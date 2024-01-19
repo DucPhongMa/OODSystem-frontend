@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from "react"
-import { getMenuItems } from "../../../api/menuitem"
+import { getMenuItems } from "../../api/menuitem"
 export default function RestaurantDetail() {
   const [restaurantName, setRestaurantName] = useState("")
   useEffect(() => {
