@@ -22,7 +22,7 @@ Route: /management/register
 
 The pages we see after owner clicks register.
 
-### M3. Registration Thank You Popup (Video #1 - Yumei)
+### M2B. Registration Thank You Popup (Video #1 - Yumei)
 
 Give Popup with the following:
 - Give message saying restaurant website is created -> give URL
@@ -30,13 +30,13 @@ Give Popup with the following:
 
 Redirect the page to the M5. Management Interface Home Page
 
-### M4. Management Interface Login Page (Video #1 - Danny frontend, Vivy backend)
+### M3. Management Interface Login Page (Video #1 - Danny frontend, Vivy backend)
 
 Route: /management/login
 
 https://wireframe.cc/VaOK8k
 
-### M5. Management Interface Dashboard (Video #1 - Danny)
+### M4. Management Interface Dashboard (Video #1 - Danny)
 
 Route: /management/dashboard
 
