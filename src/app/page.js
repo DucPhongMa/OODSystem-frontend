@@ -1,33 +1,25 @@
 "use client"
 import { addImage } from "./api/image"
 import { addRestaurant } from "./api/restaurant"
-import { useState } from "react"
-export default function Home() {
-  // const [newRestaurantName, setRestaurantName] = useState("")
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault()
-  //   const restaurantData = await addRestaurant(newRestaurantName)
-  //   console.log(`http://localhost:3000/restaurant/${restaurantData.id}`)
-  // }
-  // return (
-  //   <form onSubmit={handleSubmit}>
-  //     <label>
-  //       Restaurant Name:
-  //       <input
-  //         type="text"
-  //         name="name"
-  //         value={newRestaurantName}
-  //         onChange={(e) => setRestaurantName(e.currentTarget.value)}
-  //       />
-  //     </label>
-  //     <input
-  //       type="submit"
-  //       value="Submit"
-  //     />
-  //   </form>
-  // )
-  // formData.append("files", imageFile) // imageFile is the image to be uploaded
+import { useState, useEffect } from "react"
+import { registerBusiness, loginBusiness } from "./api/auth"
 
+export default function Home() {
+  // useEffect(() => {
+  //   registerBusiness({
+  //     username: "Vivy",
+  //     email: "vngvy48@gmail.com",
+  //     password: "password1234.",
+  //   })
+
+  //   // loginBusiness({
+  //   //   username: "Vivy",
+  //   //   password: "testing",
+  //   // })
+  // }, [])
+  // return <h1>Test API Develop</h1>
+
+  Test Restaurant Data
   const [imageData, setImageData] = useState()
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -35,14 +27,9 @@ export default function Home() {
   }
 
   const handleImageFile = (event) => {
-    // const formData = new FormData()
     const input = event.target
-    // const files = input.files[0]
-    // console.log(files)
     setImageData(input.files[0])
-    // formData.append("files", input.files) // imageFile is the image to be uploaded
-    // console.log(formData)
-    // setImageData(formData)
+
   }
   return (
     <form onSubmit={handleSubmit}>
@@ -59,5 +46,5 @@ export default function Home() {
         value="Submit"
       />
     </form>
-  )
+  // )
 }
