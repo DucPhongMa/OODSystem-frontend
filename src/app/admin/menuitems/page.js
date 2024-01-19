@@ -1,14 +1,11 @@
 "use client"
 import { useState, useEffect } from "react"
-import { useParams } from "next/navigation"
-import { getRestaurantByID } from "../../../api/restaurant"
+import { getMenuItems } from "../../api/menuitem"
 export default function RestaurantDetail() {
   const [restaurantName, setRestaurantName] = useState("")
-  const params = useParams()
   useEffect(() => {
-    const id = params.id
     async function fetchMyAPI() {
-      const restaurantData = await getRestaurantByID(id)
+      const restaurantData = await getMenuItems()
       setRestaurantName(restaurantData.Name)
     }
 

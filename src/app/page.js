@@ -19,7 +19,7 @@ export default function Home() {
   // }, [])
   // return <h1>Test API Develop</h1>
 
-  Test Restaurant Data
+  // Test Restaurant Data
   const [imageData, setImageData] = useState()
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -29,7 +29,6 @@ export default function Home() {
   const handleImageFile = (event) => {
     const input = event.target
     setImageData(input.files[0])
-
   }
   return (
     <form onSubmit={handleSubmit}>
@@ -46,5 +45,5 @@ export default function Home() {
         value="Submit"
       />
     </form>
-  // )
+  )
 }
