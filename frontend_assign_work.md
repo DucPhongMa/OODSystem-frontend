@@ -36,7 +36,7 @@ Route: /management/login
 
 https://wireframe.cc/VaOK8k
 
-### M4. Management Interface Dashboard (Video #1 - Danny)
+### M4. Management Interface Dashboard (Video #1 - Kevin)
 
 Route: /management/dashboard
 
