@@ -22,7 +22,8 @@ export const registerBusiness = async (user) => {
     }
     localStorage.setItem("authorization", JSON.stringify(item))
   } catch (e) {
-    console.log(e)
+    // redirect to error page
+    console.error(e)
   }
 }
 
@@ -34,7 +35,7 @@ export const loginBusiness = async (user) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: user.username,
+        identifier: user.identifier,
         password: user.password,
       }),
     })
@@ -46,6 +47,7 @@ export const loginBusiness = async (user) => {
     }
     localStorage.setItem("authorization", JSON.stringify(item))
   } catch (e) {
-    console.log(e)
+    // redirect to error page
+    console.error(e)
   }
 }
