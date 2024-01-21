@@ -1,52 +1,67 @@
 ## API DOCUMENTATION
 
-### General 
+### General
+
 All API functions are stored into "api" folder
+
 ### Lists of API functions
+
 #### 1. Auth API - auth.js
-#####   Create business account
+
+##### Create business account
+
 Function: registerBusiness
 Required input:
+
 ```javascript
 {
   email: "business-email",
   password: "business-password"
 }
-``` 
+```
+
 Output: It will set the "authorization value" in the localstorage with JWT token and 30 mins expiry
 
- ##### Login business account
- Function: loginBusiness
- Required input:
- ```javascript
+##### Login business account
+
+Function: loginBusiness
+Required input:
+
+```javascript
 {
-  identifier: "business-email",
-  password: "business-password"
+ identifier: "business-email",
+ password: "business-password"
 }
-``` 
+```
+
 Output: It will set the "authorization value" in the localstorage with JWT token and 30 mins expiry
 
 #### 2. Restaurant API - restaurant.js
+
 ##### Add restaurant
+
 Function: addRestaurant
 Required input:
+
 ```javascript
 "example-restaurant",
-"unique-website-route",
-{
-   phone: "123456789",
-   address: "1213 Finch Avenue",
-   provinceOrState: "Ontario",
-   city: "Toronto",
-   postalCode: "N1M 1CA",
-},
-{
-   aboutDescription: "About description website",
-   bannerURL: "bannerURLImage",
-},
-   null
-``` 
+  "unique-website-route",
+  {
+    phone: "123456789",
+    address: "1213 Finch Avenue",
+    provinceOrState: "Ontario",
+    city: "Toronto",
+    postalCode: "N1M 1CA",
+  },
+  {
+    aboutDescription: "About description website",
+    bannerURL: "bannerURLImage",
+  },
+  null
+```
+
 Output:
+
 ```javascript
 {
 "id":11,
@@ -59,12 +74,16 @@ Output:
 ```
 
 #### Get restaurant based on route
+
 Function: getRestaurantByRoute
-Required Input: 
+Required Input:
+
 ```javascript
-  "unique-website-route"
+"unique-website-route"
 ```
+
 Output:
+
 ```javascript
 {"id":11,
 "attributes":{
