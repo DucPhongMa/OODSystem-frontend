@@ -54,10 +54,10 @@ export default function landing() {
             </Grid>
         </Grid>
         <Grid item xs={6} container justifyContent={"center"}>
-            <img src="https://picsum.photos/650/600" alt="placeholder image" width={650} height={600} /> {/* Can't use Image from next.js without changing config file */}
+            <img src="https://picsum.photos/650/600" alt="placeholder image" width={650} height={600} /> {/* A landing picture */}
         </Grid>
         <Grid item xs={6} container justifyContent={"center"}>
-            <img src="https://picsum.photos/650/600" alt="placeholder image" width={650} height={600} /> {/* Can't use Image from next.js without changing config file */}
+            <img src="https://picsum.photos/650/600" alt="placeholder image" width={650} height={600} /> {/* An about me picture? What does that mean? */}
         </Grid>
         <Grid item xs={6} container justifyContent={"center"}>
             <div style={{ textAlign:'center' }}>
