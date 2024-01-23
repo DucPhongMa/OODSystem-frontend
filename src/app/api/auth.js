@@ -8,7 +8,7 @@ export const registerBusiness = async (user) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: Math.random().toString(36).slice(2, 7),
+        username: user.email,
         email: user.email,
         password: user.password,
         role: "Business",
