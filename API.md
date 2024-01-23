@@ -44,20 +44,42 @@ Function: addRestaurant
 Required input:
 
 ```javascript
-"example-restaurant",
-  "unique-website-route",
-  {
-    phone: "123456789",
-    address: "1213 Finch Avenue",
-    provinceOrState: "Ontario",
-    city: "Toronto",
-    postalCode: "N1M 1CA",
-  },
-  {
-    aboutDescription: "About description website",
-    bannerURL: "bannerURLImage",
-  },
-  null
+
+restaurant {
+	owner: {
+		email: "",
+		password: "",	
+	}
+	name: "restaurant-name",
+	route: "restaurant-route",
+	restaurant_contact: {
+		phone: "123456789",
+    		address: "1213 Finch Avenue",
+    		provinceOrState: "Ontario",
+    		city: "Toronto",
+    		postalCode: "N1M 1CA",	
+	}
+	"restaurant_description" : {
+    		aboutDescription: "About description website",
+   	 	bannerURL: "bannerURLImage",
+
+	}
+	"restaurant_categories: ["dessert", "main"],
+	"restaurant_dishes": [{
+		"category_id": 0,
+		"name": 
+		"price": 
+	}]
+	"hours": {
+		"monday": {"open": 08:00, "close": "23:00"},
+		"tuesday": {"open": 08:00, "close": "23:00"},
+		"wednesday": {"open": 08:00, "close": "23:00"},
+		"thursday": {"open": 08:00, "close": "23:00"},
+		"friday": {"open": 08:00, "close": "23:00"},
+		"saturday": {"open": 08:00, "close": "23:00"},
+		"sunday": {"open": 08:00, "close": "23:00"},
+	}
+}
 ```
 
 Output:
