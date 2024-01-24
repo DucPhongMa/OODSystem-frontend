@@ -4,70 +4,91 @@ export const addRestaurant = async (
   inputRoute,
   inputContactObj,
   inputDescObj,
-  inputMenu
+  categoriesList,
+  dishesList,
+  hoursObj,
+  themeObj
 ) => {
-  let restaurantContactID
-  let restaurantDescID
-  let websiteID
+  const categoryListID = []
+  const menuItemList = []
+  let menuID
   let restaurantData
 
-  // Add restaurant contact
-  await fetch(`${API_BACKEND}api/restaurant-contacts`, {
-    method: "POST",
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Content-type": "application/json",
-    },
-    body: JSON.stringify({
-      data: inputContactObj,
-    }),
-  })
-    .then((res) => res.json())
-    .then((jsonResponse) => {
-      restaurantContactID = jsonResponse.data.id
+  // persist menu_categories to database;
+  for (const [index, cateName] of categoriesList.entries()) {
+    await fetch(`${API_BACKEND}api/menu-categories`, {
+      method: "POST",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        data: {
+          nameCate: cateName,
+        },
+      }),
     })
+      .then((res) => res.json())
+      .then((jsonData) => {
+        categoryListID[index] = jsonData.data.id
+      })
+  }
 
-  await fetch(`${API_BACKEND}api/restaurant-descriptions`, {
-    method: "POST",
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Content-type": "application/json",
-    },
-    body: JSON.stringify({
-      data: inputDescObj,
-    }),
-  })
-    .then((res) => res.json())
-    .then((jsonResponse) => {
-      restaurantDescID = jsonResponse.data.id
+  // persist menu_items to database;
+
+  for (const dish of dishesList) {
+    await fetch(`${API_BACKEND}api/menu-items`, {
+      method: "POST",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        data: {
+          description: dish.description,
+          name: dish.name,
+          price: dish.price,
+          menu_category: categoryListID[dish.category_id],
+        },
+      }),
     })
+      .then((res) => res.json())
+      .then((jsonData) => {
+        console.log(jsonData)
+        menuItemList.push(jsonData.data.id)
+      })
+  }
 
-  await fetch(`${API_BACKEND}api/websites`, {
+  // persist menu to database
+  await fetch(`${API_BACKEND}api/menus`, {
     method: "POST",
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Content-type": "application/json",
     },
     body: JSON.stringify({
-      data: { websiteURL: inputRoute },
+      data: {
+        menu_items: menuItemList,
+        menu_categories: categoryListID,
+      },
     }),
   })
     .then((res) => res.json())
-    .then((jsonResponse) => {
-      websiteID = jsonResponse.data.id
+    .then((jsonData) => {
+      menuID = jsonData.data.id
     })
 
   let body = {
     data: {
       name: inputName,
       route: inputRoute,
-      restaurant_contact: restaurantContactID,
-      restaurant_description: restaurantDescID,
-      website: websiteID,
-      menu: null,
+      restaurant_contact: inputContactObj,
+      restaurant_description: inputDescObj,
+      menu: menuID,
+      theme: themeObj,
+      hours: hoursObj,
     },
   }
-
   await fetch(`${API_BACKEND}api/restaurants`, {
     method: "POST",
     headers: {
@@ -86,7 +107,7 @@ export const addRestaurant = async (
 export const getRestaurantByRoute = async (route) => {
   let restaurantData
   await fetch(
-    `${API_BACKEND}api/restaurants/?filters[route][$eq]=${route}&populate=*`
+    `${API_BACKEND}api/restaurants/?filters[route][$eq]=${route}&populate[menu][populate][menu_items][populate][0]=menu_category,imageURL&populate[menu][populate]=menu_categories`
   )
     .then((res) => res.json())
     .then((jsonData) => {
