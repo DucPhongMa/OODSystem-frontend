@@ -113,7 +113,6 @@ export const getRestaurantByRoute = async (route) => {
     .then((jsonData) => {
       restaurantData = jsonData.data[0]
     })
-
   return restaurantData
 }
 

@@ -3,18 +3,23 @@ import { useState, useEffect } from "react"
 import { useParams } from "next/navigation"
 import { getRestaurantByRoute } from "../../api/restaurant"
 export default function RestaurantDetail() {
-  const [restaurantName, setRestaurantName] = useState("")
+  const [restaurantData, setRestaurantData] = useState()
+  const [isLoading, setIsLoading] = useState(true)
   const params = useParams()
   useEffect(() => {
     const restaurantRoute = params.route
     async function fetchMyAPI() {
-      // not work right now because backend need to add field
       const restaurantData = await getRestaurantByRoute(restaurantRoute)
+      setRestaurantData(restaurantData.attributes)
+      setIsLoading(false)
       console.log(restaurantData)
-      setRestaurantName(restaurantData.attributes.name)
     }
 
     fetchMyAPI()
   }, [])
-  return <h1>Restaurant Name: {restaurantName}</h1>
+  return isLoading ? (
+    <div>Is loading</div>
+  ) : (
+    <h1>Restaurant Name: {restaurantData.name}</h1>
+  )
 }
