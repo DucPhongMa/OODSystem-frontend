@@ -9,13 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.15.6",
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18"
   },
   "devDependencies": {
-    "@mui/material-nextjs": "^5.15.3",
     "@emotion/cache": "^11.11.0",
+    "@mui/material-nextjs": "^5.15.3",
     "@types/node": "20.10.8",
     "@types/react": "18.2.47",
     "autoprefixer": "^10.0.1",
