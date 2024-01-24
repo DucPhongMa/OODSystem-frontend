@@ -51,3 +51,19 @@ export const loginBusiness = async (user) => {
     console.error(e)
   }
 }
+
+export const checkLogin = () => {
+  const itemStr = localStorage.getItem("authorization")
+  console.log(itemStr)
+  if (!itemStr) {
+    return false
+  }
+  const item = JSON.parse(itemStr)
+  const now = new Date()
+  // compare the expiry time of the item with the current time
+  if (now.getTime() > item.expiry) {
+    localStorage.removeItem("authorization")
+    return false
+  }
+  return true
+}
