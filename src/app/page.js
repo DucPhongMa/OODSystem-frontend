@@ -1,61 +1,49 @@
 "use client"
 import { addImage } from "./api/image"
 import { addRestaurant } from "./api/restaurant"
-import { getMenuItems } from "./api/menuitem"
 import { useState, useEffect } from "react"
+import { registerBusiness, loginBusiness } from "./api/auth"
+
 export default function Home() {
-  const [imageData, setImageData] = useState();
-  const [menuItem, setMenuItem] = useState([]);
+  // useEffect(() => {
+  //   registerBusiness({
+  //     username: "Vivy",
+  //     email: "vngvy48@gmail.com",
+  //     password: "password1234.",
+  //   })
 
-  useEffect(() => {
-    async function fetchMyAPI() {
-      const response = await getMenuItems();
-      console.log("Menu Item data: ", response);
+  //   // loginBusiness({
+  //   //   username: "Vivy",
+  //   //   password: "testing",
+  //   // })
+  // }, [])
+  // return <h1>Test API Develop</h1>
 
-      // Check if the data structure is an array
-      if (Array.isArray(response)) {
-        setMenuItem(response);
-      } else if (response.data && Array.isArray(response.data)) {
-        // If data is nested within a property like 'data'
-        setMenuItem(response.data);
-      } else {
-        console.error("Invalid data structure:", response);
-      }
-    }
-
-    fetchMyAPI();
-  }, []);
-
+  // Test Restaurant Data
+  const [imageData, setImageData] = useState()
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    await addImage(imageData);
-  };
+    event.preventDefault()
+    await addImage(imageData)
+  }
 
   const handleImageFile = (event) => {
-    const input = event.target;
-    setImageData(input.files[0]);
-  };
-
+    const input = event.target
+    setImageData(input.files[0])
+  }
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Image Add:
-          <input type="file" name="name" onChange={handleImageFile} />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
-      <p>---------------------------------------------------------------</p>
-      {menuItem.map((restaurant, index) => (
-        <div key={index}>
-          {/* Display or perform operations on each element */}
-          <p>item Name: {restaurant.attributes.name}</p>
-          <p>item description: {restaurant.attributes.description}</p>
-          <p>item price: {restaurant.attributes.price}</p>
-          <img src={restaurant.attributes.imageURL.data.attributes.url} alt="Item Image" /><br />
-          {/* Add more details as needed */}
-        </div>
-      ))}
-    </div>
-  );
+    <form onSubmit={handleSubmit}>
+      <label>
+        Image Add:
+        <input
+          type="file"
+          name="name"
+          onChange={handleImageFile}
+        />
+      </label>
+      <input
+        type="submit"
+        value="Submit"
+      />
+    </form>
+  )
 }

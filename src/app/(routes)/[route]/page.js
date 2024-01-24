@@ -1,26 +1,27 @@
 "use client"
 import { useState, useEffect } from "react"
 import { useParams } from "next/navigation"
-// import { getRestaurantByID } from "../../../api/restaurant"
+import { getRestaurantByRoute } from "../../api/restaurant"
 import RestaurantAppBar from "@/app/components/RestaurantAppBar"
 
 export default function RestaurantDetail() {
   const [restaurantName, setRestaurantName] = useState("")
   const params = useParams()
-  // useEffect(() => {
-  //   const id = params.id
-  //   async function fetchMyAPI() {
-  //     const restaurantData = await getRestaurantByID(id)
-  //     setRestaurantName(restaurantData.Name)
-  //   }
+    useEffect(() => {
+    const restaurantRoute = params.route
+    async function fetchMyAPI() {
+      // not work right now because backend need to add field
+      const restaurantData = await getRestaurantByRoute(restaurantRoute)
+      console.log(restaurantData)
+      setRestaurantName(restaurantData.attributes.name)
+    }
 
-  //   fetchMyAPI()
-  // }, [])
-  // return <h1>Restaurant Name: {restaurantName}</h1>
+    fetchMyAPI()
+  }, [])
 
   return (
     <>
-      <RestaurantAppBar restaurantID={params.route} />
+      <RestaurantAppBar restaurantID={restaurantName} />
     </>
   );
 }
