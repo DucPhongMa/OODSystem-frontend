@@ -5,13 +5,13 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 
-const CategoryCard = ({ image, categoryName, handleClick }) => {
+const CategoryCard = ({ image, categoryName, handleClick, height="140" }) => {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardActionArea onClick={handleClick}>
         <CardMedia
           component="img"
-          height="140"
+          height={height}
           image={image}
           alt="green iguana"
         />
