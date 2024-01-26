@@ -11,29 +11,30 @@ import RestaurantAppBar from '@/app/components/RestaurantAppBar';
 import CategoryCard from '@/app/components/CategoryCard';
 
 export default function RestaurantDetail() {
-  // const [restaurantName, setRestaurantName] = useState('');
-  const [restaurantInfo, setRestaurantInfo] = useState();
-  const params = useParams();
+  const [restaurantData, setRestaurantData] = useState("")
+  const [isLoading, setIsLoading] = useState(true);
+  const params = useParams()
   const restaurantRoute = params.route;
 
   useEffect(() => {
     async function fetchMyAPI() {
-      // not work right now because backend need to add field
-      const restaurantData = await getRestaurantByRoute(restaurantRoute);
-      console.log(restaurantData);
-      setRestaurantInfo(restaurantData.attributes);
-      // setRestaurantName(restaurantData.attributes.name);
+
+      const restaurantData = await getRestaurantByRoute(restaurantRoute)
+      setRestaurantData(restaurantData.attributes);
+      setIsLoading(false);
+      console.log(restaurantData)
+
     }
 
     fetchMyAPI();
   }, []);
 
   // console.log(restaurantInfo?.menu.data.attributes.menu_categories?.data);
-  console.log(restaurantInfo?.menu.data.attributes);
+  console.log(restaurantData?.menu.data.attributes);
 
   return (
     <>
-      {!restaurantInfo && (
+      {isLoading && (
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={restaurantInfo == null}
@@ -41,7 +42,7 @@ export default function RestaurantDetail() {
           <CircularProgress color="inherit" />
         </Backdrop>
       )}
-      {restaurantInfo && (
+      {!isLoading && (
         <>
           <RestaurantAppBar restaurantInfo={restaurantInfo} />
           <Image
