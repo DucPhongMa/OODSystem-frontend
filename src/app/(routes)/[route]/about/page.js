@@ -1,1 +1,1 @@
-export const RestaurantAboutPage = () => {}
+export default function RestaurantAboutPage() {}

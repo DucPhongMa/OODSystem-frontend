@@ -1,1 +1,1 @@
-export const ManagementLoginPage = () => {}
+export default function ManagementLoginPage() {}
