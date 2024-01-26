@@ -4,9 +4,11 @@ import { useParams } from 'next/navigation';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import Image from 'next/image';
+import Grid from '@mui/material/Grid';
 
 import { getRestaurantByRoute } from '../../api/restaurant';
 import RestaurantAppBar from '@/app/components/RestaurantAppBar';
+import CategoryCard from '@/app/components/CategoryCard';
 
 export default function RestaurantDetail() {
   // const [restaurantName, setRestaurantName] = useState('');
@@ -26,7 +28,9 @@ export default function RestaurantDetail() {
     fetchMyAPI();
   }, []);
 
-  // console.log(restaurantInfo);
+  // console.log(restaurantInfo?.menu.data.attributes.menu_categories?.data);
+  console.log(restaurantInfo?.menu.data.attributes);
+
   return (
     <>
       {!restaurantInfo && (
@@ -45,7 +49,20 @@ export default function RestaurantDetail() {
             alt="banner example"
             width={1500}
             height={30}
+            priority={true}
           />
+          {/* category */}
+          <Grid container spacing={2} sx={{ margin: '20px' }}>
+            <Grid item xs={4}>
+              <CategoryCard
+                image="https://cdn12.picryl.com/photo/2016/12/31/the-cake-dessert-eating-food-drink-b83df2-1024.jpg"
+                categoryName="dessert"
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <CategoryCard image="ddd" categoryName="drink" />
+            </Grid>
+          </Grid>
         </>
       )}
     </>

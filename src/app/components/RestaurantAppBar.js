@@ -9,9 +9,16 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import Link from 'next/link';
 import Image from 'next/image';
 
-
 const RestaurantAppBar = ({ restaurantInfo }) => {
   // console.log(restaurantInfo);
+  const currentDate = new Date();
+  const dayOfWeek = currentDate
+    .toLocaleDateString('en-US', { weekday: 'long' })
+    .toLowerCase();
+  // console.log(restaurantInfo.hours);
+  // console.log(restaurantInfo.hours.thursday);
+  // console.log(restaurantInfo.hours[dayOfWeek].open);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -30,9 +37,7 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
           </Typography>
         </Box>
         <Toolbar>
-          <div
-            style={{ position: 'relative', width: 240 }}
-          >
+          <div style={{ position: 'relative', width: 240 }}>
             <Image
               src="/sushi.png"
               alt="sushi logo"
@@ -48,7 +53,7 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
                 color: 'white',
               }}
             >
-              Hours: 10:00 -
+              Hours: {restaurantInfo.hours[dayOfWeek].open} -
             </span>
             <span
               style={{
@@ -58,7 +63,7 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
                 color: 'white',
               }}
             >
-              23:00
+              {restaurantInfo.hours[dayOfWeek].close}
             </span>
             {/* <div>
               <Typography variant="h6" component="div">
