@@ -57,10 +57,15 @@ export default function RestaurantDetail() {
               <CategoryCard
                 image="https://cdn12.picryl.com/photo/2016/12/31/the-cake-dessert-eating-food-drink-b83df2-1024.jpg"
                 categoryName="dessert"
+                handleClick={() => {console.log()}}
               />
             </Grid>
             <Grid item xs={4}>
-              <CategoryCard image="ddd" categoryName="drink" />
+              <CategoryCard
+                image="https://images.pexels.com/photos/12516840/pexels-photo-12516840.jpeg"
+                categoryName="drink"
+                handleClick={() => {}}
+              />
             </Grid>
           </Grid>
         </>
