@@ -1,6 +1,5 @@
-"use client";
 import "./App.css";
-import Form from "../../../components/admin/register/Form";
+import Form from "./components/Form";
 
 function App() {
   return (
