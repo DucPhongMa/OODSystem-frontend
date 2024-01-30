@@ -1,8 +1,6 @@
-import { Truculenta } from "next/font/google"
-
 const API_BACKEND = process.env.NEXT_PUBLIC_API_BACKEND_URL
 
-export const registerBusiness = async (user) => {
+export const registerBusiness = async (email, password) => {
   try {
     const response = await fetch(`${API_BACKEND}api/auth/local/register`, {
       method: "POST",
@@ -10,9 +8,9 @@ export const registerBusiness = async (user) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: user.email,
-        email: user.email,
-        password: user.password,
+        username: email,
+        email: email,
+        password: password,
         role: "Business",
       }),
     })

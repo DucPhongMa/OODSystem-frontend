@@ -1,59 +1,60 @@
 // Management Interface Registration Form
 // /admin/register
 
-import React, { useState } from "react";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Button from "@mui/material/Button";
-import SignUpInfo from "./SignUpInfo";
-import RestaurantInfo from "./RestaurantInfo";
-import RestaurantHoursInfo from "./RestaurantHoursInfo";
-import RestaurantMenuInfo from "./RestaurantMenuInfo";
-import RestaurantThemeInfo from "./RestaurantThemeInfo";
-import ConfirmInfo from "./ConfirmInfo";
-// import { addRestaurant } from "../../../app/api/restaurant";
+import React, { useState } from "react"
+import Dialog from "@mui/material/Dialog"
+import DialogActions from "@mui/material/DialogActions"
+import DialogContent from "@mui/material/DialogContent"
+import DialogContentText from "@mui/material/DialogContentText"
+import DialogTitle from "@mui/material/DialogTitle"
+import Button from "@mui/material/Button"
+import SignUpInfo from "./SignUpInfo"
+import RestaurantInfo from "./RestaurantInfo"
+import RestaurantHoursInfo from "./RestaurantHoursInfo"
+import RestaurantMenuInfo from "./RestaurantMenuInfo"
+import RestaurantThemeInfo from "./RestaurantThemeInfo"
+import ConfirmInfo from "./ConfirmInfo"
+import { addRestaurant } from "../../../app/api/restaurant"
+import { registerBusiness } from "@/app/api/auth"
 
 function validateEmail(email) {
   const re =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  return re.test(String(email).toLowerCase())
 }
 
 function validatePassword(password) {
   // Check for minimum length
   if (password.length < 8) {
-    return false;
+    return false
   }
 
   // Check for uppercase letter
   if (!/[A-Z]/.test(password)) {
-    return false;
+    return false
   }
 
   // Check for lowercase letter
   if (!/[a-z]/.test(password)) {
-    return false;
+    return false
   }
 
   // Check for digit
   if (!/[0-9]/.test(password)) {
-    return false;
+    return false
   }
 
   // Check for special character
   if (!/[!@#$%^&*]/.test(password)) {
-    return false;
+    return false
   }
 
   // If all conditions are met
-  return true;
+  return true
 }
 
 function Form() {
-  let alertMsg = "";
+  let alertMsg = ""
 
   const FormTitles = [
     "Sign Up",
@@ -62,10 +63,10 @@ function Form() {
     "Restaurant Theme Info",
     "Restaurant Menu Info",
     "Confirm Info",
-  ];
+  ]
 
-  const [open, setOpen] = useState(false);
-  const [page, setPage] = useState(0);
+  const [open, setOpen] = useState(false)
+  const [page, setPage] = useState(0)
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -100,77 +101,101 @@ function Form() {
       saturday: { open: "", close: "" },
       sunday: { open: "", close: "" },
     },
-  });
+  })
 
   const handleClose = () => {
-    setOpen(false);
-    window.location.href = "http://localhost:3000/admin/login";
-  };
+    setOpen(false)
+    window.location.href = "http://localhost:3000/admin/login"
+  }
 
   const handleLogin = () => {
-    window.location.href = "http://localhost:3000/admin/login";
-  };
+    window.location.href = "http://localhost:3000/admin/login"
+  }
 
   const handleRestaurant = () => {
-    window.location.href = `http://localhost:3000/${formData.route}`;
-  };
+    window.location.href = `http://localhost:3000/${formData.route}`
+  }
 
   const PageDisplay = () => {
     if (page === 0) {
-      return <SignUpInfo formData={formData} setFormData={setFormData} />;
+      return (
+        <SignUpInfo
+          formData={formData}
+          setFormData={setFormData}
+        />
+      )
     } else if (page === 1) {
-      return <RestaurantInfo formData={formData} setFormData={setFormData} />;
+      return (
+        <RestaurantInfo
+          formData={formData}
+          setFormData={setFormData}
+        />
+      )
     } else if (page === 2) {
       return (
-        <RestaurantHoursInfo formData={formData} setFormData={setFormData} />
-      );
+        <RestaurantHoursInfo
+          formData={formData}
+          setFormData={setFormData}
+        />
+      )
     } else if (page === 3) {
       return (
-        <RestaurantThemeInfo formData={formData} setFormData={setFormData} />
-      );
+        <RestaurantThemeInfo
+          formData={formData}
+          setFormData={setFormData}
+        />
+      )
     } else if (page === 4) {
       return (
-        <RestaurantMenuInfo formData={formData} setFormData={setFormData} />
-      );
+        <RestaurantMenuInfo
+          formData={formData}
+          setFormData={setFormData}
+        />
+      )
     } else {
-      return <ConfirmInfo formData={formData} setFormData={setFormData} />;
+      return (
+        <ConfirmInfo
+          formData={formData}
+          setFormData={setFormData}
+        />
+      )
     }
-  };
+  }
 
   const validateForm = () => {
     if (page === 0) {
       // Sign Up page must have email and password
       if (!formData.email || !formData.password) {
-        alertMsg = "Please fill in all required fields.";
-        return false;
+        alertMsg = "Please fill in all required fields."
+        return false
       }
 
       // Sign Up page email must be valid
       if (!validateEmail(formData.email)) {
-        alertMsg = "Invalid email.";
-        return false;
+        alertMsg = "Invalid email."
+        return false
       }
 
       // Sign Up page passwords must match
       if (formData.password !== formData.confirmPassword) {
-        alertMsg = "Passwords do not match.";
-        return false;
+        alertMsg = "Passwords do not match."
+        return false
       }
 
       // Sign Up page password must be a valid password
       if (!validatePassword(formData.password)) {
         alertMsg =
-          "Passwords must be\nAt least 8 characters long\nContains at least one uppercase letter\nContains at least one lowercase letter\nContains at least one digit\nContains at least one special character";
-        return false;
+          "Passwords must be\nAt least 8 characters long\nContains at least one uppercase letter\nContains at least one lowercase letter\nContains at least one digit\nContains at least one special character"
+        return false
       }
     } else if (page === 1 && (!formData.name || !formData.route)) {
       // Restaurant Info page must have name and route
-      alertMsg = "Please fill in all required fields.";
-      return false;
+      alertMsg = "Please fill in all required fields."
+      return false
     }
 
-    return true;
-  };
+    return true
+  }
 
   return (
     <div className="form">
@@ -201,7 +226,7 @@ function Form() {
           <button
             disabled={page == 0}
             onClick={() => {
-              setPage((currPage) => currPage - 1);
+              setPage((currPage) => currPage - 1)
             }}
           >
             Prev
@@ -210,35 +235,55 @@ function Form() {
             onClick={async () => {
               if (page === FormTitles.length - 1) {
                 // When user clicks the Submit button to submit the registration form
-                alert("FORM SUBMITTED");
-                console.log(formData);
+                alert("FORM SUBMITTED")
+                // console.log(formData)
+                try {
+                  // Get an array of just category names
+                  let categoryNames = formData.categories.map(
+                    (category) => category.name
+                  )
+                  await registerBusiness(
+                    formData.email,
+                    formData.confirmPassword
+                  )
+                  // Get an array containing a list of all items from all categories
+                  let allItems = formData.categories.flatMap(
+                    (category, index) =>
+                      category.items.map((item) => ({
+                        category_id: index,
+                        name: item.name,
+                        price: item.price,
+                      }))
+                  )
+                  // console.log(allItems)
+                  const restaurantData = await addRestaurant(
+                    formData.name,
+                    formData.route,
+                    formData.restaurant_contact,
+                    formData.restaurant_description,
+                    categoryNames,
+                    allItems,
+                    formData.hours,
+                    {
+                      id: 1,
+                      name: "classic",
+                    }
+                  )
 
-                // Get an array of just category names
-                let categoryNames = formData.categories.map(
-                  (category) => category.name
-                );
-                console.log(categoryNames);
+                  // Save data to database
+                  // const newRestaurantValue = await addRestaurant(formData.restaurantName);
 
-                // Get an array containing a list of all items from all categories
-                let allItems = formData.categories.flatMap((category, index) =>
-                  category.items.map((item) => ({
-                    category_id: index,
-                    name: item.name,
-                    price: item.price,
-                  }))
-                );
-                console.log(allItems);
-
-                // Save data to database
-                // const newRestaurantValue = await addRestaurant(formData.restaurantName);
-
-                // Open the dialog window
-                setOpen(true);
+                  // Open the dialog window
+                  setOpen(true)
+                } catch (error) {
+                  // handle route unique error error
+                  alert(error)
+                }
               } else {
                 if (validateForm()) {
-                  setPage((currPage) => currPage + 1);
+                  setPage((currPage) => currPage + 1)
                 } else {
-                  alert(alertMsg);
+                  alert(alertMsg)
                 }
               }
             }}
@@ -262,16 +307,23 @@ function Form() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleLogin} color="primary">
+          <Button
+            onClick={handleLogin}
+            color="primary"
+          >
             Go to login page
           </Button>
-          <Button onClick={handleRestaurant} color="primary" autoFocus>
+          <Button
+            onClick={handleRestaurant}
+            color="primary"
+            autoFocus
+          >
             Go to restaurant website
           </Button>
         </DialogActions>
       </Dialog>
     </div>
-  );
+  )
 }
 
-export default Form;
+export default Form
