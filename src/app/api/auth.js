@@ -1,6 +1,6 @@
 const API_BACKEND = process.env.NEXT_PUBLIC_API_BACKEND_URL
 
-export const registerBusiness = async (user) => {
+export const registerBusiness = async (email, password) => {
   try {
     const response = await fetch(`${API_BACKEND}api/auth/local/register`, {
       method: "POST",
@@ -8,9 +8,9 @@ export const registerBusiness = async (user) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: user.email,
-        email: user.email,
-        password: user.password,
+        username: email,
+        email: email,
+        password: password,
         role: "Business",
       }),
     })
@@ -27,7 +27,7 @@ export const registerBusiness = async (user) => {
   }
 }
 
-export const loginBusiness = async (user) => {
+export const loginBusiness = async (identifier, password) => {
   try {
     const response = await fetch(`${API_BACKEND}api/auth/local`, {
       method: "POST",
@@ -35,20 +35,24 @@ export const loginBusiness = async (user) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        identifier: user.identifier,
-        password: user.password,
+        identifier: identifier,
+        password: password,
       }),
     })
 
     const responseData = await response.json()
-    const item = {
-      value: responseData.jwt,
-      expiry: new Date().getTime() + 30 * 60000,
+
+    if (responseData.jwt) {
+      const item = {
+        value: responseData.jwt,
+        expiry: new Date().getTime() + 30 * 60000,
+      }
+      localStorage.setItem("authorization", JSON.stringify(item))
+    } else {
+      return "Email or password is incorrect! Please check!"
     }
-    localStorage.setItem("authorization", JSON.stringify(item))
   } catch (e) {
-    // redirect to error page
-    console.error(e)
+    return e
   }
 }
 

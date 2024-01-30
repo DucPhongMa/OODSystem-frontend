@@ -99,7 +99,11 @@ export const addRestaurant = async (
   })
     .then((res) => res.json())
     .then((jsonData) => {
-      restaurantData = jsonData.data
+      if (jsonData.data) {
+        restaurantData = jsonData.data
+      } else {
+        throw "Restaurant route need to be unique"
+      }
     })
   return restaurantData
 }
