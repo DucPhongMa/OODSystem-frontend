@@ -14,6 +14,7 @@ import Link from "next/link"
 import { loginBusiness } from "../../api/auth"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import MainNavbar from "../../../components/admin/register/MainNavbar"
 
 export default function ManagementLoginPage() {
   const [error, setError] = useState(false)
@@ -33,25 +34,7 @@ export default function ManagementLoginPage() {
   return (
     <>
       {/* Navbar */}
-      <AppBar position="static">
-        <Toolbar>
-          <Typography style={{ marginRight: "40px" }}>
-            <Link href="/about">About</Link>
-          </Typography>
-          <Typography>
-            <Link href="/contact">Contact</Link>
-          </Typography>
-
-          <div style={{ flexGrow: 1 }}></div>
-
-          <Typography style={{ marginRight: "40px" }}>
-            <Link href="/admin/login">Log In</Link>
-          </Typography>
-          <Typography>
-            <Link href="/admin/register">Register</Link>
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <MainNavbar isLoggedin={false} />
 
       {/* Body */}
       <Container component="main">

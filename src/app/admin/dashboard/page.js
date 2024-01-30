@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { LineChart, PieChart  } from '@mui/x-charts';
+import MainNavbar from '../../../components/admin/register/MainNavbar'
 
 const data = [
   { id: 0, value: 10, label: 'series A' },
@@ -33,23 +34,8 @@ export default function DashboardPage() {
     <div>"Is Loading"</div>
   ) : isLoggedIn ? (
     <div>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} />
-          <Link href="/edit-menu" passHref>
-            <Button color="inherit">Edit Menu</Button>
-          </Link>
-          <Link href="/edit-theme" passHref>
-            <Button color="inherit">Edit Theme</Button>
-          </Link>
-          <Link href="/edit-info" passHref>
-            <Button color="inherit">Edit Info</Button>
-          </Link>
-          <Link href="/admin/login" passHref>
-            <Button color="inherit">Logout</Button>
-          </Link>
-        </Toolbar>
-      </AppBar>
+      <MainNavbar isLoggedin={isLoggedIn} />
+     
       <Box mt={4} textAlign="center">
         <Typography variant="h4" fontWeight="bold">Dashboard</Typography>
       </Box>
@@ -141,6 +127,10 @@ export default function DashboardPage() {
       </Grid>
     </div>
   ) : (
-    <div>"You are not auth"</div>
+
+    <div>
+      <MainNavbar isLoggedin={isLoggedIn} />
+      <p>"You are not auth"</p>
+    </div>
   )
 }

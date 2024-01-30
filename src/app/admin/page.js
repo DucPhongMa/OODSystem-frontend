@@ -1,5 +1,6 @@
 import { AppBar, Toolbar, Typography, Grid, Button } from "@mui/material"
 import Link from "next/link"
+import MainNavbar from "../../components/admin/register/MainNavbar"
 
 export default function landing() {
   const gridStyle = {
@@ -11,25 +12,7 @@ export default function landing() {
   return (
     <>
       {/* Navbar */}
-      <AppBar position="static">
-        <Toolbar>
-          <Typography style={{ marginRight: "40px" }}>
-            <Link href="/about">About</Link>
-          </Typography>
-          <Typography>
-            <Link href="/contact">Contact</Link>
-          </Typography>
-
-          <div style={{ flexGrow: 1 }}></div>
-
-          <Typography style={{ marginRight: "40px" }}>
-            <Link href="/admin/login">Log In</Link>
-          </Typography>
-          <Typography>
-            <Link href="/admin/register">Register</Link>
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <MainNavbar isLoggedin={false}/>
 
       {/* Body */}
       <Grid
