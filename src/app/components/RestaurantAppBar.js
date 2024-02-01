@@ -38,13 +38,15 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
         </Box>
         <Toolbar>
           <div style={{ position: 'relative', width: 240 }}>
-            <Image
-              src="/sushi.png"
-              alt="sushi logo"
-              width={100}
-              height={100}
-              priority={true}
-            />
+            <Link href={`/${restaurantInfo.route}/`}>
+              <Image
+                src="/sushi.png"
+                alt="sushi logo"
+                width={100}
+                height={100}
+                priority={true}
+              />
+            </Link>
             <span
               style={{
                 position: 'absolute',
@@ -75,7 +77,7 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
             {/* </div> */}
           </div>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <Link href={`/${restaurantInfo.route}`}>ORDER PICKUP</Link>
+            <Link href={`/${restaurantInfo.route}/menu`}>ORDER PICKUP</Link>
           </Typography>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link href={`/${restaurantInfo.route}/about`}>ABOUT</Link>
@@ -84,17 +86,19 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
             <Link href={`/${restaurantInfo.route}/reviews`}>REVIEWS</Link>
           </Typography>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <Link href={`/${restaurantInfo.route}/orders`}>ORDERS</Link>
+            <Link href={`/${restaurantInfo.route}/orderhistory`}>ORDERS</Link>
           </Typography>
           <Button color="inherit" variant="outlined">
-            Log In
+            <Link href={`/${restaurantInfo.route}/login`}>Log In</Link>
           </Button>
           <IconButton
             color="inherit"
             variant="outlined"
             aria-label="add to shopping cart"
           >
-            <AddShoppingCartIcon />
+            <Link href={`/${restaurantInfo.route}/cart`}>
+              <AddShoppingCartIcon />
+            </Link>
           </IconButton>
         </Toolbar>
       </AppBar>

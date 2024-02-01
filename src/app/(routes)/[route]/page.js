@@ -55,7 +55,7 @@ export default function RestaurantDetail() {
           />
           {/* category */}
           <Grid container spacing={2} sx={{ margin: '20px' }}>
-            <Grid item xs={4}>
+            {/* <Grid item xs={4}>
               <CategoryCard
                 image="https://cdn12.picryl.com/photo/2016/12/31/the-cake-dessert-eating-food-drink-b83df2-1024.jpg"
                 categoryName="dessert"
@@ -70,18 +70,18 @@ export default function RestaurantDetail() {
                 categoryName="drink"
                 handleClick={() => {}}
               />
-            </Grid>
-            {/* {restaurantData.menu.data.attributes.menu_categories.data.map(
+            </Grid> */}
+            {restaurantData.menu.data.attributes.menu_categories.data.map(
               (item, index) => (
                 <Grid item xs={4} key={index}>
                   <CategoryCard
                     image="https://images.pexels.com/photos/12516840/pexels-photo-12516840.jpeg"
-                    categoryName="drink"
+                    categoryName={item.attributes.nameCate}
                     handleClick={() => {}}
                   />
                 </Grid>
               )
-            )} */}
+            )}
           </Grid>
           {/* top picks */}
           <Grid
@@ -118,7 +118,7 @@ export default function RestaurantDetail() {
             <Grid item xs={4}>
               <CategoryCard
                 image="https://images.pexels.com/photos/12516840/pexels-photo-12516840.jpeg"
-                categoryName="juice"
+                categoryName="XXX"
                 handleClick={() => {}}
                 height={80}
               />
@@ -309,8 +309,7 @@ export default function RestaurantDetail() {
                   textAlign: 'center',
                   color: 'white',
                 }}
-              >
-              </Typography>
+              ></Typography>
             </Grid>
           </Grid>
         </>
