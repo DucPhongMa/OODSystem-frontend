@@ -71,3 +71,7 @@ export const checkLogin = () => {
   }
   return true
 }
+
+export const removeToken = () => {
+  localStorage.removeItem('authorization');
+}
