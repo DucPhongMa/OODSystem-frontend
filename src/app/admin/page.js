@@ -32,7 +32,7 @@ export default function landing() {
               variant="h4"
               style={{ marginBottom: "50px" }}
             >
-              Welcome to [App Name]
+              Welcome to Restaurant Website Generator & Food Pick Up
             </Typography>
             <Typography
               fontSize={"30px"}
@@ -116,7 +116,7 @@ export default function landing() {
               maxWidth={"550px"}
               style={{ marginBottom: "50px" }}
             >
-              We at [App Name] understand the frustration many restaurant owners
+              We at Restaurant Website Generator & Food Pick Up understand the frustration many restaurant owners
               face in today's digitally dependant world. The lack of a
               fast-loading website and an efficient online pickup ordering
               system can be a significant hurdle.

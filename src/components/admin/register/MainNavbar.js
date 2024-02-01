@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, useMediaQuery, Drawer, List, ListItem, ListItemText, ListItemIcon } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import Link from "next/link";
+import {removeToken} from "../../../app/api/auth"
 
 export default function Landing({ isLoggedin }) {
   const [mobileMenuAnchor, setMobileMenuAnchor] = useState(null);
@@ -15,6 +16,10 @@ export default function Landing({ isLoggedin }) {
   const handleMobileMenuClose = () => {
     setMobileMenuAnchor(null);
   };
+
+  const logout = () => {   
+    removeToken();
+ }
 
   return (
     <>
@@ -63,7 +68,7 @@ export default function Landing({ isLoggedin }) {
                     <Link href="/">Edit Info</Link>
                   </ListItem>
                   <ListItem button>
-                    <Link href="/admin/login">Logout</Link>
+                    <Link href="/admin/login" onClick={logout}>Logout</Link>
                   </ListItem>
                 </>
               ) : (
@@ -106,7 +111,7 @@ export default function Landing({ isLoggedin }) {
                   <Link href="/">Edit Info</Link>
                 </Typography>
                 <Typography>
-                  <Link href="/admin/login">Logout</Link>
+                  <Link href="/admin/login" onClick={logout}>Logout</Link>
                 </Typography>
               </>
             ) : (
