@@ -267,7 +267,8 @@ function Form() {
                     {
                       id: 1,
                       name: "classic",
-                    }
+                    },
+                    formData.email
                   )
 
                   // Save data to database
