@@ -47,7 +47,6 @@ export default function ManagementLoginPage() {
           }}
         >
           <Typography variant="h3">Log In</Typography>
-          {error && <h3>"Email or password is incorrect! Please check"</h3>}
 
           <Box
             component="form"
@@ -55,6 +54,7 @@ export default function ManagementLoginPage() {
             noValidate
             sx={{ mt: 5 }}
           >
+            {error && <h3 style={{ color: 'red' }}>"Email or password is incorrect! Please check"</h3>}
             <Grid
               container
               spacing={2}
@@ -62,7 +62,7 @@ export default function ManagementLoginPage() {
               <Grid
                 item
                 xs={12}
-              >
+              >    
                 <TextField
                   autoComplete="email"
                   required
@@ -79,6 +79,7 @@ export default function ManagementLoginPage() {
                 <TextField
                   autoComplete="password"
                   required
+                  fullWidth
                   id="password"
                   label="Password"
                   type="password"
