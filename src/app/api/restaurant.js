@@ -7,7 +7,8 @@ export const addRestaurant = async (
   categoriesList,
   dishesList,
   hoursObj,
-  themeObj
+  themeObj,
+  inputBusinessName,
 ) => {
   const categoryListID = []
   const menuItemList = []
@@ -87,6 +88,7 @@ export const addRestaurant = async (
       menu: menuID,
       theme: themeObj,
       hours: hoursObj,
+      restaurant_owner: inputBusinessName
     },
   }
   await fetch(`${API_BACKEND}api/restaurants`, {
@@ -118,6 +120,19 @@ export const getRestaurantByRoute = async (route) => {
       restaurantData = jsonData.data[0]
     })
   return restaurantData
+}
+
+export const getRestaurantByBusinessName = async (username) => {
+  let restaurantData
+  await fetch(
+    `${API_BACKEND}api/restaurants/?filters[restaurant_owner][$eq]=${username}`
+  )
+    .then((res) => res.json())
+    .then((jsonData) => {
+      restaurantData = jsonData.data[0]
+    })
+   
+  return restaurantData.attributes.route
 }
 
 // TODO

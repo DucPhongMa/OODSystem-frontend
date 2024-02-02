@@ -48,6 +48,7 @@ export const loginBusiness = async (identifier, password) => {
         expiry: new Date().getTime() + 30 * 60000,
       }
       localStorage.setItem("authorization", JSON.stringify(item))
+      localStorage.setItem("username", identifier)
     } else {
       return "Email or password is incorrect! Please check!"
     }
@@ -74,4 +75,5 @@ export const checkLogin = () => {
 
 export const removeToken = () => {
   localStorage.removeItem('authorization');
+  localStorage.removeItem('username');
 }

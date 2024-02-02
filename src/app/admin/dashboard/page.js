@@ -2,8 +2,6 @@
 import { useEffect, useState } from "react"
 import { checkLogin } from "@/app/api/auth"
 import {
-  AppBar,
-  Toolbar,
   Button,
   Grid,
   Paper,
@@ -13,23 +11,35 @@ import {
 import Link from "next/link";
 import { LineChart, PieChart  } from '@mui/x-charts';
 import MainNavbar from '../../../components/admin/register/MainNavbar'
+import {getRestaurantByBusinessName} from '../../api/restaurant'
 
-const data = [
-  { id: 0, value: 10, label: 'series A' },
-  { id: 1, value: 15, label: 'series B' },
-  { id: 2, value: 20, label: 'series C' },
-];
 
 export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [restaurantRoute, setRestaurantRoute] = useState('');
+  const [username, setUsername] = useState("");
+ 
   useEffect(() => {
     const checkLoggedIn = checkLogin()
     console.log(checkLoggedIn)
     setIsLoggedIn(checkLoggedIn)
     setIsLoading(false)
-  }, [])
 
+    // Get username from localStorage
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername);
+
+      async function fetchMyAPI() {
+        const restaurantData = await getRestaurantByBusinessName(storedUsername);
+        setRestaurantRoute(restaurantData);  
+      }
+
+      fetchMyAPI();
+    }
+  }, [])
+  console.log("route: ", restaurantRoute);
   return isLoading ? (
     <div>"Is Loading"</div>
   ) : isLoggedIn ? (
@@ -51,7 +61,7 @@ export default function DashboardPage() {
             <Typography>Successful Order Rate: 92%</Typography>
             <Grid container spacing={2} style={{ marginTop: "20px" }}>
               <Grid item xs={6}>
-                <Link href="/order-history" passHref>
+                <Link href="/admin/order-history" passHref>
                   <Button variant="contained" color="primary" fullWidth>
                     View Order History
                   </Button>
@@ -59,7 +69,7 @@ export default function DashboardPage() {
                 
               </Grid>
               <Grid item xs={6}>
-              <Link href="/order-dashboard" passHref>
+              <Link href="/admin/order-dashboard" passHref>
                   <Button variant="contained" color="primary" fullWidth>
                     View Order Dashboard
                   </Button>
@@ -93,7 +103,7 @@ export default function DashboardPage() {
             <Typography>Monthly visitors: 254</Typography>
             <Typography>Most Traffic Month: August</Typography>
             <br />
-            <Link href="http://localhost:3000/uniqueroute1223" passHref>
+            <Link href={`http://localhost:3000/${restaurantRoute}`} passHref>
               <Button
                 variant="contained"
                 color="secondary"
