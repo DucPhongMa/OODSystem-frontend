@@ -11,7 +11,7 @@ import {
 } from "@mui/material"
 import { useForm } from "react-hook-form"
 import Link from "next/link"
-import { loginBusiness } from "../../api/auth"
+import { loginUser } from "../../api/auth"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import MainNavbar from "../../../components/admin/register/MainNavbar"
@@ -22,7 +22,7 @@ export default function ManagementLoginPage() {
   const router = useRouter()
 
   const handleFormSubmit = async (formData) => {
-    const error = await loginBusiness(formData.email, formData.password)
+    const error = await loginUser(formData.email, formData.password)
     if (error) {
       console.log(error)
       setError(error)
@@ -54,7 +54,11 @@ export default function ManagementLoginPage() {
             noValidate
             sx={{ mt: 5 }}
           >
-            {error && <h3 style={{ color: 'red' }}>"Email or password is incorrect! Please check"</h3>}
+            {error && (
+              <h3 style={{ color: "red" }}>
+                "Email or password is incorrect! Please check"
+              </h3>
+            )}
             <Grid
               container
               spacing={2}
@@ -62,7 +66,7 @@ export default function ManagementLoginPage() {
               <Grid
                 item
                 xs={12}
-              >    
+              >
                 <TextField
                   autoComplete="email"
                   required

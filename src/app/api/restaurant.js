@@ -8,7 +8,7 @@ export const addRestaurant = async (
   dishesList,
   hoursObj,
   themeObj,
-  inputBusinessName,
+  inputBusinessName
 ) => {
   const categoryListID = []
   const menuItemList = []
@@ -88,7 +88,7 @@ export const addRestaurant = async (
       menu: menuID,
       theme: themeObj,
       hours: hoursObj,
-      restaurant_owner: inputBusinessName
+      restaurant_owner: inputBusinessName,
     },
   }
   await fetch(`${API_BACKEND}api/restaurants`, {
@@ -131,8 +131,44 @@ export const getRestaurantByBusinessName = async (username) => {
     .then((jsonData) => {
       restaurantData = jsonData.data[0]
     })
-   
+
   return restaurantData.attributes.route
+}
+
+export const getRestaurantMenuData = async (username) => {
+  let restaurantData
+  await fetch(
+    `${API_BACKEND}api/restaurants/?filters[restaurant_owner][$eq]=${username}&populate[menu][populate][menu_items][populate][0]=menu_category,imageURL&populate[menu][populate]=menu_categories`
+  )
+    .then((res) => res.json())
+    .then((jsonData) => {
+      restaurantData = jsonData.data[0]
+    })
+
+  return restaurantData.attributes.menu
+}
+
+export const updateRestaurantMenu = async (
+  restaurantID,
+  catRemoveList,
+  catAddList,
+  dishRemoveList,
+  dishAddList
+) => {
+  console.log(restaurantID)
+  console.log(catRemoveList)
+  console.log(catAddList)
+  console.log(dishRemoveList)
+  console.log(dishAddList)
+  // TO DO loop through catAddList -> add category
+
+  // TO DO loop through dishAddList -> add dish into cat (check if category id has it, then just add it with that category id, if not map it with the new category ID)
+
+  // TO DO update restaurant to get the entity with new category list and update list, also remove the dish and restaurant entities
+
+  // TO DO remove the category
+
+  // TO DO remove the item
 }
 
 // TODO
