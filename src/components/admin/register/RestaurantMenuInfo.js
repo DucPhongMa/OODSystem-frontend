@@ -267,7 +267,14 @@ function RestaurantMenuInfo({ formData, setFormData }) {
                   <ListItem key={item.name}>
                     <ListItemText
                       primary={item.name}
-                      secondary={`Description: ${item.description}, Price: ${item.price}, imageURL: ${item.imageName}`}
+                      secondary={
+                      <>
+                        <div>Description: {item.description}</div>
+                        <div>Price: {item.price}</div>
+                        <div>
+                          Image Name: <img src={item.imageName} alt="Item Image" style={{ maxWidth: '100px', maxHeight: '100px' }} />
+                        </div>
+                      </>}
                     />
                     <IconButton
                       onClick={(event) => handleDeleteItem(event, item)}
