@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams } from 'next/navigation';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -10,13 +10,16 @@ import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 
 import { getRestaurantByRoute } from '../../api/restaurant';
-import RestaurantAppBar from '@/app/components/RestaurantAppBar';
-import CategoryCard from '@/app/components/CategoryCard';
+import RestaurantAppBar from '@/components/restaurant/RestaurantAppBar';
+import CategoryCard from '@/components/restaurant/CategoryCard';
+import { CustomerIDContext, SetCustomerIDContext } from '@/app/page';
 
 export default function RestaurantDetail() {
   const [restaurantData, setRestaurantData] = useState('');
   const params = useParams();
   const restaurantRoute = params.route;
+  const customerID = useContext(CustomerIDContext);
+  const setCustomerID = useContext(SetCustomerIDContext);
 
   useEffect(() => {
     async function fetchMyAPI() {
@@ -45,7 +48,11 @@ export default function RestaurantDetail() {
       )}
       {restaurantData && (
         <>
-          <RestaurantAppBar restaurantInfo={restaurantData} />
+          <RestaurantAppBar
+            restaurantInfo={restaurantData}
+            customerID={customerID}
+            setCustomerID={setCustomerID}
+          />
           <Image
             src="/Food_Banner.jpeg"
             alt="banner example"
