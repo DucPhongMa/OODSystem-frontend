@@ -12,16 +12,20 @@ import {
   DialogContent,
   DialogActions,
   IconButton,
+  Input
 } from "@mui/material";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import RemoveIcon from "@mui/icons-material/Remove";
 
 function RestaurantMenuInfo({ formData, setFormData }) {
   const [activeCategory, setActiveCategory] = useState(null);
   const [newCategoryName, setNewCategoryName] = useState("");
+  const [file, setFile] = useState(null);
   const [newItem, setNewItem] = useState({
     name: "",
     description: "",
     price: "",
+    imageName: "" // Added state for image name
   });
 
   const handleSaveCategory = () => {
@@ -61,41 +65,83 @@ function RestaurantMenuInfo({ formData, setFormData }) {
     });
   };
 
-  const handleSaveItem = () => {
+  const handleSaveItem = async (e) => {
+    e.preventDefault();
     const trimmedItemName = newItem.name.trim();
     const trimmedItemDescription = newItem.description.trim();
     const trimmedItemPrice = newItem.price.trim();
-
+  
     if (!trimmedItemName || !trimmedItemPrice) {
       alert("Item name and price cannot be empty.");
       return;
     }
-
+  
     if (activeCategory.items.some((item) => item.name === trimmedItemName)) {
       alert("An item with this name already exists in this category.");
       return;
     }
+    //===========================Upload Images============================
+    const formData2 = new FormData();
+    formData2.append('file', file);
+    formData2.append('upload_preset', 'my-uploads');
+  
+    try {
+      const data = await fetch('https://api.cloudinary.com/v1_1/dyu1deqdg/image/upload', {
+        method: 'POST',
+        body: formData2
+      }).then(r => r.json());
+      console.log('data', data);
+      console.log('image_url', data.secure_url);
+  
+      const uploadImage = data.secure_url;
+  
+      if (!uploadImage) {
+        console.error("Image upload failed.");
+        return;
+      }
+  
+      // Update newItem state with imageName
+      setNewItem({ ...newItem, imageName: uploadImage });
+      //============================================================================
 
-    const updatedItem = {
-      name: trimmedItemName,
-      description: trimmedItemDescription,
-      price: trimmedItemPrice,
-    };
-
-    const updatedCategories = formData.categories.map((category) =>
-      category.name === activeCategory.name
-        ? { ...category, items: [...category.items, updatedItem] }
-        : category
-    );
-
-    const updatedActiveCategory = updatedCategories.find(
-      (category) => category.name === activeCategory.name
-    );
-
-    setFormData({ ...formData, categories: updatedCategories });
-    setNewItem({ name: "", description: "", price: "" });
-    setActiveCategory(updatedActiveCategory);
+      const updatedItem = {
+        name: trimmedItemName,
+        description: trimmedItemDescription,
+        price: trimmedItemPrice,
+        imageName: uploadImage
+      };
+  
+      const updatedCategories = formData.categories.map((category) =>
+        category.name === activeCategory.name
+          ? { ...category, items: [...category.items, updatedItem] }
+          : category
+      );
+  
+      setFormData({
+        ...formData,
+        categories: updatedCategories
+      });
+  
+      setActiveCategory((prevActiveCategory) => {
+        const updatedActiveCategory = updatedCategories.find(
+          (category) => category.name === prevActiveCategory.name
+        );
+        return updatedActiveCategory || null;
+      });
+  
+      // Reset input fields after save
+      setNewItem({
+        name: "",
+        description: "",
+        price: "",
+        imageName: ""
+      });
+  
+    } catch (error) {
+      console.error(error);
+    }
   };
+  
 
   const handleDeleteItem = (event, itemToDelete) => {
     event.stopPropagation();
@@ -114,6 +160,16 @@ function RestaurantMenuInfo({ formData, setFormData }) {
 
     setFormData({ ...formData, categories: updatedCategories });
     setActiveCategory(updatedActiveCategory);
+  };
+
+  const handleImageUpload = async (e) => {
+    e.preventDefault();
+    const uploadedFile = e.target.files[0];
+    setFile(uploadedFile);
+
+    // Use uploadedFile instead of file because file may not have been updated yet
+    console.log('file', uploadedFile);
+   
   };
 
   return (
@@ -189,6 +245,21 @@ function RestaurantMenuInfo({ formData, setFormData }) {
                     }
                   />
                 </Grid>
+                 {/* File Upload Input */}
+                <Grid item xs={12}>
+                  <Input
+                    type="file"
+                    id="upload-image"
+                    onChange={handleImageUpload}
+                    inputProps={{
+                      accept: 'image/*',
+                    }}
+                    fullWidth
+                  />
+                  <br /><br />
+                  {newItem.imageName && <p>File Name: {newItem.imageName}</p>} {/* Display file name */}
+                </Grid>
+                {/* End File Upload Input */}
               </Grid>
               <Button onClick={handleSaveItem}>Save Item</Button>
               <List sx={{ maxHeight: "200px", overflow: "auto" }}>
@@ -196,7 +267,7 @@ function RestaurantMenuInfo({ formData, setFormData }) {
                   <ListItem key={item.name}>
                     <ListItemText
                       primary={item.name}
-                      secondary={`Description: ${item.description}, Price: ${item.price}`}
+                      secondary={`Description: ${item.description}, Price: ${item.price}, imageURL: ${item.imageName}`}
                     />
                     <IconButton
                       onClick={(event) => handleDeleteItem(event, item)}

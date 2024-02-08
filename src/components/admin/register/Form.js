@@ -236,12 +236,14 @@ function Form() {
               if (page === FormTitles.length - 1) {
                 // When user clicks the Submit button to submit the registration form
                 alert("FORM SUBMITTED")
-                // console.log(formData)
+                console.log(formData)
                 try {
                   // Get an array of just category names
                   let categoryNames = formData.categories.map(
                     (category) => category.name
                   )
+
+                  console.log(categoryNames);
                   await registerBusiness(
                     formData.email,
                     formData.confirmPassword
@@ -253,9 +255,11 @@ function Form() {
                         category_id: index,
                         name: item.name,
                         price: item.price,
+                        description: item.description,
+                        imageURL: item.imageName
                       }))
                   )
-                  // console.log(allItems)
+                  console.log(allItems)
                   const restaurantData = await addRestaurant(
                     formData.name,
                     formData.route,
