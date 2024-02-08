@@ -20,14 +20,14 @@ export const registerBusiness = async (email, password) => {
       value: responseData.jwt,
       expiry: new Date().getTime() + 30 * 60000,
     }
-    localStorage.setItem("authorization", JSON.stringify(item))
+    localStorage.setItem("business-authorization", JSON.stringify(item))
   } catch (e) {
     // redirect to error page
     console.error(e)
   }
 }
 
-export const loginBusiness = async (identifier, password) => {
+export const loginUser = async (identifier, password) => {
   try {
     const response = await fetch(`${API_BACKEND}api/auth/local`, {
       method: "POST",
@@ -39,15 +39,26 @@ export const loginBusiness = async (identifier, password) => {
         password: password,
       }),
     })
-
     const responseData = await response.json()
+    const userInfo = await fetch(`${API_BACKEND}api/users/me?populate=*`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${responseData.jwt}`,
+      },
+    })
 
+    const userInfoData = await userInfo.json()
     if (responseData.jwt) {
       const item = {
         value: responseData.jwt,
         expiry: new Date().getTime() + 30 * 60000,
       }
-      localStorage.setItem("authorization", JSON.stringify(item))
+      if (userInfoData.role.name == "Business") {
+        localStorage.setItem("business-authorization", JSON.stringify(item))
+      } else {
+        localStorage.setItem("customer-authorization", JSON.stringify(item))
+      }
+
       localStorage.setItem("username", identifier)
     } else {
       return "Email or password is incorrect! Please check!"
@@ -57,9 +68,8 @@ export const loginBusiness = async (identifier, password) => {
   }
 }
 
-export const checkLogin = () => {
-  const itemStr = localStorage.getItem("authorization")
-  console.log(itemStr)
+export const checkBusinessLogin = () => {
+  const itemStr = localStorage.getItem("business-authorization")
   if (!itemStr) {
     return false
   }
@@ -67,13 +77,39 @@ export const checkLogin = () => {
   const now = new Date()
   // compare the expiry time of the item with the current time
   if (now.getTime() > item.expiry) {
-    localStorage.removeItem("authorization")
+    localStorage.removeItem("business-authorization")
     return false
   }
   return true
 }
 
 export const removeToken = () => {
-  localStorage.removeItem('authorization');
-  localStorage.removeItem('username');
+  localStorage.removeItem("business-authorization")
+  localStorage.removeItem("username")
+}
+
+export const registerCustomer = async (email, password) => {
+  try {
+    const response = await fetch(`${API_BACKEND}api/auth/local/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: email,
+        email: email,
+        password: password,
+      }),
+    })
+
+    const responseData = await response.json()
+    const item = {
+      value: responseData.jwt,
+      expiry: new Date().getTime() + 1440 * 60000,
+    }
+    localStorage.setItem("customer-authorization", JSON.stringify(item))
+  } catch (e) {
+    // redirect to error page
+    console.error(e)
+  }
 }
