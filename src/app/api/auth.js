@@ -105,7 +105,7 @@ export const registerCustomer = async (email, password) => {
     const responseData = await response.json()
     const item = {
       value: responseData.jwt,
-      expiry: new Date().getTime() + 30 * 60000,
+      expiry: new Date().getTime() + 1440 * 60000,
     }
     localStorage.setItem("customer-authorization", JSON.stringify(item))
   } catch (e) {
