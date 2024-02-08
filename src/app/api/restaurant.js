@@ -38,18 +38,21 @@ export const addRestaurant = async (
   // persist menu_items to database;
 
   for (const dish of dishesList) {
+    console.log('============= Dish: ', dish);
     await fetch(`${API_BACKEND}api/menu-items`, {
       method: "POST",
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Content-type": "application/json",
       },
+     
       body: JSON.stringify({
         data: {
           description: dish.description,
           name: dish.name,
           price: dish.price,
           menu_category: categoryListID[dish.category_id],
+          imageURL: dish.imageURL
         },
       }),
     })
