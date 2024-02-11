@@ -8,6 +8,9 @@ import IconButton from '@mui/material/IconButton';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useAtom } from 'jotai';
+import { cartAtom } from '../../../../store';
+
 
 const RestaurantAppBar = ({ restaurantInfo, customerID, setCustomerID }) => {
   // console.log(restaurantInfo);
@@ -19,6 +22,9 @@ const RestaurantAppBar = ({ restaurantInfo, customerID, setCustomerID }) => {
   // console.log(restaurantInfo.hours.thursday);
   // console.log(restaurantInfo.hours[dayOfWeek].open);
 
+  const [cart, setCart] = useAtom(cartAtom);
+  console.log("cart:");
+  console.log(cart);
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">

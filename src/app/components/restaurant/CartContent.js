@@ -1,10 +1,13 @@
 import { Typography } from '@mui/material';
-import { useContext } from 'react';
-import { SetCartContext } from '../../page';
+import { useAtom } from 'jotai';
+import { cartAtom } from '../../../../store';
 
 const CartContent = () => {
-  const cart = useContext(CartContent);
-  const setCart = useContext(SetCartContext);
+  const [cart, setCart] = useAtom(cartAtom);
+  console.log('cart:');
+  console.log(cart);
+
+
 
   const addToItemQuantity = (itemID) => {
     setCart((prevCart) => {
