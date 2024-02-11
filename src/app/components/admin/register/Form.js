@@ -14,7 +14,7 @@ import RestaurantHoursInfo from "./RestaurantHoursInfo"
 import RestaurantMenuInfo from "./RestaurantMenuInfo"
 import RestaurantThemeInfo from "./RestaurantThemeInfo"
 import ConfirmInfo from "./ConfirmInfo"
-import { addRestaurant } from "../../../app/api/restaurant"
+import { addRestaurant } from "../../../api/restaurant"
 import { registerBusiness } from "@/app/api/auth"
 
 function validateEmail(email) {

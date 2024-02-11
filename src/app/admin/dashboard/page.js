@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { LineChart, PieChart  } from '@mui/x-charts';
-import MainNavbar from '../../../components/admin/register/MainNavbar'
+import MainNavbar from '../../components/admin/register/MainNavbar'
 import {getRestaurantByBusinessName} from '../../api/restaurant'
 
 

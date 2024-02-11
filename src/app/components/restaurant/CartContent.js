@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import { useContext } from 'react';
-import { SetCartContext } from '../../app/page';
+import { SetCartContext } from '../../page';
 
 const CartContent = () => {
   const cart = useContext(CartContent);

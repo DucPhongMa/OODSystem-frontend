@@ -10,8 +10,8 @@ import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 
 import { getRestaurantByRoute } from '../../api/restaurant';
-import RestaurantAppBar from '@/components/restaurant/RestaurantAppBar';
-import CategoryCard from '@/components/restaurant/CategoryCard';
+import RestaurantAppBar from '@/app/components/restaurant/RestaurantAppBar';
+import CategoryCard from '@/app/components/restaurant/CategoryCard';
 import { CustomerIDContext, SetCustomerIDContext } from '@/app/page';
 
 export default function RestaurantDetail() {

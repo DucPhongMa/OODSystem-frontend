@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, useMediaQuery, Drawer, List, ListItem, ListItemText, ListItemIcon } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import Link from "next/link";
-import {removeToken} from "../../../app/api/auth"
+import {removeToken} from "../../../api/auth"
 
 export default function Landing({ isLoggedin }) {
   const [mobileMenuAnchor, setMobileMenuAnchor] = useState(null);
