@@ -3,8 +3,10 @@ import { useAtom } from 'jotai';
 import { cartAtom } from '../../../../store';
 import CloseIcon from '@mui/icons-material/Close';
 import CartItem from './CartItem';
+import { useRouter } from 'next/navigation';
 
 const CartContent = ({ handleClose }) => {
+  const router = useRouter();
   const [cart, setCart] = useAtom(cartAtom);
   console.log('cart:');
   console.log(cart);
@@ -39,6 +41,7 @@ const CartContent = ({ handleClose }) => {
   const handleCheckout=()=>{
     // link to checkout
     console.log(cart)
+    router.push('/[route]/checkout');
   }
 
   return (
