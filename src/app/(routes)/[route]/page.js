@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -12,14 +12,12 @@ import { Typography } from '@mui/material';
 import { getRestaurantByRoute } from '../../api/restaurant';
 import RestaurantAppBar from '@/app/components/restaurant/RestaurantAppBar';
 import CategoryCard from '@/app/components/restaurant/CategoryCard';
-import { CustomerIDContext, SetCustomerIDContext } from '@/app/page';
 
 export default function RestaurantDetail() {
   const [restaurantData, setRestaurantData] = useState('');
   const params = useParams();
   const restaurantRoute = params.route;
-  const customerID = useContext(CustomerIDContext);
-  const setCustomerID = useContext(SetCustomerIDContext);
+
 
   useEffect(() => {
     async function fetchMyAPI() {
