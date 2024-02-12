@@ -19,7 +19,6 @@ export default function RestaurantDetail() {
   const [restaurantData, setRestaurantData] = useState('');
   const params = useParams();
   const restaurantRoute = params.route;
-  const [customerID, setCustomerID] = useAtom(customerIDAtom);
 
 
   useEffect(() => {
