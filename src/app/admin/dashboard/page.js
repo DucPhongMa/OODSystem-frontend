@@ -1,130 +1,80 @@
-"use client"
-import { useEffect, useState } from "react"
-import { checkBusinessLogin } from "@/app/api/auth"
-import { Button, Grid, Paper, Box, Typography } from "@mui/material"
-import Link from "next/link"
-import { LineChart, PieChart } from "@mui/x-charts"
-import MainNavbar from "../../../components/admin/register/MainNavbar"
-import { getRestaurantByBusinessName } from "../../api/restaurant"
+'use client';
+import { useEffect, useState } from 'react';
+import { checkBusinessLogin } from '@/app/api/auth';
+import { Button, Grid, Paper, Box, Typography } from '@mui/material';
+import Link from 'next/link';
+import { LineChart, PieChart } from '@mui/x-charts';
+import { getRestaurantByBusinessName } from '../../api/restaurant';
+import { MainNavbar } from '../../components/admin/register/MainNavbar';
 
 export default function DashboardPage() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [restaurantRoute, setRestaurantRoute] = useState("")
-  const [username, setUsername] = useState("")
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [restaurantRoute, setRestaurantRoute] = useState('');
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
-    const checkLoggedIn = checkBusinessLogin()
-    console.log(checkLoggedIn)
-    setIsLoggedIn(checkLoggedIn)
-    setIsLoading(false)
+    const checkLoggedIn = checkBusinessLogin();
+    console.log(checkLoggedIn);
+    setIsLoggedIn(checkLoggedIn);
+    setIsLoading(false);
 
     // Get username from localStorage
-    const storedUsername = localStorage.getItem("username")
+    const storedUsername = localStorage.getItem('username');
     if (storedUsername) {
-      setUsername(storedUsername)
+      setUsername(storedUsername);
 
       async function fetchMyAPI() {
-        const restaurantData = await getRestaurantByBusinessName(storedUsername)
-        setRestaurantRoute(restaurantData)
+        const restaurantData = await getRestaurantByBusinessName(
+          storedUsername
+        );
+        setRestaurantRoute(restaurantData);
       }
 
-      fetchMyAPI()
+      fetchMyAPI();
     }
-  }, [])
-  console.log("route: ", restaurantRoute)
+  }, []);
+  console.log('route: ', restaurantRoute);
   return isLoading ? (
     <div>"Is Loading"</div>
   ) : isLoggedIn ? (
     <div>
       <MainNavbar isLoggedin={isLoggedIn} />
 
-      <Box
-        mt={4}
-        textAlign="center"
-      >
-        <Typography
-          variant="h4"
-          fontWeight="bold"
-        >
+      <Box mt={4} textAlign="center">
+        <Typography variant="h4" fontWeight="bold">
           Dashboard
         </Typography>
       </Box>
-      <Grid
-        container
-        spacing={3}
-        style={{ padding: "20px" }}
-      >
-        <Grid
-          item
-          xs={12}
-          md={6}
-        >
-          <Paper style={{ padding: "20px", height: "100%" }}>
-            <Typography
-              variant="h5"
-              fontWeight="bold"
-              gutterBottom
-            >
+      <Grid container spacing={3} style={{ padding: '20px' }}>
+        <Grid item xs={12} md={6}>
+          <Paper style={{ padding: '20px', height: '100%' }}>
+            <Typography variant="h5" fontWeight="bold" gutterBottom>
               Pick Up Order System
             </Typography>
             <Typography>Placed Orders: 313</Typography>
             <Typography>Success Orders: 290</Typography>
             <Typography>Fail Orders: 23</Typography>
             <Typography>Successful Order Rate: 92%</Typography>
-            <Grid
-              container
-              spacing={2}
-              style={{ marginTop: "20px" }}
-            >
-              <Grid
-                item
-                xs={6}
-              >
-                <Link
-                  href="/admin/order-history"
-                  passHref
-                >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                  >
+            <Grid container spacing={2} style={{ marginTop: '20px' }}>
+              <Grid item xs={6}>
+                <Link href="/admin/order-history" passHref>
+                  <Button variant="contained" color="primary" fullWidth>
                     View Order History
                   </Button>
                 </Link>
               </Grid>
-              <Grid
-                item
-                xs={6}
-              >
-                <Link
-                  href="/admin/order-dashboard"
-                  passHref
-                >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                  >
+              <Grid item xs={6}>
+                <Link href="/admin/order-dashboard" passHref>
+                  <Button variant="contained" color="primary" fullWidth>
                     View Order Dashboard
                   </Button>
                 </Link>
               </Grid>
             </Grid>
-            <Grid
-              container
-              spacing={2}
-              style={{ marginTop: "20px" }}
-            >
-              <Grid
-                item
-                xs={12}
-              >
-                <Box
-                  border={1}
-                  height={280}
-                >
+            <Grid container spacing={2} style={{ marginTop: '20px' }}>
+              <Grid item xs={12}>
+                <Box border={1} height={280}>
                   <LineChart
                     xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
                     series={[
@@ -140,57 +90,36 @@ export default function DashboardPage() {
             </Grid>
           </Paper>
         </Grid>
-        <Grid
-          item
-          xs={12}
-          md={6}
-        >
-          <Paper style={{ padding: "20px", height: "100%" }}>
-            <Typography
-              variant="h5"
-              fontWeight="bold"
-              gutterBottom
-            >
+        <Grid item xs={12} md={6}>
+          <Paper style={{ padding: '20px', height: '100%' }}>
+            <Typography variant="h5" fontWeight="bold" gutterBottom>
               Website
             </Typography>
             <Typography>Total visitors: 900</Typography>
             <Typography>Monthly visitors: 254</Typography>
             <Typography>Most Traffic Month: August</Typography>
             <br />
-            <Link
-              href={`http://localhost:3000/${restaurantRoute}`}
-              passHref
-            >
+            <Link href={`http://localhost:3000/${restaurantRoute}`} passHref>
               <Button
                 variant="contained"
                 color="secondary"
                 fullWidth
-                style={{ marginTop: "35px" }}
+                style={{ marginTop: '35px' }}
               >
                 View Website
               </Button>
             </Link>
 
-            <Grid
-              container
-              spacing={2}
-              style={{ marginTop: "20px" }}
-            >
-              <Grid
-                item
-                xs={12}
-              >
-                <Box
-                  border={1}
-                  height={280}
-                >
+            <Grid container spacing={2} style={{ marginTop: '20px' }}>
+              <Grid item xs={12}>
+                <Box border={1} height={280}>
                   <PieChart
                     series={[
                       {
                         data: [
-                          { id: 0, value: 10, label: "series A" },
-                          { id: 1, value: 15, label: "series B" },
-                          { id: 2, value: 20, label: "series C" },
+                          { id: 0, value: 10, label: 'series A' },
+                          { id: 1, value: 15, label: 'series B' },
+                          { id: 2, value: 20, label: 'series C' },
                         ],
                       },
                     ]}
@@ -208,5 +137,5 @@ export default function DashboardPage() {
       <MainNavbar isLoggedin={isLoggedIn} />
       <p>"You are not auth"</p>
     </div>
-  )
+  );
 }
