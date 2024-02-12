@@ -16,6 +16,7 @@ import clsx from 'clsx';
 import { styled, css } from '@mui/system';
 import { Modal as BaseModal } from '@mui/base/Modal';
 import CartContent from './CartContent';
+import { Badge } from '@mui/material';
 
 const RestaurantAppBar = ({ restaurantInfo }) => {
   // console.log(restaurantInfo);
@@ -128,9 +129,15 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
             aria-label="add to shopping cart"
             onClick={handleOpen}
           >
-            {/* <Link href={`/${restaurantInfo.route}/cart`}> */}
-            <AddShoppingCartIcon />
-            {/* </Link> */}
+            <Badge
+              badgeContent={cart.reduce(
+                (total, item) => total + item.quantity,
+                0
+              )}
+              color="error"
+            >
+              <AddShoppingCartIcon />
+            </Badge>
           </IconButton>
           <Modal
             aria-labelledby="unstyled-modal-title"
