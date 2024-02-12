@@ -14,12 +14,12 @@ import RestaurantAppBar from '@/app/components/restaurant/RestaurantAppBar';
 import CategoryCard from '@/app/components/restaurant/CategoryCard';
 import { customerIDAtom } from '../../../../store';
 import { useAtom } from 'jotai';
+import Link from 'next/link';
 
 export default function RestaurantDetail() {
   const [restaurantData, setRestaurantData] = useState('');
   const params = useParams();
   const restaurantRoute = params.route;
-
 
   useEffect(() => {
     async function fetchMyAPI() {
@@ -48,9 +48,7 @@ export default function RestaurantDetail() {
       )}
       {restaurantData && (
         <>
-          <RestaurantAppBar
-            restaurantInfo={restaurantData}
-          />
+          <RestaurantAppBar restaurantInfo={restaurantData} />
           <Image
             src="/Food_Banner.jpeg"
             alt="banner example"
@@ -79,11 +77,17 @@ export default function RestaurantDetail() {
             {restaurantData.menu.data.attributes.menu_categories.data.map(
               (item, index) => (
                 <Grid item xs={4} key={index}>
-                  <CategoryCard
-                    image="https://images.pexels.com/photos/12516840/pexels-photo-12516840.jpeg"
-                    categoryName={item.attributes.nameCate}
-                    handleClick={() => {}}
-                  />
+                  <Link
+                    href={`/${restaurantRoute}/menu#${
+                      index === 0 ? 'top' : item.attributes.nameCate
+                    }`}
+                  >
+                    <CategoryCard
+                      image="https://images.pexels.com/photos/12516840/pexels-photo-12516840.jpeg"
+                      categoryName={item.attributes.nameCate}
+                      handleClick={() => {}}
+                    />
+                  </Link>
                 </Grid>
               )
             )}
