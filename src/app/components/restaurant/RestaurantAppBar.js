@@ -1,4 +1,3 @@
-import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,10 +8,10 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAtom } from 'jotai';
-import { cartAtom } from '../../../../store';
+import { cartAtom, customerIDAtom } from '../../../../store';
+import { useEffect } from 'react';
 
-
-const RestaurantAppBar = ({ restaurantInfo, customerID, setCustomerID }) => {
+const RestaurantAppBar = ({ restaurantInfo }) => {
   // console.log(restaurantInfo);
   const currentDate = new Date();
   const dayOfWeek = currentDate
@@ -21,9 +20,14 @@ const RestaurantAppBar = ({ restaurantInfo, customerID, setCustomerID }) => {
   // console.log(restaurantInfo.hours);
   // console.log(restaurantInfo.hours.thursday);
   // console.log(restaurantInfo.hours[dayOfWeek].open);
+  const [customerID, setCustomerID] = useAtom(customerIDAtom);
+
+  useEffect(() => {
+    setCustomerID(1); //only for testing
+  }, []);
 
   const [cart, setCart] = useAtom(cartAtom);
-  console.log("cart:");
+  console.log('cart:');
   console.log(cart);
   return (
     <Box sx={{ flexGrow: 1 }}>
