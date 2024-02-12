@@ -111,6 +111,7 @@ export default function ItemDialog({
             </Box>
             <Button
               variant="contained"
+              color="primary"
               sx={{ mt: 2 }}
               onClick={handleAddToCart}
             >

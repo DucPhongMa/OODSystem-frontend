@@ -15,6 +15,7 @@ import CategoryCard from '@/app/components/restaurant/CategoryCard';
 import { customerIDAtom } from '../../../../store';
 import { useAtom } from 'jotai';
 import Link from 'next/link';
+import RestaurantFooter from '@/app/components/restaurant/RestaurantFooter';
 
 export default function RestaurantDetail() {
   const [restaurantData, setRestaurantData] = useState('');
@@ -53,11 +54,12 @@ export default function RestaurantDetail() {
             src="/Food_Banner.jpeg"
             alt="banner example"
             width={1500}
-            height={30}
+            height={500} // specify the height
             priority={true}
+            layout="responsive" // add this to maintain aspect ratio
           />
           {/* category */}
-          <Grid container spacing={2} sx={{ margin: '20px' }}>
+          <Grid container spacing={2} sx={{ padding: '20px' }}>
             {/* <Grid item xs={4}>
               <CategoryCard
                 image="https://cdn12.picryl.com/photo/2016/12/31/the-cake-dessert-eating-food-drink-b83df2-1024.jpg"
@@ -208,119 +210,7 @@ export default function RestaurantDetail() {
             </Grid>
           </Grid>
           {/* bottom */}
-          <Grid
-            container
-            spacing={2}
-            sx={{
-              marginTop: '20px',
-              bgcolor: '#0066ff',
-              // height: '60vh',
-              height: '300',
-              maxWidth: '100%',
-            }}
-          >
-            <Grid
-              item
-              xs={4}
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-              }}
-            >
-              <Typography
-                gutterBottom
-                variant="h6"
-                component="div"
-                sx={{
-                  textAlign: 'center',
-                  color: 'white',
-                }}
-              >
-                CONTACT <br />
-              </Typography>
-              <Typography
-                gutterBottom
-                variant="h7"
-                component="div"
-                sx={{
-                  textAlign: 'center',
-                  color: 'white',
-                }}
-              >
-                Phone: {restaurantData.restaurant_contact.phone}
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              xs={4}
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-              }}
-            >
-              <Typography
-                gutterBottom
-                variant="h6"
-                component="div"
-                sx={{
-                  textAlign: 'center',
-                  color: 'white',
-                }}
-              >
-                LOCATION <br />
-              </Typography>
-              <Typography
-                gutterBottom
-                variant="h7"
-                component="div"
-                sx={{
-                  textAlign: 'left',
-                  color: 'white',
-                }}
-              >
-                Address: {restaurantData.restaurant_contact.address} <br />
-                City:{restaurantData.restaurant_contact.city} <br />
-                Postal Code: {restaurantData.restaurant_contact.postalCode}{' '}
-                <br />
-                Province:{restaurantData.restaurant_contact.provinceOrState}
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              xs={4}
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-              }}
-            >
-              <Typography
-                gutterBottom
-                variant="h6"
-                component="div"
-                sx={{
-                  textAlign: 'center',
-                  color: 'white',
-                }}
-              >
-                SUPPORT <br />
-              </Typography>
-              <Typography
-                gutterBottom
-                variant="h7"
-                component="div"
-                sx={{
-                  textAlign: 'center',
-                  color: 'white',
-                }}
-              ></Typography>
-            </Grid>
-          </Grid>
+          <RestaurantFooter restaurantData={restaurantData} />
         </>
       )}
     </>

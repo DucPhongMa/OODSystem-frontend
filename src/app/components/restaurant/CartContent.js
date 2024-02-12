@@ -1,14 +1,17 @@
-import { Box, Button, IconButton, Typography } from '@mui/material';
-import { useAtom } from 'jotai';
-import { cartAtom } from '../../../../store';
-import CloseIcon from '@mui/icons-material/Close';
-import CartItem from './CartItem';
-import { useRouter } from 'next/navigation';
+import { Box, Button, IconButton, Typography } from "@mui/material";
+import { useAtom } from "jotai";
+import { cartAtom } from "../../../../store";
+import CloseIcon from "@mui/icons-material/Close";
+import CartItem from "./CartItem";
+import { useRouter, useParams } from "next/navigation";
 
 const CartContent = ({ handleClose }) => {
   const router = useRouter();
+  const params = useParams();
+  const restaurantRoute = params.route;
   const [cart, setCart] = useAtom(cartAtom);
-  console.log('cart:');
+
+  console.log("cart:");
   console.log(cart);
 
   const addToItemQuantity = (itemID) => {
@@ -34,15 +37,15 @@ const CartContent = ({ handleClose }) => {
     });
   };
 
-  const clearCart=()=>{
+  const clearCart = () => {
     setCart([]);
-  }
+  };
 
-  const handleCheckout=()=>{
+  const handleCheckout = () => {
     // link to checkout
-    console.log(cart)
-    router.push('/[route]/checkout');
-  }
+    console.log(cart);
+    router.push(`/${restaurantRoute}/checkout`);
+  };
 
   return (
     <>
