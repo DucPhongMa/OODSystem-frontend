@@ -50,8 +50,6 @@ export default function RestaurantDetail() {
         <>
           <RestaurantAppBar
             restaurantInfo={restaurantData}
-            customerID={customerID}
-            setCustomerID={setCustomerID}
           />
           <Image
             src="/Food_Banner.jpeg"
