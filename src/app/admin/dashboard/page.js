@@ -5,7 +5,8 @@ import { Button, Grid, Paper, Box, Typography } from '@mui/material';
 import Link from 'next/link';
 import { LineChart, PieChart } from '@mui/x-charts';
 import { getRestaurantByBusinessName } from '../../api/restaurant';
-import { MainNavbar } from '../../components/admin/register/MainNavbar';
+import MainNavbar from '../../components/admin/register/MainNavbar';
+
 
 export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true);

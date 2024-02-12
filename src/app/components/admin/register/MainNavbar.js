@@ -5,7 +5,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Link from "next/link";
 import {removeToken} from "../../../api/auth"
 
-export default function Landing({ isLoggedin }) {
+export default function MainNavbar({ isLoggedin }) {
   const [mobileMenuAnchor, setMobileMenuAnchor] = useState(null);
   const isMobileOrTablet = useMediaQuery('(max-width:960px)');
 
