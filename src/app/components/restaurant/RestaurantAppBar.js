@@ -8,8 +8,11 @@ import IconButton from '@mui/material/IconButton';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useAtom } from 'jotai';
+import { cartAtom } from '../../../../store';
 
-const RestaurantAppBar = ({ restaurantInfo }) => {
+
+const RestaurantAppBar = ({ restaurantInfo, customerID, setCustomerID }) => {
   // console.log(restaurantInfo);
   const currentDate = new Date();
   const dayOfWeek = currentDate
@@ -19,6 +22,9 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
   // console.log(restaurantInfo.hours.thursday);
   // console.log(restaurantInfo.hours[dayOfWeek].open);
 
+  const [cart, setCart] = useAtom(cartAtom);
+  console.log("cart:");
+  console.log(cart);
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -77,7 +83,12 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
             {/* </div> */}
           </div>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <Link href={`/${restaurantInfo.route}/menu`}>ORDER PICKUP</Link>
+            {customerID && (
+              <Link href={`/${restaurantInfo.route}/menu`}>ORDER PICKUP</Link>
+            )}
+            {!customerID && (
+              <Link href={`/${restaurantInfo.route}/login`}>ORDER PICKUP</Link>
+            )}
           </Typography>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link href={`/${restaurantInfo.route}/about`}>ABOUT</Link>
@@ -89,7 +100,14 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
             <Link href={`/${restaurantInfo.route}/orderhistory`}>ORDERS</Link>
           </Typography>
           <Button color="inherit" variant="outlined">
-            <Link href={`/${restaurantInfo.route}/login`}>Log In</Link>
+            {!customerID && (
+              <Link href={`/${restaurantInfo.route}/login`}>Log In</Link>
+            )}
+            {customerID && (
+              <Link href={`/${restaurantInfo.route}/logout`}>
+                {customerID} Log Out
+              </Link> // here need customer name or email?
+            )}
           </Button>
           <IconButton
             color="inherit"
