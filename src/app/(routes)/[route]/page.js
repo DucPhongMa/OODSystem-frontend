@@ -12,11 +12,14 @@ import { Typography } from '@mui/material';
 import { getRestaurantByRoute } from '../../api/restaurant';
 import RestaurantAppBar from '@/app/components/restaurant/RestaurantAppBar';
 import CategoryCard from '@/app/components/restaurant/CategoryCard';
+import { customerIDAtom } from '../../../../store';
+import { useAtom } from 'jotai';
 
 export default function RestaurantDetail() {
   const [restaurantData, setRestaurantData] = useState('');
   const params = useParams();
   const restaurantRoute = params.route;
+  const [customerID, setCustomerID] = useAtom(customerIDAtom);
 
 
   useEffect(() => {
