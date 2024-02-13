@@ -1,6 +1,6 @@
-'use client';
-import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+"use client";
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import {
   Box,
   Grid,
@@ -17,16 +17,15 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import { getRestaurantByRoute } from '../../../api/restaurant';
-import ItemDialog from '@/app/components/restaurant/ItemDialog';
-import ItemCard from '@/app/components/restaurant/ItemCard';
-import RestaurantAppBar from '@/app/components/restaurant/RestaurantAppBar';
-import RestaurantFooter from '@/app/components/restaurant/RestaurantFooter';
-
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { getRestaurantByRoute } from "../../../api/restaurant";
+import ItemDialog from "@/app/components/restaurant/ItemDialog";
+import ItemCard from "@/app/components/restaurant/ItemCard";
+import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
+import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
 
 export default function RestaurantMenu() {
   const [restaurantData, setRestaurantData] = useState(null);
@@ -51,7 +50,7 @@ export default function RestaurantMenu() {
     const handleHashChange = () => {
       const { hash } = window.location;
       if (hash) {
-        const id = hash.substr(1);
+        const id = hash.substr(1).replace(/\s/g, "_");
         const element = document.getElementById(id);
         if (element) element.scrollIntoView();
       }
@@ -59,10 +58,10 @@ export default function RestaurantMenu() {
 
     handleHashChange();
 
-    window.addEventListener('hashchange', handleHashChange, false);
+    window.addEventListener("hashchange", handleHashChange, false);
 
     return () => {
-      window.removeEventListener('hashchange', handleHashChange, false);
+      window.removeEventListener("hashchange", handleHashChange, false);
     };
   }, []);
 
@@ -102,7 +101,7 @@ export default function RestaurantMenu() {
     if (categoryName === restaurantData.menuCate[0].name) {
       window.scrollTo(0, 0);
     } else {
-      window.location.hash = categoryName;
+      window.location.hash = categoryName.replace(/\s/g, "_");
     }
   };
 
@@ -124,18 +123,21 @@ export default function RestaurantMenu() {
     return null;
   }
 
-
   return (
-    <div>
-      <RestaurantAppBar
-        restaurantInfo={restaurantData}
-      />
-      <Box sx={{ bgcolor: '#c8e6c9', py: 1, position: 'static', zIndex: 2 }}>
+    <Box
+      sx={{
+        background: "linear-gradient(to bottom, #ffffff, #f7fafc)",
+        minHeight: "100vh",
+        backgroundAttachment: "fixed",
+      }}
+    >
+      <RestaurantAppBar restaurantInfo={restaurantData} />
+      <Box sx={{ bgcolor: "#c8e6c9", py: 1, position: "static", zIndex: 2 }}>
         <Container maxWidth="md">
           <Typography
             variant="body1"
             align="center"
-            sx={{ color: '#1b5e20', fontWeight: 'bold' }}
+            sx={{ color: "#1b5e20", fontWeight: "bold" }}
           >
             OPEN FOR PICKUP
           </Typography>
@@ -146,28 +148,28 @@ export default function RestaurantMenu() {
         color="default"
         elevation={0}
         sx={{
-          borderBottom: '1px solid #e0e0e0',
-          backgroundColor: '#f5f5f5',
+          borderBottom: "1px solid #e0e0e0",
+          backgroundColor: "#f5f5f5",
           zIndex: 1,
         }}
       >
-        <Toolbar sx={{ justifyContent: 'center' }}>
+        <Toolbar sx={{ justifyContent: "center" }}>
           {restaurantData.menuCate.map((category) => (
             <Button
               key={category.id}
               variant="contained"
               onClick={() => handleCategoryClick(category.name)}
               sx={{
-                margin: '0 8px',
-                backgroundColor: '#e0e0e0',
-                color: '#424242',
-                fontWeight: 'bold',
-                border: '1px solid #bdbdbd',
-                boxShadow: 'none',
+                margin: "0 8px",
+                backgroundColor: "#e0e0e0",
+                color: "#424242",
+                fontWeight: "bold",
+                border: "1px solid #bdbdbd",
+                boxShadow: "none",
                 borderRadius: 0,
-                '&:hover': {
-                  backgroundColor: '#bbdefb',
-                  boxShadow: 'none',
+                "&:hover": {
+                  backgroundColor: "#bbdefb",
+                  boxShadow: "none",
                 },
               }}
             >
@@ -179,11 +181,20 @@ export default function RestaurantMenu() {
       <Container maxWidth="md">
         <Box sx={{ mt: 3 }}>
           {restaurantData.menuCate.map((category) => (
-            <Box key={category.name} id={category.name} sx={{ mb: 4 }}>
+            <Box
+              key={category.name}
+              id={category.name.replace(/\s/g, "_")}
+              sx={{
+                mb: 4,
+                position: "relative",
+                marginTop: "-70px",
+                paddingTop: "70px",
+              }}
+            >
               <Typography
                 variant="h4"
                 gutterBottom
-                sx={{ fontWeight: 'bold', color: '#4f4f4f' }}
+                sx={{ fontWeight: "bold", color: "#4f4f4f" }}
               >
                 {category.name.toUpperCase()}
               </Typography>
@@ -207,6 +218,6 @@ export default function RestaurantMenu() {
         openDialog={openDialog}
         handleCloseDialog={handleCloseDialog}
       />
-    </div>
+    </Box>
   );
 }

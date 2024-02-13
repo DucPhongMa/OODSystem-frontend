@@ -7,12 +7,12 @@ import {
   Box,
   CardMedia,
   Button,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import { useAtom } from 'jotai';
-import { cartAtom } from '../../../../store';
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { useAtom } from "jotai";
+import { cartAtom } from "../../../../store";
 
 export default function ItemDialog({
   item,
@@ -59,13 +59,14 @@ export default function ItemDialog({
         onClose={handleCloseDialog}
         maxWidth="sm"
         fullWidth
+        sx={{ marginTop: "-50px" }}
       >
         <DialogTitle>
           <IconButton
             aria-label="close"
             onClick={handleCloseDialog}
             sx={{
-              position: 'absolute',
+              position: "absolute",
               right: 8,
               top: 8,
               color: (theme) => theme.palette.grey[500],
@@ -75,27 +76,38 @@ export default function ItemDialog({
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <Box sx={{ textAlign: 'center' }}>
+          <Box sx={{ textAlign: "center" }}>
             <CardMedia
               component="img"
               sx={{
-                width: '100%',
-                height: 'auto',
-                maxWidth: 200,
-                margin: 'auto',
+                width: "100%",
+                height: "auto",
+                maxWidth: 500,
+                margin: "auto",
               }}
               image={item?.imageURL}
               alt={item?.name}
             />
-            <Typography variant="h6" gutterBottom>
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: "bold",
+                color: "#4D4D4D",
+                mt: 2,
+              }}
+              gutterBottom
+            >
               {item?.name}
             </Typography>
-            <Typography variant="body1">{item?.description}</Typography>
+            <Typography variant="body1" sx={{ color: "grey" }}>
+              {item?.description}
+            </Typography>
+
             <Box
               sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
                 mt: 2,
               }}
             >
@@ -111,8 +123,15 @@ export default function ItemDialog({
             </Box>
             <Button
               variant="contained"
-              color="primary"
-              sx={{ mt: 2 }}
+              sx={{
+                mt: 2,
+                backgroundColor: (theme) =>
+                  `${theme.palette.primary.main} !important`,
+                "&:hover": {
+                  backgroundColor: (theme) =>
+                    `${theme.palette.primary.dark} !important`,
+                },
+              }}
               onClick={handleAddToCart}
             >
               Add to Cart ${(item?.price * itemCount).toFixed(2)}

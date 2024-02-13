@@ -1,4 +1,4 @@
-import { Card, CardActionArea, CardContent, CardMedia, Typography } from "@mui/material";
+import { Box, Card, CardActionArea, CardContent, CardMedia, Typography } from "@mui/material";
 
 export default function ItemCard({ item, handleOpenDialog }) {
   return (
@@ -11,7 +11,7 @@ export default function ItemCard({ item, handleOpenDialog }) {
         }}
         onClick={() => handleOpenDialog(item)}
       >
-        <CardContent sx={{ flex: "1 0 auto" }}>
+        <CardContent sx={{ flex: "1 0 auto", width: 'calc(100% - 151px)' }}>
           <Typography component="div" variant="h6">
             {item.name}
           </Typography>
@@ -19,6 +19,13 @@ export default function ItemCard({ item, handleOpenDialog }) {
             variant="body2"
             color="text.secondary"
             component="div"
+            sx={{
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
+            }}
           >
             {item.description}
           </Typography>
@@ -26,20 +33,29 @@ export default function ItemCard({ item, handleOpenDialog }) {
             variant="body1"
             color="text.primary"
             component="div"
+            sx={{ marginTop: 1 }}
           >
-            ${item.price}
+            ${parseFloat(item.price).toFixed(2)}
           </Typography>
         </CardContent>
-        <CardMedia
-          component="img"
-          sx={{
-            width: 151,
-            objectFit: "contain",
-            alignSelf: "center",
-          }}
-          image={item.imageURL}
-          alt={item.name}
-        />
+        <Box sx={{
+          width: 151,
+          height: 151,
+          overflow: 'hidden',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+          <CardMedia
+            component="img"
+            sx={{
+              height: '100%',
+              objectFit: "cover",
+            }}
+            image={item.imageURL}
+            alt={item.name}
+          />
+        </Box>
       </CardActionArea>
     </Card>
   );
