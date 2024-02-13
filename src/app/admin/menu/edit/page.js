@@ -39,6 +39,7 @@ export default function EditMenuPage() {
   })
 
   const [restaurantID, setRestaurantID] = useState()
+  const [file, setFile] = useState(null)
 
   useEffect(() => {
     // check user auth
@@ -104,7 +105,7 @@ export default function EditMenuPage() {
     }
   }
 
-  const handleSaveItem = () => {
+  const handleSaveItem = async () => {
     const trimmedItemName = newItem.name.trim()
     const trimmedItemDescription = newItem.description.trim()
     const trimmedItemPrice = newItem.price.trim()
@@ -119,12 +120,39 @@ export default function EditMenuPage() {
       return
     }
 
+    //===========================Upload Images============================
+    const formData2 = new FormData()
+    formData2.append("file", file)
+    formData2.append("upload_preset", "my-uploads")
+
+    try {
+      const data = await fetch(
+        "https://api.cloudinary.com/v1_1/dyu1deqdg/image/upload",
+        {
+          method: "POST",
+          body: formData2,
+        }
+      ).then((r) => r.json())
+      console.log("data", data)
+      console.log("image_url", data.secure_url)
+
+      const uploadImage = data.secure_url
+
+      if (!uploadImage) {
+        console.error("Image upload failed.")
+        return
+      }
+    } catch (error) {
+      console.error("Image upload failed.")
+    }
+
     const updatedItem = {
       name: trimmedItemName,
       description: trimmedItemDescription,
       price: trimmedItemPrice,
       categoryID: activeCategory.id ? activeCategory.id : null,
       categoryName: activeCategory.name,
+      imageName: uploadImage,
     }
 
     const updatedCategories = menuCats.map((category) =>
@@ -175,6 +203,15 @@ export default function EditMenuPage() {
     if (itemToDelete.id) {
       setItemDeleteList([...itemDeleteList, { ...itemToDelete }])
     }
+  }
+
+  const handleImageUpload = async (e) => {
+    e.preventDefault()
+    const uploadedFile = e.target.files[0]
+    setFile(uploadedFile)
+
+    // Use uploadedFile instead of file because file may not have been updated yet
+    console.log("file", uploadedFile)
   }
   return isLoading ? (
     "Page is loading"
@@ -293,6 +330,25 @@ export default function EditMenuPage() {
                         setNewItem({ ...newItem, price: e.target.value })
                       }
                     />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                  >
+                    <Input
+                      type="file"
+                      id="upload-image"
+                      onChange={handleImageUpload}
+                      inputProps={{
+                        accept: "image/*",
+                      }}
+                      fullWidth
+                    />
+                    <br />
+                    <br />
+                    {newItem.imageName && (
+                      <p>File Name: {newItem.imageName}</p>
+                    )}{" "}
                   </Grid>
                 </Grid>
                 <Button onClick={handleSaveItem}>Save Item</Button>
