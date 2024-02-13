@@ -40,9 +40,9 @@ export default function ItemDialog({
         return [
           ...prevCart,
           {
-            itemID: item.id, // Assuming `item` has an `id` property
-            name: item.name, // Assuming `item` has a `name` property
-            price: item.price, // Assuming `item` has a `price` property
+            itemID: item.id,
+            name: item.name,
+            price: item.price,
             quantity: itemCount,
           },
         ];
@@ -80,9 +80,13 @@ export default function ItemDialog({
             <CardMedia
               component="img"
               sx={{
-                width: "100%",
+                width: "auto",
                 height: "auto",
                 maxWidth: 500,
+                maxHeight: 500,
+                minWidth: "100%",
+                minHeight: "100%",
+                objectFit: "contain",
                 margin: "auto",
               }}
               image={item?.imageURL}
