@@ -183,9 +183,8 @@ export default function CustomerRegisterPage() {
               Register
             </Button>
             <Typography variant="caption">
-              Existing User? <Link href="/DannySushi/login">Sign in</Link>.
+              Existing User? <Link href="/customer/login">Sign in</Link>.
             </Typography>{" "}
-            {/* I don't know how to get dynamic route */}
           </Box>
         </Box>
       </Container>
