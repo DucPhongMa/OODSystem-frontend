@@ -1,6 +1,4 @@
-import { atom } from 'jotai';
+import { atom } from "jotai"
 
-export const customerIDAtom = atom('');
-export const restaurantIDAtom = atom('');
-export const cartAtom = atom([]);
-
+export const restaurantIDAtom = atom("")
+export const cartAtom = atom([])

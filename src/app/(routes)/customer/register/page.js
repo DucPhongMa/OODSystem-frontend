@@ -8,23 +8,27 @@ import {
   Typography,
   AppBar,
   Toolbar,
+  Checkbox,
 } from "@mui/material"
 import { useForm } from "react-hook-form"
-import { loginUser } from "@/app/api/auth"
 import Link from "next/link"
+import { registerCustomer } from "@/app/api/auth"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
 
-export default function CustomerLoginPage() {
+export default function CustomerRegisterPage() {
   const { register, handleSubmit } = useForm()
-  const [error, setError] = useState(null)
   const router = useRouter()
 
   const handleFormSubmit = async (formData) => {
+    const fullName = formData.firstName + " " + formData.lastName
     const currentRestaurant = localStorage.getItem("restaurant-route")
-    const error = await loginUser(formData.email, formData.password)
+    const error = await registerCustomer(
+      formData.email,
+      formData.password,
+      fullName,
+      formData.phoneNum
+    )
     if (error) {
-      console.log(error)
       setError(error)
     } else {
       currentRestaurant && router.push(`/${currentRestaurant}`)
@@ -64,12 +68,8 @@ export default function CustomerLoginPage() {
             alignItems: "center",
           }}
         >
-          <Typography variant="h3">Log In</Typography>
-          {error && (
-            <h3 style={{ color: "red" }}>
-              "Email or password is incorrect! Please check"
-            </h3>
-          )}
+          <Typography variant="h3">Register</Typography>
+
           <Box
             component="form"
             onSubmit={handleSubmit(handleFormSubmit)}
@@ -82,6 +82,30 @@ export default function CustomerLoginPage() {
             >
               <Grid
                 item
+                xs={6}
+              >
+                <TextField
+                  required
+                  fullWidth
+                  id="fName"
+                  label="First Name"
+                  {...register("firstName")}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={6}
+              >
+                <TextField
+                  required
+                  fullWidth
+                  id="lName"
+                  label="Last Name"
+                  {...register("lastName")}
+                />
+              </Grid>
+              <Grid
+                item
                 xs={12}
               >
                 <TextField
@@ -89,8 +113,34 @@ export default function CustomerLoginPage() {
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
+                  label="Email"
                   {...register("email")}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={6}
+              >
+                <TextField
+                  autoComplete="password"
+                  required
+                  fullWidth
+                  id="password"
+                  label="Password"
+                  type="password"
+                  {...register("password")}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={6}
+              >
+                <TextField
+                  required
+                  fullWidth
+                  id="confirm"
+                  label="Confirm Password"
+                  type="password"
                 />
               </Grid>
               <Grid
@@ -98,58 +148,44 @@ export default function CustomerLoginPage() {
                 xs={12}
               >
                 <TextField
-                  autoComplete="password"
                   required
-                  id="password"
-                  label="Password"
-                  type="password"
-                  {...register("password")}
+                  fullWidth
+                  id="phone"
+                  label="Phone Number"
+                  {...register("phoneNum")}
                 />
               </Grid>
+              <Grid
+                item
+                xs={12}
+              >
+                <Typography variant="body1">
+                  Do you agree to the{" "}
+                  <Link href="">
+                    <u>Terms and Conditions</u>
+                  </Link>
+                  <Checkbox required></Checkbox>
+                </Typography>
+              </Grid>
             </Grid>
-            <Grid
-              container
-              spacing={2}
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              style={{
+                backgroundColor: "#1976d2",
+                height: "35px",
+                marginTop: "2em",
+                display: "flex",
+                justifyContent: "center",
+              }}
             >
-              <Grid
-                item
-                xs={6}
-              >
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  style={{
-                    backgroundColor: "#1976d2",
-                    width: "180px",
-                    height: "35px",
-                    marginTop: "2em",
-                  }}
-                >
-                  Log In
-                </Button>
-              </Grid>
-
-              <Grid
-                item
-                xs={6}
-              >
-                {/* I don't know how to get dynamic route */}
-                <Button
-                  href="/DannySushi/register"
-                  fullWidth
-                  variant="contained"
-                  style={{
-                    backgroundColor: "#1976d2",
-                    width: "180px",
-                    height: "35px",
-                    marginTop: "2em",
-                  }}
-                >
-                  Register
-                </Button>
-              </Grid>
-            </Grid>
+              Register
+            </Button>
+            <Typography variant="caption">
+              Existing User? <Link href="/DannySushi/login">Sign in</Link>.
+            </Typography>{" "}
+            {/* I don't know how to get dynamic route */}
           </Box>
         </Box>
       </Container>
