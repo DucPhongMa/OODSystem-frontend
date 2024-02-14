@@ -35,10 +35,6 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
   const handleOpen = () => setCartOpen(true);
   const handleClose = () => setCartOpen(false);
 
-  useEffect(() => {
-    // setCustomerID(1); //only for testing
-  }, []);
-
   const [cart, setCart] = useAtom(cartAtom);
   console.log('cart:');
   console.log(cart);
@@ -99,86 +95,85 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
             </Typography> */}
             {/* </div> */}
           </div>
+
           {/* ORDER PICKUP */}
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {customerID && (
+          {customerID !== '' && (
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               <Link href={`/${restaurantInfo.route}/menu`}>ORDER PICKUP</Link>
-            )}
-            {!customerID && (
-              <Typography
-                variant="h6"
-                component="div"
-                sx={{ flexGrow: 1 }}
-                onClick={handleLoginModalOpen}
-              >
-                ORDER PICKUP
-              </Typography>
-            )}
-            <Modal
-              aria-labelledby="unstyled-modal-title"
-              aria-describedby="unstyled-modal-description"
-              open={loginModalOpen}
-              onClose={handleLoginModalClose}
-              slots={{ backdrop: StyledBackdrop }}
+            </Typography>
+          )}
+          {!customerID && (
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{ flexGrow: 1 }}
+              onClick={handleLoginModalOpen}
             >
-              <ModalContent sx={{ width: 600, height: 300 }}>
-                <Typography
-                  variant="h6"
-                  component="div"
-                  style={{ padding: 20 }}
-                >
-                  Register for an account to collect rewards!
-                </Typography>
-                <Box
+              ORDER PICKUP
+            </Typography>
+          )}
+
+          <Modal
+            aria-labelledby="unstyled-modal-title"
+            aria-describedby="unstyled-modal-description"
+            open={loginModalOpen}
+            onClose={handleLoginModalClose}
+            slots={{ backdrop: StyledBackdrop }}
+          >
+            <ModalContent sx={{ width: 600, height: 300 }}>
+              <Typography variant="h6" component="div" style={{ padding: 20 }}>
+                Register for an account to collect rewards!
+              </Typography>
+              <Box
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  padding: 20,
+                }}
+              >
+                <Button
                   style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    padding: 20,
+                    borderColor: 'white',
+                    backgroundColor: 'blue',
+                    color: 'white',
+                    height: 100,
+                    width: 120,
                   }}
                 >
-                  <Button
-                    style={{
-                      borderColor: 'white',
-                      backgroundColor: 'blue',
-                      color: 'white',
-                      height: 100,
-                      width: 120,
-                    }}
-                  >
-                    <Link href={`/${restaurantInfo.route}/register`}>
-                      Register
-                    </Link>
-                  </Button>
-                  <Button
-                    style={{
-                      borderColor: 'white',
-                      backgroundColor: 'blue',
-                      color: 'white',
-                      height: 100,
-                      width: 120,
-                    }}
-                  >
-                    <Link href={`/${restaurantInfo.route}/login`}>Sign In</Link>
-                  </Button>
-                  <Button
-                    style={{
-                      borderColor: 'white',
-                      backgroundColor: 'blue',
-                      color: 'white',
-                      height: 100,
-                      width: 120,
-                    }}
-                    onClick={() => {
-                      setCustomerID(0);
-                      handleLoginModalClose();
-                    }}
-                  >
-                    Proceed without an account
-                  </Button>
-                </Box>
-              </ModalContent>
-            </Modal>
-          </Typography>
+                  <Link href={`/${restaurantInfo.route}/register`}>
+                    Register
+                  </Link>
+                </Button>
+                <Button
+                  style={{
+                    borderColor: 'white',
+                    backgroundColor: 'blue',
+                    color: 'white',
+                    height: 100,
+                    width: 120,
+                  }}
+                >
+                  <Link href={`/${restaurantInfo.route}/login`}>Sign In</Link>
+                </Button>
+                <Button
+                  style={{
+                    borderColor: 'white',
+                    backgroundColor: 'blue',
+                    color: 'white',
+                    height: 100,
+                    width: 120,
+                  }}
+                  onClick={() => {
+                    setCustomerID(0);
+                    handleLoginModalClose();
+                  }}
+                >
+                  Proceed without an account
+                </Button>
+              </Box>
+            </ModalContent>
+          </Modal>
+
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link href={`/${restaurantInfo.route}/about`}>ABOUT</Link>
           </Typography>
@@ -188,16 +183,18 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link href={`/${restaurantInfo.route}/orderhistory`}>ORDERS</Link>
           </Typography>
-          <Button color="inherit" variant="outlined">
-            {!customerID && (
+
+          {!customerID > 0 && (
+            <Button color="inherit" variant="outlined">
               <Link href={`/${restaurantInfo.route}/login`}>Log In</Link>
-            )}
-            {customerID && (
-              <Link href={`/${restaurantInfo.route}/logout`}>
-                {customerID} Log Out
-              </Link> // here need customer name or email?
-            )}
-          </Button>
+            </Button>
+          )}
+          {customerID > 0 && (
+            <Button color="inherit" variant="outlined">
+              <Link href={`/${restaurantInfo.route}/logout`}>Log Out</Link>
+            </Button>
+          )}
+
           <IconButton
             color="inherit"
             variant="outlined"
