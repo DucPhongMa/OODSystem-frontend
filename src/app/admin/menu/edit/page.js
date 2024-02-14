@@ -5,7 +5,7 @@ import {
   updateRestaurantMenu,
 } from "@/app/api/restaurant"
 import { useEffect, useState } from "react"
-import MainNavbar from "../../../../components/admin/register/MainNavbar"
+import MainNavbar from "../../../components/admin/register/MainNavbar"
 import {
   Button,
   Box,

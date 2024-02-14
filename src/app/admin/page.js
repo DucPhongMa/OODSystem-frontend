@@ -1,6 +1,6 @@
 import { AppBar, Toolbar, Typography, Grid, Button } from "@mui/material"
 import Link from "next/link"
-import MainNavbar from "../../components/admin/register/MainNavbar"
+import MainNavbar from "../components/admin/register/MainNavbar"
 
 export default function landing() {
   const gridStyle = {

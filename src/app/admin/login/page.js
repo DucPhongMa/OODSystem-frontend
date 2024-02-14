@@ -14,7 +14,7 @@ import Link from "next/link"
 import { loginUser } from "../../api/auth"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-import MainNavbar from "../../../components/admin/register/MainNavbar"
+import MainNavbar from "../../components/admin/register/MainNavbar"
 
 export default function ManagementLoginPage() {
   const [error, setError] = useState(false)
