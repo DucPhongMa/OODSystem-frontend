@@ -14,24 +14,94 @@ import { useForm } from "react-hook-form"
 import Link from "next/link"
 import { registerCustomer } from "@/app/api/auth"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 export default function CustomerRegisterPage() {
   const { register, handleSubmit } = useForm()
+  const [alertMsg, setAlertMsg] = useState(null)
   const router = useRouter()
 
+  function validateEmail(email) {
+    const re =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    return re.test(String(email).toLowerCase())
+  }
+
+  function validatePassword(password) {
+    // Check for minimum length
+    if (password.length < 8) {
+      return false
+    }
+
+    // Check for uppercase letter
+    if (!/[A-Z]/.test(password)) {
+      return false
+    }
+
+    // Check for lowercase letter
+    if (!/[a-z]/.test(password)) {
+      return false
+    }
+
+    // Check for digit
+    if (!/[0-9]/.test(password)) {
+      return false
+    }
+
+    // Check for special character
+    if (!/[!@#$%^&*]/.test(password)) {
+      return false
+    }
+
+    // If all conditions are met
+    return true
+  }
+
+  const validateForm = (data) => {
+    // Sign Up page must have email and password
+    if (!data.email || !data.password) {
+      setAlertMsg("Please fill in all required fields.")
+      return false
+    }
+
+    // Sign Up page email must be valid
+    if (!validateEmail(data.email)) {
+      setAlertMsg("Invalid email.")
+      return false
+    }
+
+    // Sign Up page passwords must match
+    if (data.password !== data.confirmPassword) {
+      setAlertMsg("Passwords do not match.")
+      return false
+    }
+
+    // Sign Up page password must be a valid password
+    if (!validatePassword(data.password)) {
+      setAlertMsg(
+        "Passwords must be at least 8 characters long contains at least one uppercase letter, one lowercase letter, one digit, one special character"
+      )
+
+      return false
+    }
+    return true
+  }
+
   const handleFormSubmit = async (formData) => {
-    const fullName = formData.firstName + " " + formData.lastName
-    const currentRestaurant = localStorage.getItem("restaurant-route")
-    const error = await registerCustomer(
-      formData.email,
-      formData.password,
-      fullName,
-      formData.phoneNum
-    )
-    if (error) {
-      setError(error)
-    } else {
-      currentRestaurant && router.push(`/${currentRestaurant}`)
+    if (validateForm(formData)) {
+      const fullName = formData.firstName + " " + formData.lastName
+      const currentRestaurant = localStorage.getItem("restaurant-route")
+      const error = await registerCustomer(
+        formData.email,
+        formData.password,
+        fullName,
+        formData.phoneNum
+      )
+      if (error) {
+        setError(error)
+      } else {
+        currentRestaurant && router.push(`/${currentRestaurant}`)
+      }
     }
   }
 
@@ -69,7 +139,7 @@ export default function CustomerRegisterPage() {
           }}
         >
           <Typography variant="h3">Register</Typography>
-
+          {alertMsg && <h3 style={{ color: "red" }}>{alertMsg}</h3>}
           <Box
             component="form"
             onSubmit={handleSubmit(handleFormSubmit)}
@@ -141,6 +211,7 @@ export default function CustomerRegisterPage() {
                   id="confirm"
                   label="Confirm Password"
                   type="password"
+                  {...register("confirmPassword")}
                 />
               </Grid>
               <Grid
