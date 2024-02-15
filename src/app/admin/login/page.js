@@ -35,7 +35,6 @@ export default function ManagementLoginPage() {
     <>
       {/* Navbar */}
       <MainNavbar isLoggedin={false} />
-
       {/* Body */}
       <Container component="main">
         <Box

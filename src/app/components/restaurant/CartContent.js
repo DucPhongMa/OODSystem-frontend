@@ -53,17 +53,39 @@ const CartContent = ({ handleClose }) => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           CART
         </Typography>
+
         <IconButton aria-label="close" onClick={handleClose}>
           <CloseIcon />
         </IconButton>
       </Box>
+
       {cart.length === 0 && (
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           It's empty now!
         </Typography>
       )}
+
       {cart.length > 0 && (
-        <div>
+        <Box
+          sx={{
+            maxHeight: "500px",
+            overflowY: "auto",
+            pr: 2,
+            "&::-webkit-scrollbar": {
+              width: "10px",
+            },
+            "&::-webkit-scrollbar-track": {
+              background: "#f1f1f1",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              background: "#888",
+              borderRadius: "10px",
+            },
+            "&::-webkit-scrollbar-thumb:hover": {
+              background: "#555",
+            },
+          }}
+        >
           {cart.map((item) => (
             <CartItem
               key={item.itemID}
@@ -72,6 +94,7 @@ const CartContent = ({ handleClose }) => {
               removeFromItemQuantity={removeFromItemQuantity}
             />
           ))}
+
           <Box
             display="flex"
             alignItems="center"
@@ -80,13 +103,15 @@ const CartContent = ({ handleClose }) => {
             <Button variant="outlined" onClick={clearCart}>
               Clear Cart
             </Button>
+
             <Button variant="outlined" onClick={handleCheckout}>
               Check Out
             </Button>
           </Box>
-        </div>
+        </Box>
       )}
     </>
   );
 };
+
 export default CartContent;

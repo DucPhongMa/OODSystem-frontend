@@ -1,19 +1,24 @@
-import { Box, Button, Card, CardContent, IconButton, Typography } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
+import {
+  Box,
+  Card,
+  CardContent,
+  IconButton,
+  Typography,
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 const CartItem = ({ item, addToItemQuantity, removeFromItemQuantity }) => {
   return (
-    <Card sx={{my:2}}>
+    <Card sx={{ my: 2 }}>
       <CardContent>
         <Box display="flex" alignItems="center" justifyContent="space-between">
-          <Typography variant="h5">{item.name}</Typography>
+          <Typography variant="h6">{item.name}</Typography>
           <Box
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              // mt: 2,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             <IconButton onClick={() => removeFromItemQuantity(item.itemID)}>
@@ -27,21 +32,6 @@ const CartItem = ({ item, addToItemQuantity, removeFromItemQuantity }) => {
             </IconButton>
           </Box>
         </Box>
-        {/* <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => removeFromItemQuantity(item.itemID)}
-        >
-          -
-        </Button>
-        <Typography variant="body1">Quantity: {item.quantity}</Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => addToItemQuantity(item.itemID)}
-        >
-          +
-        </Button> */}
       </CardContent>
     </Card>
   );

@@ -9,7 +9,7 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAtom } from 'jotai';
-import { cartAtom, customerIDAtom } from '../../../../store';
+import { cartAtom } from '../../../../store';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
@@ -17,7 +17,7 @@ import { styled, css } from '@mui/system';
 import { Modal as BaseModal } from '@mui/base/Modal';
 import CartContent from './CartContent';
 import { Badge } from '@mui/material';
-
+import { checkCustomerLogin, logoutCustomer } from '@/app/api/auth';
 const RestaurantAppBar = ({ restaurantInfo }) => {
   // console.log(restaurantInfo);
   const currentDate = new Date();
@@ -27,13 +27,25 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
   // console.log(restaurantInfo.hours);
   // console.log(restaurantInfo.hours.thursday);
   // console.log(restaurantInfo.hours[dayOfWeek].open);
-  const [customerID, setCustomerID] = useAtom(customerIDAtom);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [customerLoggedIn, setCustomerLoggedIn] = useState(false);
+  const handleOpen = () => setCartOpen(true);
+  const handleClose = () => setCartOpen(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const handleLoginModalOpen = () => setLoginModalOpen(true);
   const handleLoginModalClose = () => setLoginModalOpen(false);
-  const [cartOpen, setCartOpen] = useState(false);
-  const handleOpen = () => setCartOpen(true);
-  const handleClose = () => setCartOpen(false);
+
+  useEffect(() => {
+    const customerInformation = checkCustomerLogin();
+    if (customerInformation) {
+      setCustomerLoggedIn(true);
+    }
+  }, []);
+
+  const logOutCustomerHandler = () => {
+    logoutCustomer();
+    setCustomerLoggedIn(false);
+  };
 
   const [cart, setCart] = useAtom(cartAtom);
   console.log('cart:');
@@ -97,22 +109,21 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
           </div>
 
           {/* ORDER PICKUP */}
-          {customerID !== '' && (
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            {customerLoggedIn && (
               <Link href={`/${restaurantInfo.route}/menu`}>ORDER PICKUP</Link>
-            </Typography>
-          )}
-          {!customerID && (
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ flexGrow: 1 }}
-              onClick={handleLoginModalOpen}
-            >
-              ORDER PICKUP
-            </Typography>
-          )}
-
+            )}
+            {!customerLoggedIn && (
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{ flexGrow: 1 }}
+                onClick={handleLoginModalOpen}
+              >
+                ORDER PICKUP
+              </Typography>
+            )}
+          </Typography>
           <Modal
             aria-labelledby="unstyled-modal-title"
             aria-describedby="unstyled-modal-description"
@@ -173,7 +184,6 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
               </Box>
             </ModalContent>
           </Modal>
-
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link href={`/${restaurantInfo.route}/about`}>ABOUT</Link>
           </Typography>
@@ -183,18 +193,16 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link href={`/${restaurantInfo.route}/orderhistory`}>ORDERS</Link>
           </Typography>
-
-          {!customerID > 0 && (
-            <Button color="inherit" variant="outlined">
+          <Button color="inherit" variant="outlined">
+            {!customerLoggedIn && (
               <Link href={`/${restaurantInfo.route}/login`}>Log In</Link>
-            </Button>
-          )}
-          {customerID > 0 && (
-            <Button color="inherit" variant="outlined">
-              <Link href={`/${restaurantInfo.route}/logout`}>Log Out</Link>
-            </Button>
-          )}
-
+            )}
+            {customerLoggedIn && (
+              <Link href={`/${restaurantInfo.route}/logout`}>
+                {customerID} Log Out
+              </Link> // here need customer name or email?
+            )}
+          </Button>
           <IconButton
             color="inherit"
             variant="outlined"
