@@ -111,10 +111,10 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
 
           {/* ORDER PICKUP */}
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {customerLoggedIn ||
-              (!customerLoggedIn && pickupClicked > 0 && (
+            {(customerLoggedIn ||
+              (!customerLoggedIn && pickupClicked > 0)) && (
                 <Link href={`/${restaurantInfo.route}/menu`}>ORDER PICKUP</Link>
-              ))}
+              )}
             {!customerLoggedIn && pickupClicked < 1 && (
               <Typography
                 variant="h6"
@@ -207,7 +207,7 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
               variant="outlined"
               onClick={logOutCustomerHandler}
             >
-              {customerID} Log Out
+              Log Out
             </Button>
           )}
 
