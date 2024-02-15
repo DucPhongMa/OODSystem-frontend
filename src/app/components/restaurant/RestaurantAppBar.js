@@ -31,6 +31,7 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
   const [customerLoggedIn, setCustomerLoggedIn] = useState(false);
   const handleOpen = () => setCartOpen(true);
   const handleClose = () => setCartOpen(false);
+  const [pickupClicked, setPickupClicked] = useState(0);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const handleLoginModalOpen = () => setLoginModalOpen(true);
   const handleLoginModalClose = () => setLoginModalOpen(false);
@@ -110,15 +111,19 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
 
           {/* ORDER PICKUP */}
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {customerLoggedIn && (
-              <Link href={`/${restaurantInfo.route}/menu`}>ORDER PICKUP</Link>
-            )}
-            {!customerLoggedIn && (
+            {customerLoggedIn ||
+              (!customerLoggedIn && pickupClicked > 0 && (
+                <Link href={`/${restaurantInfo.route}/menu`}>ORDER PICKUP</Link>
+              ))}
+            {!customerLoggedIn && pickupClicked < 1 && (
               <Typography
                 variant="h6"
                 component="div"
                 sx={{ flexGrow: 1 }}
-                onClick={handleLoginModalOpen}
+                onClick={() => {
+                  handleLoginModalOpen();
+                  setPickupClicked(1);
+                }}
               >
                 ORDER PICKUP
               </Typography>
@@ -151,9 +156,7 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
                     width: 120,
                   }}
                 >
-                  <Link href={`/${restaurantInfo.route}/register`}>
-                    Register
-                  </Link>
+                  <Link href={`/customer/register`}>Register</Link>
                 </Button>
                 <Button
                   style={{
@@ -164,7 +167,7 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
                     width: 120,
                   }}
                 >
-                  <Link href={`/${restaurantInfo.route}/login`}>Sign In</Link>
+                  <Link href={`/customer/login`}>Sign In</Link>
                 </Button>
                 <Button
                   style={{
@@ -175,7 +178,7 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
                     width: 120,
                   }}
                   onClick={() => {
-                    setCustomerID(0);
+                    // setCustomerID(0);
                     handleLoginModalClose();
                   }}
                 >
@@ -193,16 +196,21 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link href={`/${restaurantInfo.route}/orderhistory`}>ORDERS</Link>
           </Typography>
-          <Button color="inherit" variant="outlined">
-            {!customerLoggedIn && (
-              <Link href={`/${restaurantInfo.route}/login`}>Log In</Link>
-            )}
-            {customerLoggedIn && (
-              <Link href={`/${restaurantInfo.route}/logout`}>
-                {customerID} Log Out
-              </Link> // here need customer name or email?
-            )}
-          </Button>
+          {!customerLoggedIn && (
+            <Button color="inherit" variant="outlined">
+              <Link href={`/customer/login`}>Log In</Link>
+            </Button>
+          )}
+          {customerLoggedIn && (
+            <Button
+              color="inherit"
+              variant="outlined"
+              onClick={logOutCustomerHandler}
+            >
+              {customerID} Log Out
+            </Button>
+          )}
+
           <IconButton
             color="inherit"
             variant="outlined"
