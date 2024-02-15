@@ -136,7 +136,7 @@ export default function CustomerLoginPage() {
               >
                 {/* I don't know how to get dynamic route */}
                 <Button
-                  href="/DannySushi/register"
+                  href="/customer/register"
                   fullWidth
                   variant="contained"
                   style={{
