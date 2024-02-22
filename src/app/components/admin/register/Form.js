@@ -16,6 +16,9 @@ import RestaurantThemeInfo from "./RestaurantThemeInfo"
 import ConfirmInfo from "./ConfirmInfo"
 import { addRestaurant } from "../../../api/restaurant"
 import { registerBusiness } from "@/app/api/auth"
+import { selectedFileAtom } from '../../../../../store';
+import { useAtom } from 'jotai';
+
 
 function validateEmail(email) {
   const re =
@@ -55,7 +58,6 @@ function validatePassword(password) {
 
 function Form() {
   let alertMsg = ""
-
   const FormTitles = [
     "Sign Up",
     "Restaurant Info",
@@ -65,8 +67,11 @@ function Form() {
     "Confirm Info",
   ]
 
+  
   const [open, setOpen] = useState(false)
   const [page, setPage] = useState(0)
+  const [selectedFile, setSelectedFile] = useAtom(selectedFileAtom);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -126,17 +131,20 @@ function Form() {
       )
     } else if (page === 1) {
       return (
-        <RestaurantInfo
-          formData={formData}
-          setFormData={setFormData}
-        />
+        <>
+          <RestaurantInfo
+            formData={formData}
+            setFormData={setFormData}
+          />
+          {selectedFile && <p>Selected file: {selectedFile.name}</p>}
+        </>
       )
     } else if (page === 2) {
       return (
         <RestaurantHoursInfo
           formData={formData}
           setFormData={setFormData}
-        />
+        /> 
       )
     } else if (page === 3) {
       return (
@@ -237,6 +245,7 @@ function Form() {
                 // When user clicks the Submit button to submit the registration form
                 alert("FORM SUBMITTED")
                 console.log(formData)
+                
                 try {
                   // Get an array of just category names
                   let categoryNames = formData.categories.map(
@@ -248,6 +257,27 @@ function Form() {
                     formData.email,
                     formData.confirmPassword
                   )
+
+                  //===========================Upload Images============================
+                  const formData2 = new FormData();
+                  formData2.append('file', selectedFile);
+                  formData2.append('upload_preset', 'my-uploads');
+        
+                  const data = await fetch('https://api.cloudinary.com/v1_1/dyu1deqdg/image/upload', {
+                    method: 'POST',
+                    body: formData2
+                  }).then(r => r.json());
+                  console.log('data', data);
+                  console.log('image_url', data.secure_url);
+              
+                  const uploadImage = data.secure_url;
+                  if (!uploadImage) {
+                    console.error("Image upload failed.");
+                    return;
+                  }
+
+                  //console.log("Cloudinary: ", uploadImage);
+                  //============================================================================
                   // Get an array containing a list of all items from all categories
                   let allItems = formData.categories.flatMap(
                     (category, index) =>
@@ -272,7 +302,8 @@ function Form() {
                       id: 1,
                       name: "classic",
                     },
-                    formData.email
+                    formData.email,
+                    uploadImage
                   )
 
                   // Save data to database

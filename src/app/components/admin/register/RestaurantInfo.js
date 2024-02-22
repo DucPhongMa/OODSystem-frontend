@@ -1,7 +1,17 @@
-import React from "react";
-import { TextField, Grid, Box } from "@mui/material";
+import React,  { useState } from "react";
+import { TextField, Grid, Box, Input } from "@mui/material";
+import { useAtom } from 'jotai';
+import { selectedFileAtom } from '../../../../../store';
 
-function RestaurantInfo({ formData, setFormData }) {
+function RestaurantInfo({ formData, setFormData  }) {
+  //const [file, setFile] = useState(null);
+  const [, setSelectedFile] = useAtom(selectedFileAtom);
+  const handleImageUpload =  (e) => {
+    //e.preventDefault();
+    const uploadedFile = e.target.files[0];
+    setSelectedFile(uploadedFile);
+   
+  };
   return (
     <Box sx={{ mt: 3 }}>
       <Grid container spacing={2}>
@@ -195,6 +205,20 @@ function RestaurantInfo({ formData, setFormData }) {
               })
             }
           />
+        </Grid>
+        <Grid item xs={12}>
+            <label>Upload Image for Banner: </label>
+            <Input
+              type="file"
+              id="upload-image"
+              onChange={handleImageUpload}
+              inputProps={{
+                accept: 'image/*',
+              }}
+              fullWidth
+            />
+            <br /><br />
+            
         </Grid>
       </Grid>
     </Box>
