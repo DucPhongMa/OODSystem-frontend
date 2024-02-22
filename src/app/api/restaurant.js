@@ -8,7 +8,8 @@ export const addRestaurant = async (
   dishesList,
   hoursObj,
   themeObj,
-  inputBusinessName
+  inputBusinessName,
+  inputBannerImage
 ) => {
   const categoryListID = []
   const menuItemList = []
@@ -92,6 +93,7 @@ export const addRestaurant = async (
       theme: themeObj,
       hours: hoursObj,
       restaurant_owner: inputBusinessName,
+      bannerURL: inputBannerImage
     },
   }
   await fetch(`${API_BACKEND}api/restaurants`, {
