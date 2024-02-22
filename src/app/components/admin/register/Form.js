@@ -89,8 +89,7 @@ function Form() {
     },
 
     restaurant_description: {
-      aboutDescription: "",
-      bannerURL: "",
+      aboutDescription: ""
     },
 
     restaurantThemeID: 0,
