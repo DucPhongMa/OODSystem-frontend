@@ -19,11 +19,7 @@ import {
   DialogContent,
   DialogActions,
   IconButton,
-<<<<<<< HEAD
   Input,
-=======
-  Input
->>>>>>> 4947e167e3cb82a67d1377edfc0f9bc0e76ce280
 } from "@mui/material"
 import RemoveIcon from "@mui/icons-material/Remove"
 
@@ -127,7 +123,7 @@ export default function EditMenuPage() {
     }
 
     //===========================Upload Images============================
-    let uploadImage;
+    let uploadImage
     const formData2 = new FormData()
     formData2.append("file", file)
     formData2.append("upload_preset", "my-uploads")
@@ -152,7 +148,7 @@ export default function EditMenuPage() {
     } catch (error) {
       console.error("Image upload failed.")
     }
-    
+
     const updatedItem = {
       name: trimmedItemName,
       description: trimmedItemDescription,
