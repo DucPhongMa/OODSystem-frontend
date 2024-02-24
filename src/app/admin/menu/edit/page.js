@@ -19,7 +19,11 @@ import {
   DialogContent,
   DialogActions,
   IconButton,
+<<<<<<< HEAD
   Input,
+=======
+  Input
+>>>>>>> 4947e167e3cb82a67d1377edfc0f9bc0e76ce280
 } from "@mui/material"
 import RemoveIcon from "@mui/icons-material/Remove"
 
@@ -59,7 +63,7 @@ export default function EditMenuPage() {
             return {
               name: item.attributes.name,
               price: item.attributes.price,
-              imageURL: item.attributes.itemURL,
+              imageURL: item.attributes.imageURL,
               categoryID: item.attributes.menu_category.data.id,
               id: item.id,
               description: item.attributes.description,
@@ -123,6 +127,7 @@ export default function EditMenuPage() {
     }
 
     //===========================Upload Images============================
+    let uploadImage;
     const formData2 = new FormData()
     formData2.append("file", file)
     formData2.append("upload_preset", "my-uploads")
@@ -138,7 +143,7 @@ export default function EditMenuPage() {
       console.log("data", data)
       console.log("image_url", data.secure_url)
 
-      const uploadImage = data.secure_url
+      uploadImage = data.secure_url
 
       if (!uploadImage) {
         console.error("Image upload failed.")
@@ -147,14 +152,14 @@ export default function EditMenuPage() {
     } catch (error) {
       console.error("Image upload failed.")
     }
-
+    
     const updatedItem = {
       name: trimmedItemName,
       description: trimmedItemDescription,
       price: trimmedItemPrice,
       categoryID: activeCategory.id ? activeCategory.id : null,
       categoryName: activeCategory.name,
-      imageName: uploadImage,
+      imageURL: uploadImage,
     }
 
     const updatedCategories = menuCats.map((category) =>
