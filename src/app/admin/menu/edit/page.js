@@ -19,7 +19,7 @@ import {
   DialogContent,
   DialogActions,
   IconButton,
-  Input
+  Input,
 } from "@mui/material"
 import RemoveIcon from "@mui/icons-material/Remove"
 
@@ -39,7 +39,7 @@ export default function EditMenuPage() {
     price: "",
   })
 
-  const [restaurantID, setRestaurantID] = useState()
+  const [restaurantMenuID, setRestaurantMenuID] = useState()
   const [file, setFile] = useState(null)
 
   useEffect(() => {
@@ -49,11 +49,12 @@ export default function EditMenuPage() {
 
     // Get username from localStorage
     const storedUsername = localStorage.getItem("username")
-    if (storedUsername) {
-      async function fetchMyAPI() {
-        const restaurantData = await getRestaurantMenuData(storedUsername)
 
-        const menuItems = restaurantData.data.attributes.menu_items.data.map(
+    if (storedUsername && checkLoggedIn) {
+      async function fetchMyAPI() {
+        const restaurantMenu = await getRestaurantMenuData(storedUsername)
+
+        const menuItems = restaurantMenu.data.attributes.menu_items.data.map(
           (item) => {
             return {
               name: item.attributes.name,
@@ -66,7 +67,7 @@ export default function EditMenuPage() {
           }
         )
         const menuCate =
-          restaurantData.data.attributes.menu_categories.data.map((cat) => {
+          restaurantMenu.data.attributes.menu_categories.data.map((cat) => {
             return {
               name: cat.attributes.nameCate,
               id: cat.id,
@@ -74,15 +75,15 @@ export default function EditMenuPage() {
             }
           })
         setMenuCats(menuCate)
-        setRestaurantID(restaurantData.data.id)
+        setRestaurantMenuID(restaurantMenu.data.id)
 
         // console.log(menuItems)
         // console.log(restaurantData)
       }
 
       fetchMyAPI()
-      setIsLoading(false)
     }
+    setIsLoading(false)
   }, [])
 
   // TODO: save new category to the restaurant
@@ -122,7 +123,7 @@ export default function EditMenuPage() {
     }
 
     //===========================Upload Images============================
-    let uploadImage;
+    let uploadImage
     const formData2 = new FormData()
     formData2.append("file", file)
     formData2.append("upload_preset", "my-uploads")
@@ -147,7 +148,7 @@ export default function EditMenuPage() {
     } catch (error) {
       console.error("Image upload failed.")
     }
-    
+
     const updatedItem = {
       name: trimmedItemName,
       description: trimmedItemDescription,
@@ -173,7 +174,7 @@ export default function EditMenuPage() {
 
   const saveMenuChange = async () => {
     await updateRestaurantMenu(
-      restaurantID,
+      restaurantMenuID,
       catDeleteList,
       catAdd,
       itemDeleteList,
@@ -367,6 +368,7 @@ export default function EditMenuPage() {
   ) : (
     <div>
       <MainNavbar isLoggedin={isLoggedIn} />
+      <p>Please log in</p>
     </div>
   )
 }

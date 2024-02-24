@@ -39,21 +39,21 @@ export const addRestaurant = async (
   // persist menu_items to database;
 
   for (const dish of dishesList) {
-    console.log('============= Dish: ', dish);
+    console.log("============= Dish: ", dish)
     await fetch(`${API_BACKEND}api/menu-items`, {
       method: "POST",
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Content-type": "application/json",
       },
-     
+
       body: JSON.stringify({
         data: {
           description: dish.description,
           name: dish.name,
           price: dish.price,
           menu_category: categoryListID[dish.category_id],
-          imageURL: dish.imageURL
+          imageURL: dish.imageURL,
         },
       }),
     })
@@ -93,7 +93,7 @@ export const addRestaurant = async (
       theme: themeObj,
       hours: hoursObj,
       restaurant_owner: inputBusinessName,
-      bannerURL: inputBannerImage
+      bannerURL: inputBannerImage,
     },
   }
   await fetch(`${API_BACKEND}api/restaurants`, {
@@ -154,27 +154,123 @@ export const getRestaurantMenuData = async (username) => {
 }
 
 export const updateRestaurantMenu = async (
-  restaurantID,
+  menuID,
   catRemoveList,
   catAddList,
   dishRemoveList,
   dishAddList
 ) => {
-  console.log(restaurantID)
+  const newCat = {}
+  let currentCatID = []
+  let currentMenuItemID = []
+  console.log(menuID)
   console.log(catRemoveList)
   console.log(catAddList)
   console.log(dishRemoveList)
   console.log(dishAddList)
+
+  await fetch(`${API_BACKEND}api/menus/${menuID}?populate=*`)
+    .then((res) => res.json())
+    .then((jsonData) => {
+      currentCatID = jsonData.data.attributes.menu_categories.data.map(
+        (cat) => cat.id
+      )
+      currentMenuItemID = jsonData.data.attributes.menu_items.data.map(
+        (cat) => cat.id
+      )
+    })
   // TO DO loop through catAddList -> add category
-
+  // persist menu_categories to database;
+  for (const category of catAddList) {
+    await fetch(`${API_BACKEND}api/menu-categories`, {
+      method: "POST",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        data: {
+          nameCate: category,
+        },
+      }),
+    })
+      .then((res) => res.json())
+      .then((jsonData) => {
+        newCat[category] = jsonData.data.id
+        currentCatID.push(jsonData.data.id)
+      })
+  }
   // TO DO loop through dishAddList -> add dish into cat (check if category id has it, then just add it with that category id, if not map it with the new category ID)
+  for (const dish of dishAddList) {
+    await fetch(`${API_BACKEND}api/menu-items`, {
+      method: "POST",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      },
 
-  // TO DO update restaurant to get the entity with new category list and update list, also remove the dish and restaurant entities
+      body: JSON.stringify({
+        data: {
+          description: dish.description,
+          name: dish.name,
+          price: dish.price,
+          menu_category: dish.categoryID
+            ? dish.categoryID
+            : newCat[dish.categoryName],
+          imageURL: dish.imageURL,
+        },
+      }),
+    })
+      .then((res) => res.json())
+      .then((jsonData) => {
+        console.log(jsonData)
+        currentMenuItemID.push(jsonData.data.id)
+      })
+  }
+  for (const removeCatID of catRemoveList) {
+    currentCatID = currentCatID.filter((cat) => cat !== removeCatID)
+  }
+
+  for (const removeDish of dishRemoveList) {
+    currentMenuItemID = currentMenuItemID.filter(
+      (item) => item !== removeDish.id
+    )
+  }
+
+  // update restaurant menu
+  await fetch(`${API_BACKEND}api/menus/${menuID}`, {
+    method: "PUT",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      data: {
+        menu_items: currentMenuItemID,
+        menu_categories: currentCatID,
+      },
+    }),
+  })
 
   // TO DO remove the category
+  for (const removeCatID of catRemoveList) {
+    await fetch(`${API_BACKEND}api/menu-categories/${removeCatID}`, {
+      method: "DELETE",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      },
+    })
+  }
 
   // TO DO remove the item
+  for (const removeDish of dishRemoveList) {
+    await fetch(`${API_BACKEND}api/menu-items/${removeDish.id}`, {
+      method: "DELETE",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      },
+    })
+  }
 }
-
-// TODO
-// export const updateRestaurantByID = (restaurantID) => {}
