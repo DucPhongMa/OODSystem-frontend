@@ -21,6 +21,7 @@ Wait a couple seconds and VS Code should open and you should be inside the `OODS
 You can tell you are inside the directory by going to Terminal > New Terminal (or Ctrl+Shift+`) and the terminal should show your current location.
 
 Your terminal should show something like this:
+
 ```
 PS F:\projects\OODSystem-frontend>
 ```
@@ -58,7 +59,7 @@ To change the look of this page, simply go to `./src/app/(routes)/management/reg
 No need to stop the server, you can change the code of the `page.js` and hit save, then the browser contents will automatically refresh.
 
 7. Before pushing work to GitHub, make sure you create a topic branch. If you started to do work and did not create a branch yet, no worries.
-It is only a problem if you committed and pushed work to the wrong branch (say you committed to main) but even then there is a fix, so please contact the team to get the appropriate git command.
+   It is only a problem if you committed and pushed work to the wrong branch (say you committed to main) but even then there is a fix, so please contact the team to get the appropriate git command.
 
 The following is assuming you have not committed any work to the main branch. It does not matter if you have started work or not.
 

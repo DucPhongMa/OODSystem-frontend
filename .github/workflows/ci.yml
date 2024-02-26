@@ -1,0 +1,51 @@
+name: "format and build code"
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  lint-format:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install -v
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Format the code
+        run: npm run format
+      
+      - name: Commit the format code
+      - uses: stefanzweifel/git-auto-commit-action@v5
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install -v
+
+      - name: Run build
+        run: npm run build

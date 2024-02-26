@@ -1,9 +1,9 @@
-'use client';
-import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
-import { getRestaurantByID } from '../../api/restaurant';
+"use client";
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
+import { getRestaurantByID } from "../../api/restaurant";
 export default function RestaurantAbout() {
-  const [restaurantName, setRestaurantName] = useState('');
+  const [restaurantName, setRestaurantName] = useState("");
   const params = useParams();
   useEffect(() => {
     const id = params.id;
@@ -13,6 +13,6 @@ export default function RestaurantAbout() {
     }
 
     fetchMyAPI();
-  }, []);
+  }, [params.id]);
   return <h1>This is the about: {restaurantName}</h1>;
 }

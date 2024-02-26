@@ -1,7 +1,7 @@
-const API_BACKEND = process.env.NEXT_PUBLIC_API_BACKEND_URL
+const API_BACKEND = process.env.NEXT_PUBLIC_API_BACKEND_URL;
 export const addOrder = async (dishesArray, userID, restaurantID, note) => {
-  const orderDetailIDs = []
-  let orderTotal = 0
+  const orderDetailIDs = [];
+  let orderTotal = 0;
   // persist menu_items to database;
 
   for (const dish of dishesArray) {
@@ -22,9 +22,9 @@ export const addOrder = async (dishesArray, userID, restaurantID, note) => {
     })
       .then((res) => res.json())
       .then((jsonData) => {
-        orderDetailIDs.push(jsonData.data.id)
-        orderTotal += dish.unit_price * dish.quantity
-      })
+        orderDetailIDs.push(jsonData.data.id);
+        orderTotal += dish.unit_price * dish.quantity;
+      });
   }
 
   // persist order to database
@@ -49,39 +49,39 @@ export const addOrder = async (dishesArray, userID, restaurantID, note) => {
   })
     .then((res) => res.json())
     .then((jsonData) => {
-      return jsonData
-    })
-}
+      return jsonData;
+    });
+};
 
 export const getOrderBasedOnStatus = async (restaurantID, status) => {
-  let orderArray
+  let orderArray;
   if (status) {
     await fetch(
       `${API_BACKEND}api/orders??filters[restaurantID][$eq]=${restaurantID}&filters[status][$eq]=${status}&populate[order_details][populate][0]=menu_item&populate[users_permissions_user]=*`
     )
       .then((res) => res.json())
       .then((jsonData) => {
-        orderArray = jsonData.data
-      })
+        orderArray = jsonData.data;
+      });
   } else {
     await fetch(
       `${API_BACKEND}api/orders??filters[restaurantID][$eq]=${restaurantID}&populate[order_details][populate][0]=menu_item&populate[users_permissions_user]=*`
     )
       .then((res) => res.json())
       .then((jsonData) => {
-        orderArray = jsonData.data
-      })
+        orderArray = jsonData.data;
+      });
   }
 
-  return orderArray
-}
+  return orderArray;
+};
 
 export const updateOrder = async (orderID, status) => {
-  let updatedStatus = status.toLowerCase()
-  let timeComplete
+  let updatedStatus = status.toLowerCase();
+  let timeComplete;
 
   if (status == "completed" || status == "cancelled") {
-    timeComplete = Date.now()
+    timeComplete = Date.now();
   }
   // persist order to database
   await fetch(`${API_BACKEND}api/orders/${orderID}`, {
@@ -99,6 +99,6 @@ export const updateOrder = async (orderID, status) => {
   })
     .then((res) => res.json())
     .then((jsonData) => {
-      return jsonData
-    })
-}
+      return jsonData;
+    });
+};

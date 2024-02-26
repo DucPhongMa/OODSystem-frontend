@@ -1,8 +1,8 @@
-'use client';
-import { addImage } from './api/image';
-import { addRestaurant } from './api/restaurant';
-import { useState, useEffect } from 'react';
-import { registerBusiness, loginBusiness } from './api/auth';
+"use client";
+import { addImage } from "./api/image";
+import { addRestaurant } from "./api/restaurant";
+import { useState, useEffect } from "react";
+import { registerBusiness, loginBusiness } from "./api/auth";
 
 export default function Home() {
   // useEffect(() => {

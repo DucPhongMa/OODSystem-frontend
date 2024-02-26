@@ -1,23 +1,23 @@
-"use client"
-import { useAtom } from "jotai"
-import { cartAtom } from "../../../../../store"
-import { useState, useEffect } from "react"
-import { checkCustomerLogin } from "@/app/api/auth"
-import { TextField, Grid } from "@mui/material"
-import { addOrder } from "@/app/api/order"
+"use client";
+import { useAtom } from "jotai";
+import { cartAtom } from "../../../../../store";
+import { useState, useEffect } from "react";
+import { checkCustomerLogin } from "@/app/api/auth";
+import { TextField, Grid } from "@mui/material";
+import { addOrder } from "@/app/api/order";
 export default function Checkout() {
-  const [cart, setCart] = useAtom(cartAtom)
+  const [cart, setCart] = useAtom(cartAtom);
   const [formData, setFormData] = useState({
     phoneNum: "",
-  })
-  console.log("cart:")
-  console.log(cart)
+  });
+  console.log("cart:");
+  console.log(cart);
   useEffect(() => {
-    const customerInfo = checkCustomerLogin()
+    const customerInfo = checkCustomerLogin();
     if (customerInfo) {
-      setFormData({ ...formData, phoneNum: JSON.parse(customerInfo).phoneNum })
+      setFormData({ ...formData, phoneNum: JSON.parse(customerInfo).phoneNum });
     }
-  }, [])
+  }, [formData]);
 
   // // Sample submit order call to API
   // const submitOrder = async () => {
@@ -42,10 +42,7 @@ export default function Checkout() {
   return (
     <>
       <h1>this is a checkout page</h1>
-      <Grid
-        item
-        xs={12}
-      >
+      <Grid item xs={12}>
         <TextField
           autoComplete="phoneNum"
           required
@@ -59,5 +56,5 @@ export default function Checkout() {
         />
       </Grid>
     </>
-  )
+  );
 }
