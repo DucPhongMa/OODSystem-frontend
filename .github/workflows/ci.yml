@@ -30,7 +30,7 @@ jobs:
         run: npm run format
       
       - name: Commit the format code
-      - uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v5
 
   build:
     runs-on: ubuntu-latest
