@@ -2,9 +2,8 @@ name: "format and build code"
 
 on:
   push:
-    branches:
-      - master
-
+    branches: ["master", "ci/cd"]
+    
 jobs:
   lint-format:
     runs-on: ubuntu-latest
