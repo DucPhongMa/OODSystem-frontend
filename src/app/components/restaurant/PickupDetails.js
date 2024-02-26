@@ -5,7 +5,7 @@ import {
   ListItemText,
   Paper,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 
 const PickupDetails = ({ cart, subTotal }) => {
   return (
@@ -18,10 +18,10 @@ const PickupDetails = ({ cart, subTotal }) => {
               primary={item.name}
               secondary={`$${(item.price * item.quantity).toFixed(2)}`}
               sx={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                paddingRight: '40%',
-                gap: '10%',
+                display: "flex",
+                justifyContent: "flex-end",
+                paddingRight: "40%",
+                gap: "10%",
               }}
             />
           </ListItem>
@@ -31,10 +31,10 @@ const PickupDetails = ({ cart, subTotal }) => {
             primary="Subtotal"
             secondary={`$${subTotal}`}
             sx={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              paddingRight: '40%',
-              gap: '10%',
+              display: "flex",
+              justifyContent: "flex-end",
+              paddingRight: "40%",
+              gap: "10%",
             }}
           />
         </ListItem>
@@ -43,10 +43,10 @@ const PickupDetails = ({ cart, subTotal }) => {
             primary="Tax"
             secondary={`$${(subTotal * 0.13).toFixed(2)}`}
             sx={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              paddingRight: '40%',
-              gap: '10%',
+              display: "flex",
+              justifyContent: "flex-end",
+              paddingRight: "40%",
+              gap: "10%",
             }}
           />
         </ListItem>
@@ -56,10 +56,10 @@ const PickupDetails = ({ cart, subTotal }) => {
             primary="Total"
             secondary={`$${(subTotal * 1.13).toFixed(2)}`}
             sx={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              paddingRight: '40%',
-              gap: '10%',
+              display: "flex",
+              justifyContent: "flex-end",
+              paddingRight: "40%",
+              gap: "10%",
             }}
           />
         </ListItem>

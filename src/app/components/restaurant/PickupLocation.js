@@ -1,5 +1,5 @@
-import { Box, Paper, Typography } from '@mui/material';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { Box, Paper, Typography } from "@mui/material";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
 const PickupLocation = ({ address }) => {
   return (
@@ -9,16 +9,16 @@ const PickupLocation = ({ address }) => {
       <Box
         sx={{
           height: 200,
-          backgroundColor: '#eee',
-          position: 'relative',
+          backgroundColor: "#eee",
+          position: "relative",
         }}
       >
         <MapContainer
           center={[43.653, -79.3823]}
           zoom={13}
           style={{
-            height: '100%',
-            position: 'absolute',
+            height: "100%",
+            position: "absolute",
             top: 0,
             left: 0,
             right: 0,

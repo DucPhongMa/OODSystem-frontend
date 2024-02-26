@@ -6,10 +6,10 @@ export const addOrder = async (dishesArray, userID, restaurantID, note) => {
 
   for (const dish of dishesArray) {
     await fetch(`${API_BACKEND}api/order-details`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-type': 'application/json',
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
       },
 
       body: JSON.stringify({
@@ -29,10 +29,10 @@ export const addOrder = async (dishesArray, userID, restaurantID, note) => {
 
   // persist order to database
   await fetch(`${API_BACKEND}api/orders`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Content-type': 'application/json',
+      "Access-Control-Allow-Origin": "*",
+      "Content-type": "application/json",
     },
     body: JSON.stringify({
       data: {
@@ -43,7 +43,7 @@ export const addOrder = async (dishesArray, userID, restaurantID, note) => {
         order_details: orderDetailIDs,
         restaurant: restaurantID,
         users_permissions_user: userID,
-        status: 'pending',
+        status: "pending",
         checkID: uuid,
       },
     }),
@@ -86,10 +86,10 @@ export const updateOrder = async (orderID, status) => {
   }
   // persist order to database
   await fetch(`${API_BACKEND}api/orders/${orderID}`, {
-    method: 'PUT',
+    method: "PUT",
     headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Content-type': 'application/json',
+      "Access-Control-Allow-Origin": "*",
+      "Content-type": "application/json",
     },
     body: JSON.stringify({
       data: {

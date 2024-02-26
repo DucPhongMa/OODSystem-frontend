@@ -1,8 +1,8 @@
-'use client';
-import { useAtom } from 'jotai';
-import { cartAtom } from '../../../../../store';
-import { useState, useEffect } from 'react';
-import { checkCustomerLogin } from '@/app/api/auth';
+"use client";
+import { useAtom } from "jotai";
+import { cartAtom } from "../../../../../store";
+import { useState, useEffect } from "react";
+import { checkCustomerLogin } from "@/app/api/auth";
 import {
   TextField,
   Box,
@@ -12,17 +12,17 @@ import {
   Button,
   Backdrop,
   CircularProgress,
-} from '@mui/material';
-import { v4 as uuidv4 } from 'uuid';
+} from "@mui/material";
+import { v4 as uuidv4 } from "uuid";
 
-import { addOrder } from '@/app/api/order';
-import RestaurantAppBar from '@/app/components/restaurant/RestaurantAppBar';
-import { useParams, useRouter } from 'next/navigation';
-import { getRestaurantByRoute } from '@/app/api/restaurant';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import PickupLocation from '@/app/components/restaurant/PickupLocation';
-import PickupDetails from '@/app/components/restaurant/PickupDetails';
+import { addOrder } from "@/app/api/order";
+import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
+import { useParams, useRouter } from "next/navigation";
+import { getRestaurantByRoute } from "@/app/api/restaurant";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import PickupLocation from "@/app/components/restaurant/PickupLocation";
+import PickupDetails from "@/app/components/restaurant/PickupDetails";
 
 export default function Checkout() {
   const router = useRouter();
@@ -32,15 +32,14 @@ export default function Checkout() {
   const params = useParams();
   const restaurantRoute = params.route;
   const [formData, setFormData] = useState({
-    phoneNum: '',
-    customerName: '',
-    additionalNotes: '',
+    phoneNum: "",
+    customerName: "",
+    additionalNotes: "",
   });
   const [subTotal, setSubTotal] = useState(0);
-  console.log('cart:');
+  console.log("cart:");
   console.log(cart);
   useEffect(() => {
-    const customerInfo = checkCustomerLogin();
     const customerInfo = checkCustomerLogin();
     if (customerInfo) {
       setFormData({ ...formData, phoneNum: JSON.parse(customerInfo).phoneNum });
@@ -90,7 +89,7 @@ export default function Checkout() {
     <>
       {!restaurantData && (
         <Backdrop
-          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={restaurantData == null}
         >
           <CircularProgress color="inherit" />
@@ -165,7 +164,7 @@ export default function Checkout() {
                     additionalNotes: event.target.value.trim(),
                   })
                 }
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
               />
             </Paper>
             <Typography variant="h6">
@@ -173,12 +172,12 @@ export default function Checkout() {
             </Typography>
             <Box
               sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
                 marginBottom: 2,
                 marginTop: 10,
-                flexDirection: 'column',
+                flexDirection: "column",
               }}
             >
               <Button variant="outlined" color="primary" onClick={submitOrder}>

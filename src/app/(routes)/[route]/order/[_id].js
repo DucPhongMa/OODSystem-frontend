@@ -1,8 +1,8 @@
-'use client';
-import { useAtom } from 'jotai';
-import { cartAtom } from '../../../../../store';
-import { useState, useEffect } from 'react';
-import { checkCustomerLogin } from '@/app/api/auth';
+"use client";
+import { useAtom } from "jotai";
+import { cartAtom } from "../../../../../store";
+import { useState, useEffect } from "react";
+import { checkCustomerLogin } from "@/app/api/auth";
 import {
   TextField,
   Box,
@@ -12,17 +12,17 @@ import {
   Button,
   Backdrop,
   CircularProgress,
-} from '@mui/material';
-import { useRouter } from 'next/router';
+} from "@mui/material";
+import { useRouter } from "next/router";
 
-import { addOrder } from '@/app/api/order';
-import RestaurantAppBar from '@/app/components/restaurant/RestaurantAppBar';
-import { useParams } from 'next/navigation';
-import { getRestaurantByRoute } from '@/app/api/restaurant';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import PickupLocation from '@/app/components/restaurant/PickupLocation';
-import PickupDetails from '@/app/components/restaurant/PickupDetails';
+import { addOrder } from "@/app/api/order";
+import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
+import { useParams } from "next/navigation";
+import { getRestaurantByRoute } from "@/app/api/restaurant";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import PickupLocation from "@/app/components/restaurant/PickupLocation";
+import PickupDetails from "@/app/components/restaurant/PickupDetails";
 
 export default function Order() {
   const router = useRouter();
@@ -32,9 +32,9 @@ export default function Order() {
   const params = useParams();
   const restaurantRoute = params.route;
   const [formData, setFormData] = useState({
-    phoneNum: '',
-    customerName: '',
-    additionalNotes: '',
+    phoneNum: "",
+    customerName: "",
+    additionalNotes: "",
   });
   const [subTotal, setSubTotal] = useState(0);
 
@@ -43,7 +43,7 @@ export default function Order() {
     if (customerInfo) {
       setFormData({ ...formData, phoneNum: JSON.parse(customerInfo).phoneNum });
     }
-  }, []);
+  }, [formData]);
 
   useEffect(() => {
     async function fetchMyAPI() {
@@ -78,12 +78,11 @@ export default function Order() {
     fetchMyAPI();
   }, [restaurantRoute]);
 
-
   return (
     <>
       {!restaurantData && (
         <Backdrop
-          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={restaurantData == null}
         >
           <CircularProgress color="inherit" />
