@@ -1,26 +1,26 @@
-"use client"
-import { useState, useEffect } from "react"
-import { useParams } from "next/navigation"
-import Backdrop from "@mui/material/Backdrop"
-import CircularProgress from "@mui/material/CircularProgress"
-import Image from "next/image"
-import Grid from "@mui/material/Grid"
-import Container from "@mui/material/Container"
-import Box from "@mui/material/Box"
-import { Typography } from "@mui/material"
-import { styled } from "@mui/system"
+"use client";
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import Image from "next/image";
+import Grid from "@mui/material/Grid";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+import { Typography } from "@mui/material";
+import { styled } from "@mui/system";
 
-import { getRestaurantByRoute } from "../../api/restaurant"
-import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar"
-import CategoryCard from "@/app/components/restaurant/CategoryCard"
-import { useAtom } from "jotai"
-import Link from "next/link"
-import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter"
+import { getRestaurantByRoute } from "../../api/restaurant";
+import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
+import CategoryCard from "@/app/components/restaurant/CategoryCard";
+import { useAtom } from "jotai";
+import Link from "next/link";
+import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
 
 export default function RestaurantDetail() {
-  const [restaurantData, setRestaurantData] = useState("")
-  const params = useParams()
-  const restaurantRoute = params.route
+  const [restaurantData, setRestaurantData] = useState("");
+  const params = useParams();
+  const restaurantRoute = params.route;
 
   const Word = styled("div")({
     display: "inline-block",
@@ -28,7 +28,7 @@ export default function RestaurantDetail() {
     "::first-letter": {
       fontSize: "120%",
     },
-  })
+  });
 
   const StyledTypography = styled(Typography)({
     fontFamily: "'Roboto Slab', serif",
@@ -40,11 +40,11 @@ export default function RestaurantDetail() {
       fontSize: "120%",
     },
     paddingLeft: "1.4em",
-  })
+  });
 
   useEffect(() => {
     async function fetchMyAPI() {
-      const restaurantData = await getRestaurantByRoute(restaurantRoute)
+      const restaurantData = await getRestaurantByRoute(restaurantRoute);
       const menuItems =
         restaurantData.attributes.menu.data.attributes.menu_items.data.map(
           (item) => {
@@ -55,33 +55,33 @@ export default function RestaurantDetail() {
               categoryID: item.attributes.menu_category.data.id,
               id: item.id,
               description: item.attributes.description,
-            }
+            };
           }
-        )
+        );
       const menuCate =
         restaurantData.attributes.menu.data.attributes.menu_categories.data.map(
           (cat) => {
-            const items = menuItems.filter((item) => item.categoryID == cat.id)
+            const items = menuItems.filter((item) => item.categoryID == cat.id);
             return {
               name: cat.attributes.nameCate,
               id: cat.id,
               items,
               image: items[0]?.imageURL, // use the first item's image
-            }
+            };
           }
-        )
-      setRestaurantData({ ...restaurantData.attributes, menuCate })
+        );
+      setRestaurantData({ ...restaurantData.attributes, menuCate });
     }
 
-    fetchMyAPI()
-    localStorage.setItem("restaurant-route", restaurantRoute)
-  }, [])
+    fetchMyAPI();
+    localStorage.setItem("restaurant-route", restaurantRoute);
+  }, [restaurantRoute]);
 
   // console.log(restaurantData?.menu.data.attributes.menu_categories);
 
-  console.log(restaurantData)
+  console.log(restaurantData);
   // console.log(restaurantData?.menu.data.attributes);
-  console.log(restaurantData?.menu?.data?.attributes.menu_categories.data)
+  console.log(restaurantData?.menu?.data?.attributes.menu_categories.data);
 
   return (
     <>
@@ -156,11 +156,7 @@ export default function RestaurantDetail() {
             {/* Category Section */}
             <Box sx={{ margin: "30px 0", paddingBottom: "10px" }}>
               <Container maxWidth="lg">
-                <Grid
-                  container
-                  spacing={2}
-                  justifyContent="space-between"
-                >
+                <Grid container spacing={2} justifyContent="space-between">
                   {restaurantData.menuCate.map((item, index) => (
                     <Grid
                       item
@@ -276,14 +272,8 @@ export default function RestaurantDetail() {
               >
                 TOP PICKS
               </Typography>
-              <Container
-                maxWidth="lg"
-                sx={{ marginLeft: "9px", zIndex: 2 }}
-              >
-                <Grid
-                  container
-                  spacing={2}
-                >
+              <Container maxWidth="lg" sx={{ marginLeft: "9px", zIndex: 2 }}>
+                <Grid container spacing={2}>
                   {[1, 2, 3].map((item) => (
                     <Grid
                       item
@@ -370,14 +360,8 @@ export default function RestaurantDetail() {
               >
                 REVIEWS
               </Typography>
-              <Container
-                maxWidth="lg"
-                sx={{ marginLeft: "47px" }}
-              >
-                <Grid
-                  container
-                  spacing={2}
-                >
+              <Container maxWidth="lg" sx={{ marginLeft: "47px" }}>
+                <Grid container spacing={2}>
                   {[1, 2, 3].map((review) => (
                     <Grid
                       item
@@ -430,5 +414,5 @@ export default function RestaurantDetail() {
         )}
       </Box>
     </>
-  )
+  );
 }

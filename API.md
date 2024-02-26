@@ -48,7 +48,7 @@ Required input:
 restaurant {
 	owner: {
 		email: "",
-		password: "",	
+		password: "",
 	}
 	name: "restaurant-name",
 	route: "restaurant-route",
@@ -57,7 +57,7 @@ restaurant {
     		address: "1213 Finch Avenue",
     		provinceOrState: "Ontario",
     		city: "Toronto",
-    		postalCode: "N1M 1CA",	
+    		postalCode: "N1M 1CA",
 	}
 	"restaurant_description" : {
     		aboutDescription: "About description website",
@@ -67,8 +67,8 @@ restaurant {
 	"restaurant_categories: ["dessert", "main"],
 	"restaurant_dishes": [{
 		"category_id": 0,
-		"name": 
-		"price": 
+		"name":
+		"price":
 	}]
 	"hours": {
 		"monday": {"open": 08:00, "close": "23:00"},
@@ -101,7 +101,7 @@ Function: getRestaurantByRoute
 Required Input:
 
 ```javascript
-"unique-website-route"
+"unique-website-route";
 ```
 
 Output:

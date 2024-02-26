@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {
   TextField,
   Button,
@@ -8,28 +8,28 @@ import {
   Typography,
   AppBar,
   Toolbar,
-} from "@mui/material"
-import { useForm } from "react-hook-form"
-import Link from "next/link"
-import { loginUser } from "../../api/auth"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
-import MainNavbar from "../../components/admin/register/MainNavbar"
+} from "@mui/material";
+import { useForm } from "react-hook-form";
+import Link from "next/link";
+import { loginUser } from "../../api/auth";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import MainNavbar from "../../components/admin/register/MainNavbar";
 
 export default function ManagementLoginPage() {
-  const [error, setError] = useState(false)
-  const { register, handleSubmit } = useForm()
-  const router = useRouter()
+  const [error, setError] = useState(false);
+  const { register, handleSubmit } = useForm();
+  const router = useRouter();
 
   const handleFormSubmit = async (formData) => {
-    const error = await loginUser(formData.email, formData.password)
+    const error = await loginUser(formData.email, formData.password);
     if (error) {
-      console.log(error)
-      setError(error)
+      console.log(error);
+      setError(error);
     } else {
-      router.push("/admin/dashboard")
+      router.push("/admin/dashboard");
     }
-  }
+  };
 
   return (
     <>
@@ -58,14 +58,8 @@ export default function ManagementLoginPage() {
                 "Email or password is incorrect! Please check"
               </h3>
             )}
-            <Grid
-              container
-              spacing={2}
-            >
-              <Grid
-                item
-                xs={12}
-              >
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
                 <TextField
                   autoComplete="email"
                   required
@@ -75,10 +69,7 @@ export default function ManagementLoginPage() {
                   {...register("email")}
                 />
               </Grid>
-              <Grid
-                item
-                xs={12}
-              >
+              <Grid item xs={12}>
                 <TextField
                   autoComplete="password"
                   required
@@ -107,5 +98,5 @@ export default function ManagementLoginPage() {
         </Box>
       </Container>
     </>
-  )
+  );
 }

@@ -1,13 +1,26 @@
-"use client"
-import { useState } from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, useMediaQuery, Drawer, List, ListItem, ListItemText, ListItemIcon } from "@mui/material";
-import MenuIcon from '@mui/icons-material/Menu';
+"use client";
+import { useState } from "react";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Menu,
+  MenuItem,
+  useMediaQuery,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
-import {removeToken} from "../../../api/auth"
+import { removeToken } from "../../../api/auth";
 
 export default function MainNavbar({ isLoggedin }) {
   const [mobileMenuAnchor, setMobileMenuAnchor] = useState(null);
-  const isMobileOrTablet = useMediaQuery('(max-width:960px)');
+  const isMobileOrTablet = useMediaQuery("(max-width:960px)");
 
   const handleMobileMenuOpen = (event) => {
     setMobileMenuAnchor(event.currentTarget);
@@ -17,9 +30,9 @@ export default function MainNavbar({ isLoggedin }) {
     setMobileMenuAnchor(null);
   };
 
-  const logout = () => {   
+  const logout = () => {
     removeToken();
- }
+  };
 
   return (
     <>
@@ -37,7 +50,7 @@ export default function MainNavbar({ isLoggedin }) {
                 <MenuIcon />
               </IconButton>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                 RestaurantWeb ADMIN Portal
+                RestaurantWeb ADMIN Portal
               </Typography>
             </Toolbar>
           </AppBar>
@@ -54,7 +67,7 @@ export default function MainNavbar({ isLoggedin }) {
                 <Link href="/about">About</Link>
               </ListItem>
               <ListItem button>
-                <Link href="/contact">Contact</Link>  
+                <Link href="/contact">Contact</Link>
               </ListItem>
               {isLoggedin ? (
                 <>
@@ -68,7 +81,9 @@ export default function MainNavbar({ isLoggedin }) {
                     <Link href="/">Edit Info</Link>
                   </ListItem>
                   <ListItem button>
-                    <Link href="/admin/login" onClick={logout}>Logout</Link>
+                    <Link href="/admin/login" onClick={logout}>
+                      Logout
+                    </Link>
                   </ListItem>
                 </>
               ) : (
@@ -111,7 +126,9 @@ export default function MainNavbar({ isLoggedin }) {
                   <Link href="/">Edit Info</Link>
                 </Typography>
                 <Typography>
-                  <Link href="/admin/login" onClick={logout}>Logout</Link>
+                  <Link href="/admin/login" onClick={logout}>
+                    Logout
+                  </Link>
                 </Typography>
               </>
             ) : (
