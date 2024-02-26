@@ -44,7 +44,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm install -v
+        run: npm install --save-exact
 
       - name: Run build
         run: npm run build
