@@ -21,12 +21,17 @@ export default function OrderHistory() {
 
   // TODO: assign the orderID into the button attribute ID
   const readyForPickUp = async (event) => {
-    await updateOrder(event.target.id, "ready pick up")
+    await updateOrder(event.target.id, "ready for pickup")
   }
 
   // TODO: assign the orderID into the button attribute ID
   const completeOrder = async (event) => {
-    await updateOrder(event.target.id, "done")
+    await updateOrder(event.target.id, "completed")
+  }
+
+  // TODO: assign the orderID into the button attribute ID
+  const cancelOrder = async (event) => {
+    await updateOrder(event.target.id, "cancelled")
   }
 
   return <p>Restaurant Order History Page</p>
