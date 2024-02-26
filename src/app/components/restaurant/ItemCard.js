@@ -1,4 +1,11 @@
-import { Box, Card, CardActionArea, CardContent, CardMedia, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Typography,
+} from "@mui/material";
 
 export default function ItemCard({ item, handleOpenDialog }) {
   return (
@@ -11,7 +18,7 @@ export default function ItemCard({ item, handleOpenDialog }) {
         }}
         onClick={() => handleOpenDialog(item)}
       >
-        <CardContent sx={{ flex: "1 0 auto", width: 'calc(100% - 151px)' }}>
+        <CardContent sx={{ flex: "1 0 auto", width: "calc(100% - 151px)" }}>
           <Typography component="div" variant="h6">
             {item.name}
           </Typography>
@@ -20,11 +27,11 @@ export default function ItemCard({ item, handleOpenDialog }) {
             color="text.secondary"
             component="div"
             sx={{
-              display: '-webkit-box',
+              display: "-webkit-box",
               WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis'
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
             }}
           >
             {item.description}
@@ -38,18 +45,20 @@ export default function ItemCard({ item, handleOpenDialog }) {
             ${parseFloat(item.price).toFixed(2)}
           </Typography>
         </CardContent>
-        <Box sx={{
-          width: 151,
-          height: 151,
-          overflow: 'hidden',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}>
+        <Box
+          sx={{
+            width: 151,
+            height: 151,
+            overflow: "hidden",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <CardMedia
             component="img"
             sx={{
-              height: '100%',
+              height: "100%",
               objectFit: "cover",
             }}
             image={item.imageURL}

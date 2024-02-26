@@ -1,11 +1,5 @@
 const API_BACKEND = process.env.NEXT_PUBLIC_API_BACKEND_URL;
-export const addOrder = async (
-  dishesArray,
-  userID,
-  restaurantID,
-  note,
-  uuid
-) => {
+export const addOrder = async (dishesArray, userID, restaurantID, note) => {
   const orderDetailIDs = [];
   let orderTotal = 0;
   // persist menu_items to database;
@@ -87,7 +81,7 @@ export const updateOrder = async (orderID, status) => {
   let updatedStatus = status.toLowerCase();
   let timeComplete;
 
-  if (status == 'completed' || status == 'cancelled') {
+  if (status == "completed" || status == "cancelled") {
     timeComplete = Date.now();
   }
   // persist order to database

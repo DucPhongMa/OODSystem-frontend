@@ -1,4 +1,4 @@
-const API_BACKEND = process.env.NEXT_PUBLIC_API_BACKEND_URL
+const API_BACKEND = process.env.NEXT_PUBLIC_API_BACKEND_URL;
 
 export const registerBusiness = async (email, password) => {
   try {
@@ -13,19 +13,19 @@ export const registerBusiness = async (email, password) => {
         password: password,
         role: "Business",
       }),
-    })
+    });
 
-    const responseData = await response.json()
+    const responseData = await response.json();
     const item = {
       value: responseData.jwt,
       expiry: new Date().getTime() + 30 * 60000,
-    }
-    localStorage.setItem("business-authorization", JSON.stringify(item))
+    };
+    localStorage.setItem("business-authorization", JSON.stringify(item));
   } catch (e) {
     // redirect to error page
-    console.error(e)
+    console.error(e);
   }
-}
+};
 
 export const loginUser = async (identifier, password) => {
   try {
@@ -38,57 +38,57 @@ export const loginUser = async (identifier, password) => {
         identifier: identifier,
         password: password,
       }),
-    })
-    const responseData = await response.json()
+    });
+    const responseData = await response.json();
     const userInfo = await fetch(`${API_BACKEND}api/users/me?populate=*`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${responseData.jwt}`,
       },
-    })
+    });
 
-    const userInfoData = await userInfo.json()
+    const userInfoData = await userInfo.json();
     if (responseData.jwt) {
       const item = {
         value: responseData.jwt,
         expiry: new Date().getTime() + 30 * 60000,
         fullName: userInfoData.fullname,
         phoneNum: userInfoData.phonenumber,
-      }
+      };
       if (userInfoData.role.name == "Business") {
-        localStorage.setItem("business-authorization", JSON.stringify(item))
+        localStorage.setItem("business-authorization", JSON.stringify(item));
       } else {
-        localStorage.setItem("customer-authorization", JSON.stringify(item))
+        localStorage.setItem("customer-authorization", JSON.stringify(item));
       }
 
-      localStorage.setItem("username", identifier)
+      localStorage.setItem("username", identifier);
     } else {
-      return "Email or password is incorrect! Please check!"
+      return "Email or password is incorrect! Please check!";
     }
   } catch (e) {
-    return e
+    return e;
   }
-}
+};
 
 export const checkBusinessLogin = () => {
-  const itemStr = localStorage.getItem("business-authorization")
+  const itemStr = localStorage.getItem("business-authorization");
   if (!itemStr) {
-    return false
+    return false;
   }
-  const item = JSON.parse(itemStr)
-  const now = new Date()
+  const item = JSON.parse(itemStr);
+  const now = new Date();
   // compare the expiry time of the item with the current time
   if (now.getTime() > item.expiry) {
-    localStorage.removeItem("business-authorization")
-    return false
+    localStorage.removeItem("business-authorization");
+    return false;
   }
-  return true
-}
+  return true;
+};
 
 export const removeToken = () => {
-  localStorage.removeItem("business-authorization")
-  localStorage.removeItem("username")
-}
+  localStorage.removeItem("business-authorization");
+  localStorage.removeItem("username");
+};
 
 export const registerCustomer = async (email, password, fullName, phoneNum) => {
   try {
@@ -104,45 +104,45 @@ export const registerCustomer = async (email, password, fullName, phoneNum) => {
         fullname: fullName,
         phonenumber: phoneNum,
       }),
-    })
+    });
 
-    const responseData = await response.json()
+    const responseData = await response.json();
     const userInfo = await fetch(`${API_BACKEND}api/users/me?populate=*`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${responseData.jwt}`,
       },
-    })
+    });
 
-    const userInfoData = await userInfo.json()
+    const userInfoData = await userInfo.json();
     const item = {
       value: responseData.jwt,
       expiry: new Date().getTime() + 1440 * 60000,
       fullName: userInfoData.fullname,
       phoneNum: userInfoData.phonenumber,
-    }
-    localStorage.setItem("customer-authorization", JSON.stringify(item))
+    };
+    localStorage.setItem("customer-authorization", JSON.stringify(item));
   } catch (e) {
     // redirect to error page
-    console.error(e)
+    console.error(e);
   }
-}
+};
 
 export const checkCustomerLogin = () => {
-  const itemStr = localStorage.getItem("customer-authorization")
+  const itemStr = localStorage.getItem("customer-authorization");
   if (!itemStr) {
-    return false
+    return false;
   }
-  const item = JSON.parse(itemStr)
-  const now = new Date()
+  const item = JSON.parse(itemStr);
+  const now = new Date();
   // compare the expiry time of the item with the current time
   if (now.getTime() > item.expiry) {
-    localStorage.removeItem("customer-authorization")
-    return false
+    localStorage.removeItem("customer-authorization");
+    return false;
   }
-  return itemStr
-}
+  return itemStr;
+};
 
 export const logoutCustomer = () => {
-  localStorage.removeItem("customer-authorization")
-}
+  localStorage.removeItem("customer-authorization");
+};

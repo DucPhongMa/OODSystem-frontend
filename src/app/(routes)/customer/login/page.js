@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {
   TextField,
   Button,
@@ -8,28 +8,28 @@ import {
   Typography,
   AppBar,
   Toolbar,
-} from "@mui/material"
-import { useForm } from "react-hook-form"
-import { loginUser } from "@/app/api/auth"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
+} from "@mui/material";
+import { useForm } from "react-hook-form";
+import { loginUser } from "@/app/api/auth";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function CustomerLoginPage() {
-  const { register, handleSubmit } = useForm()
-  const [error, setError] = useState(null)
-  const router = useRouter()
+  const { register, handleSubmit } = useForm();
+  const [error, setError] = useState(null);
+  const router = useRouter();
 
   const handleFormSubmit = async (formData) => {
-    const currentRestaurant = localStorage.getItem("restaurant-route")
-    const error = await loginUser(formData.email, formData.password)
+    const currentRestaurant = localStorage.getItem("restaurant-route");
+    const error = await loginUser(formData.email, formData.password);
     if (error) {
-      console.log(error)
-      setError(error)
+      console.log(error);
+      setError(error);
     } else {
-      currentRestaurant && router.push(`/${currentRestaurant}`)
+      currentRestaurant && router.push(`/${currentRestaurant}`);
     }
-  }
+  };
 
   return (
     <>
@@ -76,14 +76,8 @@ export default function CustomerLoginPage() {
             noValidate
             sx={{ mt: 5 }}
           >
-            <Grid
-              container
-              spacing={2}
-            >
-              <Grid
-                item
-                xs={12}
-              >
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
                 <TextField
                   autoComplete="email"
                   required
@@ -93,10 +87,7 @@ export default function CustomerLoginPage() {
                   {...register("email")}
                 />
               </Grid>
-              <Grid
-                item
-                xs={12}
-              >
+              <Grid item xs={12}>
                 <TextField
                   autoComplete="password"
                   required
@@ -107,14 +98,8 @@ export default function CustomerLoginPage() {
                 />
               </Grid>
             </Grid>
-            <Grid
-              container
-              spacing={2}
-            >
-              <Grid
-                item
-                xs={6}
-              >
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
                 <Button
                   type="submit"
                   fullWidth
@@ -130,10 +115,7 @@ export default function CustomerLoginPage() {
                 </Button>
               </Grid>
 
-              <Grid
-                item
-                xs={6}
-              >
+              <Grid item xs={6}>
                 {/* I don't know how to get dynamic route */}
                 <Button
                   href="/customer/register"
@@ -154,5 +136,5 @@ export default function CustomerLoginPage() {
         </Box>
       </Container>
     </>
-  )
+  );
 }

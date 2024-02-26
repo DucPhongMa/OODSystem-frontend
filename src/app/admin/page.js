@@ -1,31 +1,23 @@
-import { AppBar, Toolbar, Typography, Grid, Button } from "@mui/material"
-import Link from "next/link"
-import MainNavbar from "../components/admin/register/MainNavbar"
+import { AppBar, Toolbar, Typography, Grid, Button } from "@mui/material";
+import Link from "next/link";
+import MainNavbar from "../components/admin/register/MainNavbar";
+import Image from "next/image";
 
 export default function landing() {
   const gridStyle = {
     display: "flex",
     padding: "10px",
     paddingTop: "90px",
-  }
+  };
 
   return (
     <>
       {/* Navbar */}
-      <MainNavbar isLoggedin={false}/>
+      <MainNavbar isLoggedin={false} />
 
       {/* Body */}
-      <Grid
-        style={gridStyle}
-        container
-        spacing={2}
-      >
-        <Grid
-          item
-          xs={6}
-          container
-          justifyContent={"center"}
-        >
+      <Grid style={gridStyle} container spacing={2}>
+        <Grid item xs={6} container justifyContent={"center"}>
           <div style={{ textAlign: "center" }}>
             <Typography
               fontSize={"55px"}
@@ -34,10 +26,7 @@ export default function landing() {
             >
               Welcome to Restaurant Website Generator & Food Pick Up
             </Typography>
-            <Typography
-              fontSize={"30px"}
-              variant="paragraph"
-            >
+            <Typography fontSize={"30px"} variant="paragraph">
               We will help you generate a static website and provide you an
               efficient way to handle pick-up orders.
               <br></br>
@@ -70,13 +59,8 @@ export default function landing() {
             </Button>
           </Grid>
         </Grid>
-        <Grid
-          item
-          xs={6}
-          container
-          justifyContent={"center"}
-        >
-          <img
+        <Grid item xs={6} container justifyContent={"center"}>
+          <Image
             src="https://picsum.photos/650/600"
             alt="placeholder image"
             width={650}
@@ -84,13 +68,8 @@ export default function landing() {
           />{" "}
           {/* A landing picture */}
         </Grid>
-        <Grid
-          item
-          xs={6}
-          container
-          justifyContent={"center"}
-        >
-          <img
+        <Grid item xs={6} container justifyContent={"center"}>
+          <Image
             src="https://picsum.photos/650/600"
             alt="placeholder image"
             width={650}
@@ -98,12 +77,7 @@ export default function landing() {
           />{" "}
           {/* An about me picture? What does that mean? */}
         </Grid>
-        <Grid
-          item
-          xs={6}
-          container
-          justifyContent={"center"}
-        >
+        <Grid item xs={6} container justifyContent={"center"}>
           <div style={{ textAlign: "center" }}>
             <Typography
               fontSize={"28px"}
@@ -112,14 +86,12 @@ export default function landing() {
             >
               About Us
             </Typography>
-            <Typography
-              maxWidth={"550px"}
-              style={{ marginBottom: "50px" }}
-            >
-              We at Restaurant Website Generator & Food Pick Up understand the frustration many restaurant owners
-              face in today's digitally dependant world. The lack of a
-              fast-loading website and an efficient online pickup ordering
-              system can be a significant hurdle.
+            <Typography maxWidth={"550px"} style={{ marginBottom: "50px" }}>
+              We at Restaurant Website Generator & Food Pick Up understand the
+              frustration many restaurant owners face in today's digitally
+              dependant world. The lack of a fast-loading website and an
+              efficient online pickup ordering system can be a significant
+              hurdle.
             </Typography>
             <Typography maxWidth={"550px"}>
               Many restaurants lack a fast-loading website and menu or a method
@@ -142,5 +114,5 @@ export default function landing() {
         </Grid>
       </Grid>
     </>
-  )
+  );
 }
