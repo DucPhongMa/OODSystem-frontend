@@ -18,13 +18,13 @@ export default function Home() {
     // })
   }, []);
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Image Add:
-        <input type="file" name="name" onChange={handleImageFile} />
-      </label>
-      <input type="submit" value="Submit" />
-    </form>
-  );
+  // return (
+  //   <form onSubmit={handleSubmit}>
+  //     <label>
+  //       Image Add:
+  //       <input type="file" name="name" onChange={handleImageFile} />
+  //     </label>
+  //     <input type="submit" value="Submit" />
+  //   </form>
+  // );
 }
