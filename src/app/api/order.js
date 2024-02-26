@@ -36,7 +36,7 @@ export const addOrder = async (dishesArray, userID, restaurantID, note) => {
     },
     body: JSON.stringify({
       data: {
-        date_time: Date.now(),
+        time_placed: Date.now(),
         note: note,
         total_price: orderTotal,
         tax: orderTotal + orderTotal * 0.13,
@@ -78,6 +78,11 @@ export const getOrderBasedOnStatus = async (restaurantID, status) => {
 
 export const updateOrder = async (orderID, status) => {
   let updatedStatus = status.toLowerCase()
+  let timeComplete
+
+  if (status == "completed" || status == "cancelled") {
+    timeComplete = Date.now()
+  }
   // persist order to database
   await fetch(`${API_BACKEND}api/orders/${orderID}`, {
     method: "PUT",
@@ -88,6 +93,7 @@ export const updateOrder = async (orderID, status) => {
     body: JSON.stringify({
       data: {
         status: updatedStatus,
+        time_completed: timeComplete ? timeComplete : null,
       },
     }),
   })
