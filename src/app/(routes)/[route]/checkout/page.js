@@ -43,9 +43,48 @@ export default function Checkout() {
     const customerInfo = checkCustomerLogin();
     if (customerInfo) {
       setFormData({ ...formData, phoneNum: JSON.parse(customerInfo).phoneNum });
-      setFormData({ ...formData, phoneNum: JSON.parse(customerInfo).phoneNum });
     }
   }, [formData]);
+
+  useEffect(() => {
+    async function fetchMyAPI() {
+      const restaurantData = await getRestaurantByRoute(restaurantRoute);
+      setRestaurantId(restaurantData.id);
+      const menuItems =
+        restaurantData.attributes.menu.data.attributes.menu_items.data.map(
+          (item) => {
+            return {
+              name: item.attributes.name,
+              price: item.attributes.price,
+              imageURL: item.attributes.imageURL,
+              categoryID: item.attributes.menu_category.data.id,
+              id: item.id,
+              description: item.attributes.description,
+            };
+          }
+        );
+      const menuCate =
+        restaurantData.attributes.menu.data.attributes.menu_categories.data.map(
+          (cat) => {
+            return {
+              name: cat.attributes.nameCate,
+              id: cat.id,
+              items: menuItems.filter((item) => item.categoryID == cat.id),
+            };
+          }
+        );
+      setRestaurantData({ ...restaurantData.attributes, menuCate });
+    }
+
+    fetchMyAPI();
+  }, [restaurantRoute]);
+
+  useEffect(() => {
+    const sTotal = cart
+      .reduce((total, item) => total + item.price * item.quantity, 0)
+      .toFixed(2);
+    setSubTotal(sTotal);
+  }, [cart]);
 
   // // Sample submit order call to API
   const submitOrder = async () => {
