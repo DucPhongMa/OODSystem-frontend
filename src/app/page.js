@@ -10,7 +10,7 @@ export default function Home() {
       username: "Vivy",
       email: "vngvy48@gmail.com",
       password: "password1234.",
-    })
+    });
 
     // loginBusiness({
     //   username: "Vivy",
