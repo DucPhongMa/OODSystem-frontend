@@ -43,7 +43,7 @@ export const addOrder = async (dishesArray, userID, restaurantID, note) => {
         order_details: orderDetailIDs,
         restaurant: restaurantID,
         users_permissions_user: userID,
-        status: "new",
+        status: "pending",
       },
     }),
   })
