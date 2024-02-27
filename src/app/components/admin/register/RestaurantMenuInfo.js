@@ -12,10 +12,11 @@ import {
   DialogContent,
   DialogActions,
   IconButton,
-  Input
+  Input,
 } from "@mui/material";
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import RemoveIcon from "@mui/icons-material/Remove";
+import Image from "next/image";
 
 function RestaurantMenuInfo({ formData, setFormData }) {
   const [activeCategory, setActiveCategory] = useState(null);
@@ -25,7 +26,7 @@ function RestaurantMenuInfo({ formData, setFormData }) {
     name: "",
     description: "",
     price: "",
-    imageName: "" // Added state for image name
+    imageName: "", // Added state for image name
   });
 
   const handleSaveCategory = () => {
@@ -70,36 +71,39 @@ function RestaurantMenuInfo({ formData, setFormData }) {
     const trimmedItemName = newItem.name.trim();
     const trimmedItemDescription = newItem.description.trim();
     const trimmedItemPrice = newItem.price.trim();
-  
+
     if (!trimmedItemName || !trimmedItemPrice) {
       alert("Item name and price cannot be empty.");
       return;
     }
-  
+
     if (activeCategory.items.some((item) => item.name === trimmedItemName)) {
       alert("An item with this name already exists in this category.");
       return;
     }
     //===========================Upload Images============================
     const formData2 = new FormData();
-    formData2.append('file', file);
-    formData2.append('upload_preset', 'my-uploads');
-  
+    formData2.append("file", file);
+    formData2.append("upload_preset", "my-uploads");
+
     try {
-      const data = await fetch('https://api.cloudinary.com/v1_1/dyu1deqdg/image/upload', {
-        method: 'POST',
-        body: formData2
-      }).then(r => r.json());
-      console.log('data', data);
-      console.log('image_url', data.secure_url);
-  
+      const data = await fetch(
+        "https://api.cloudinary.com/v1_1/dyu1deqdg/image/upload",
+        {
+          method: "POST",
+          body: formData2,
+        }
+      ).then((r) => r.json());
+      console.log("data", data);
+      console.log("image_url", data.secure_url);
+
       const uploadImage = data.secure_url;
-  
+
       if (!uploadImage) {
         console.error("Image upload failed.");
         return;
       }
-  
+
       // Update newItem state with imageName
       setNewItem({ ...newItem, imageName: uploadImage });
       //============================================================================
@@ -108,40 +112,38 @@ function RestaurantMenuInfo({ formData, setFormData }) {
         name: trimmedItemName,
         description: trimmedItemDescription,
         price: trimmedItemPrice,
-        imageName: uploadImage
+        imageName: uploadImage,
       };
-  
+
       const updatedCategories = formData.categories.map((category) =>
         category.name === activeCategory.name
           ? { ...category, items: [...category.items, updatedItem] }
           : category
       );
-  
+
       setFormData({
         ...formData,
-        categories: updatedCategories
+        categories: updatedCategories,
       });
-  
+
       setActiveCategory((prevActiveCategory) => {
         const updatedActiveCategory = updatedCategories.find(
           (category) => category.name === prevActiveCategory.name
         );
         return updatedActiveCategory || null;
       });
-  
+
       // Reset input fields after save
       setNewItem({
         name: "",
         description: "",
         price: "",
-        imageName: ""
+        imageName: "",
       });
-  
     } catch (error) {
       console.error(error);
     }
   };
-  
 
   const handleDeleteItem = (event, itemToDelete) => {
     event.stopPropagation();
@@ -168,8 +170,7 @@ function RestaurantMenuInfo({ formData, setFormData }) {
     setFile(uploadedFile);
 
     // Use uploadedFile instead of file because file may not have been updated yet
-    console.log('file', uploadedFile);
-   
+    console.log("file", uploadedFile);
   };
 
   return (
@@ -245,19 +246,23 @@ function RestaurantMenuInfo({ formData, setFormData }) {
                     }
                   />
                 </Grid>
-                 {/* File Upload Input */}
+                {/* File Upload Input */}
                 <Grid item xs={12}>
                   <Input
                     type="file"
                     id="upload-image"
                     onChange={handleImageUpload}
                     inputProps={{
-                      accept: 'image/*',
+                      accept: "image/*",
                     }}
                     fullWidth
                   />
-                  <br /><br />
-                  {newItem.imageName && <p>File Name: {newItem.imageName}</p>} {/* Display file name */}
+                  <br />
+                  <br />
+                  {newItem.imageName && (
+                    <p>File Name: {newItem.imageName}</p>
+                  )}{" "}
+                  {/* Display file name */}
                 </Grid>
                 {/* End File Upload Input */}
               </Grid>
@@ -268,13 +273,19 @@ function RestaurantMenuInfo({ formData, setFormData }) {
                     <ListItemText
                       primary={item.name}
                       secondary={
-                      <>
-                        <div>Description: {item.description}</div>
-                        <div>Price: {item.price}</div>
-                        <div>
-                          Image Name: <img src={item.imageName} alt="Item Image" style={{ maxWidth: '100px', maxHeight: '100px' }} />
-                        </div>
-                      </>}
+                        <>
+                          <div>Description: {item.description}</div>
+                          <div>Price: {item.price}</div>
+                          <div>
+                            Image Name:{" "}
+                            <Image
+                              src={item.imageName}
+                              alt="Item Image"
+                              style={{ maxWidth: "100px", maxHeight: "100px" }}
+                            />
+                          </div>
+                        </>
+                      }
                     />
                     <IconButton
                       onClick={(event) => handleDeleteItem(event, item)}

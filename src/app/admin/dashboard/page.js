@@ -25,9 +25,8 @@ export default function DashboardPage() {
       setUsername(storedUsername);
 
       async function fetchMyAPI() {
-        const restaurantData = await getRestaurantByBusinessName(
-          storedUsername
-        );
+        const restaurantData =
+          await getRestaurantByBusinessName(storedUsername);
         setRestaurantRoute(restaurantData);
       }
 
