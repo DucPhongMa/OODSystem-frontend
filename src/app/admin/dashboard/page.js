@@ -57,7 +57,7 @@ export default function DashboardPage() {
             <Typography>Successful Order Rate: 92%</Typography>
             <Grid container spacing={2} style={{ marginTop: "20px" }}>
               <Grid item xs={6}>
-                <Link href="/admin/order-history" passHref>
+                <Link href="/admin/orders#past" passHref>
                   <Button
                     variant="contained"
                     sx={{
@@ -70,13 +70,14 @@ export default function DashboardPage() {
                       },
                     }}
                     fullWidth
+                    onClick={() => (window.location.hash = "past")}
                   >
-                    View Order History
+                    View Past Orders
                   </Button>
                 </Link>
               </Grid>
               <Grid item xs={6}>
-                <Link href="/admin/order-dashboard" passHref>
+                <Link href="/admin/orders" passHref>
                   <Button
                     variant="contained"
                     sx={{
@@ -90,7 +91,7 @@ export default function DashboardPage() {
                     }}
                     fullWidth
                   >
-                    View Order Dashboard
+                    View Incoming Orders
                   </Button>
                 </Link>
               </Grid>
