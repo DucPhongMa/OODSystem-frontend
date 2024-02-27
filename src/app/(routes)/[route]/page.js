@@ -12,13 +12,13 @@ import { styled } from "@mui/system";
 
 import { getRestaurantByRoute } from "../../api/restaurant";
 import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
-import CategoryCard from "@/app/components/restaurant/CategoryCard";
-import { useAtom } from "jotai";
 import Link from "next/link";
 import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
+import styles from "../../styles/restaurant.module.scss";
 
 export default function RestaurantDetail() {
   const [restaurantData, setRestaurantData] = useState("");
+  const [theme, setTheme] = useState("");
   const params = useParams();
   const restaurantRoute = params.route;
 
@@ -43,6 +43,8 @@ export default function RestaurantDetail() {
   });
 
   useEffect(() => {
+    // Comment out this code to switch theme, theme 1 is h1 is yellow, theme 2 is h1 is red, we will dynamic put the theme based on theme attribute of the restaurant
+    // setTheme(styles.theme2);
     async function fetchMyAPI() {
       const restaurantData = await getRestaurantByRoute(restaurantRoute);
       const menuItems =
@@ -84,7 +86,7 @@ export default function RestaurantDetail() {
   console.log(restaurantData?.menu?.data?.attributes.menu_categories.data);
 
   return (
-    <>
+    <div className={theme}>
       <Box
         sx={{
           background: "linear-gradient(to bottom, #ffffff, #f7fafc)",
@@ -413,6 +415,6 @@ export default function RestaurantDetail() {
           </>
         )}
       </Box>
-    </>
+    </div>
   );
 }
