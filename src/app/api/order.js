@@ -131,6 +131,36 @@ export const updateOrder = async (orderID, status) => {
   })
     .then((res) => res.json())
     .then((jsonData) => {
-      return jsonData;
-    });
-};
+      return jsonData
+    })
+}
+
+export const getOrderByCustomer = async () => {
+  const token = localStorage.getItem("customer-authorization")
+  const tokenData = JSON.parse(token);
+  const jwtToken = tokenData.value;
+  console.log(jwtToken);
+  const userInfo =  await fetch(`${API_BACKEND}api/users/me?populate=orders&populate=orders.order_details.menu_item`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${jwtToken}`,
+    },
+  })
+  const userInfoData = await userInfo.json()
+
+  return userInfoData.orders;
+}
+
+export const getOrderById = async (orderId) => {
+  let orderDetailData
+  await fetch(
+    `${API_BACKEND}api/orders/${orderId}?populate=users_permissions_user&populate=order_details.menu_item&populate=restaurant`
+  )
+    .then((res) => res.json())
+    .then((jsonData) => {
+      console.log('jsonData: ', jsonData);
+      orderDetailData = jsonData.data.attributes
+    })
+
+  return orderDetailData
+}
