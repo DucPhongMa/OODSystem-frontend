@@ -95,14 +95,14 @@ export default function Checkout() {
     }));
     const uuid = uuidv4();
     console.log(uuid);
-    // await addOrder(
-    //   orderItems,
-    //   '',
-    //   restaurantId,
-    //   formData.additionalNotes,
-    //   uuid
-    // );
-    // setCart([]);
+    await addOrder(
+      uuid,
+      orderItems,
+      restaurantId,
+      formData.additionalNotes,
+      uuid
+    );
+    setCart([]);
     router.push(`/${restaurantRoute}/order/${uuid}`);
 
     //     await addOrder(
