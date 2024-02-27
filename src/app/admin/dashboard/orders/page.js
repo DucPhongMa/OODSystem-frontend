@@ -8,7 +8,7 @@ export default function OrderHistory() {
       // 50: restaurant ID
       // status: "in progress", "ready pick up", "done", "new" or put empty for all orders
       // get order based on status
-      const orderData = await getOrderBasedOnStatus(50, "ready pick up");
+      const orderData = await getOrderBasedOnStatus(50);
       console.log(orderData);
     };
     fetchData();
