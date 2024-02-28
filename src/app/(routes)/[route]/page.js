@@ -181,7 +181,10 @@ export default function RestaurantHomepage() {
               >
                 REVIEWS
               </Typography>
-              <Container maxWidth="lg" className={`${theme} ${styles.reviewsContainer}`}>
+              <Container
+                maxWidth="lg"
+                className={`${theme} ${styles.reviewsContainer}`}
+              >
                 <Grid container spacing={2}>
                   {[1, 2, 3].map((review, index) => (
                     <Grid
