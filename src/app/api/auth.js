@@ -18,7 +18,7 @@ export const registerBusiness = async (email, password) => {
     const responseData = await response.json();
     const item = {
       value: responseData.jwt,
-      expiry: new Date().getTime() + 30 * 60000,
+      expiry: new Date().getTime() + 1440 * 600000,
     };
     localStorage.setItem("business-authorization", JSON.stringify(item));
   } catch (e) {
@@ -51,7 +51,7 @@ export const loginUser = async (identifier, password) => {
     if (responseData.jwt) {
       const item = {
         value: responseData.jwt,
-        expiry: new Date().getTime() + 30 * 60000,
+        expiry: new Date().getTime() + 1440 * 600000,
         fullName: userInfoData.fullname,
         phoneNum: userInfoData.phonenumber,
       };
@@ -117,7 +117,7 @@ export const registerCustomer = async (email, password, fullName, phoneNum) => {
     const userInfoData = await userInfo.json();
     const item = {
       value: responseData.jwt,
-      expiry: new Date().getTime() + 1440 * 60000,
+      expiry: new Date().getTime() + 1440 * 600000,
       fullName: userInfoData.fullname,
       phoneNum: userInfoData.phonenumber,
     };

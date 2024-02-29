@@ -1,48 +1,24 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import Image from "next/image";
-import Grid from "@mui/material/Grid";
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
-import { Typography } from "@mui/material";
-import { styled } from "@mui/system";
-
+import { Typography, Box, Container, Grid, Backdrop } from "@mui/material";
 import { getRestaurantByRoute } from "../../api/restaurant";
 import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
-import CategoryCard from "@/app/components/restaurant/CategoryCard";
-import { useAtom } from "jotai";
 import Link from "next/link";
 import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
+import styles from "../../styles/RestaurantHomepage.module.scss";
 
-export default function RestaurantDetail() {
+export default function RestaurantHomepage() {
   const [restaurantData, setRestaurantData] = useState("");
+  const [theme, setTheme] = useState("");
   const params = useParams();
   const restaurantRoute = params.route;
 
-  const Word = styled("div")({
-    display: "inline-block",
-    marginRight: "1em",
-    "::first-letter": {
-      fontSize: "120%",
-    },
-  });
-
-  const StyledTypography = styled(Typography)({
-    fontFamily: "'Roboto Slab', serif",
-    fontWeight: "normal",
-    fontSize: "6rem",
-    textTransform: "uppercase",
-    letterSpacing: "0.15em",
-    "::first-letter": {
-      fontSize: "120%",
-    },
-    paddingLeft: "1.4em",
-  });
-
   useEffect(() => {
+    setTheme(styles.theme1); // Set page theme
+
     async function fetchMyAPI() {
       const restaurantData = await getRestaurantByRoute(restaurantRoute);
       const menuItems =
@@ -77,25 +53,13 @@ export default function RestaurantDetail() {
     localStorage.setItem("restaurant-route", restaurantRoute);
   }, [restaurantRoute]);
 
-  // console.log(restaurantData?.menu.data.attributes.menu_categories);
-
-  console.log(restaurantData);
-  // console.log(restaurantData?.menu.data.attributes);
-  console.log(restaurantData?.menu?.data?.attributes.menu_categories.data);
-
   return (
-    <>
-      <Box
-        sx={{
-          background: "linear-gradient(to bottom, #ffffff, #f7fafc)",
-          minHeight: "100vh",
-          backgroundAttachment: "fixed",
-        }}
-      >
+    <div className={theme}>
+      <Box className={`${theme} ${styles.pageBackground}`}>
         {!restaurantData && (
           <Backdrop
-            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={restaurantData == null}
+            className={`${theme} ${styles.backdrop}`}
+            open={!restaurantData}
           >
             <CircularProgress color="inherit" />
           </Backdrop>
@@ -104,57 +68,21 @@ export default function RestaurantDetail() {
           <>
             <RestaurantAppBar restaurantInfo={restaurantData} />
             <Box
-              sx={{
-                position: "relative",
-                width: "100%",
-                height: 400,
-                backgroundImage: `url(${restaurantData.bannerURL})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                backgroundAttachment: "fixed",
-                clipPath:
-                  "polygon(0 0, 100% 0, 100% 75%, 90% 81%, 79% 85%, 65% 88%, 52% 89%, 35% 88%, 21% 85%, 10% 81%, 0 76%)",
-                overflow: "hidden",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                paddingBottom: "4%",
-                "::before": {
-                  content: '""',
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                  bottom: 0,
-                  left: 0,
-                  backgroundColor: "rgba(0, 0, 0, 0.5)",
-                  zIndex: 1,
-                },
-              }}
+              className={`${theme} ${styles.bannerBox}`}
+              style={{ backgroundImage: `url(${restaurantData.bannerURL})` }}
             >
-              <StyledTypography
+              <Typography
                 variant="h1"
                 component="h1"
-                sx={{
-                  position: "relative",
-                  color: "#fff",
-                  textShadow: "3px 3px 6px rgba(0, 0, 0, 0.5)",
-                  zIndex: 2,
-                  lineHeight: 1,
-                }}
+                className={`${theme} ${styles.styledTypography}`}
               >
                 {restaurantData.name.split(" ").map((word, i) => (
-                  <span
-                    key={i}
-                    style={{ marginRight: i === 0 ? "-0.5em" : "0" }}
-                  >
-                    <Word key={i}>{word}</Word>
-                  </span>
+                  <span key={i}>{word}</span>
                 ))}
-              </StyledTypography>
+              </Typography>
             </Box>
-            {/* Category Section */}
-            <Box sx={{ margin: "30px 0", paddingBottom: "10px" }}>
+            {/* CATEGORIES */}
+            <Box className={`${theme} ${styles.categoryBoxContainer}`}>
               <Container maxWidth="lg">
                 <Grid container spacing={2} justifyContent="space-between">
                   {restaurantData.menuCate.map((item, index) => (
@@ -163,116 +91,56 @@ export default function RestaurantDetail() {
                       xs={12}
                       sm={4}
                       key={index}
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        marginBottom: "12px",
-                      }}
+                      className={`${theme} ${styles.categoryBox}`}
                     >
-                      <Box
-                        sx={{
-                          cursor: "pointer",
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                          marginBottom: "35px",
-                          "&:hover img": {
-                            filter: "brightness(0.9)",
-                          },
-                          "&:hover h3": {
-                            color: "#333",
-                          },
-                        }}
+                      <Link
+                        href={`/${restaurantRoute}/menu#${
+                          index === 0 ? "top" : item.name.replace(/\s/g, "_")
+                        }`}
+                        passHref
                       >
-                        <Link
-                          href={`/${restaurantRoute}/menu#${
-                            index === 0 ? "top" : item.name.replace(/\s/g, "_")
-                          }`}
-                          passHref
-                        >
+                        <Box className={`${theme} ${styles.innerCategoryBox}`}>
                           <Box
-                            sx={{
-                              marginBottom: "10px",
-                              width: 250,
-                              height: 250,
-                              position: "relative",
-                              boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.1)",
-                            }}
+                            className={`${theme} ${styles.categoryImageBox}`}
                           >
                             <Image
-                              src={
-                                item.image ||
-                                "https://images.pexels.com/photos/12516840/pexels-photo-12516840.jpeg"
-                              } // use the category image or default image
+                              src={item.image || "/category_placeholder.jpeg"}
                               alt={item.name}
-                              layout="fill"
-                              objectFit="cover"
-                              objectPosition="center"
+                              fill
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             />
                           </Box>
-                        </Link>
-                        <Typography
-                          variant="h5"
-                          component="h3"
-                          sx={{
-                            textAlign: "center",
-                            fontWeight: "bold",
-                            color: "#555",
-                          }}
-                        >
-                          {item.name.toUpperCase()}
-                        </Typography>
-                      </Box>
+                        </Box>
+                      </Link>
+                      <Typography
+                        variant="h5"
+                        component="h3"
+                        className={`${theme} ${styles.categoryName}`}
+                      >
+                        {item.name.toUpperCase()}
+                      </Typography>
                     </Grid>
                   ))}
                 </Grid>
               </Container>
             </Box>
-            {/* Top Picks Section */}
+            {/* TOP PICKS */}
             <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                margin: "40px 0",
-                paddingTop: "50px",
-                paddingBottom: "50px",
-                paddingLeft: "75px",
-                paddingRight: "50px",
-                position: "relative",
-                backgroundImage: `url(${restaurantData.bannerURL})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                backgroundAttachment: "fixed",
-                "::before": {
-                  content: '""',
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                  bottom: 0,
-                  left: 0,
-                  backgroundColor: "rgba(0, 0, 0, 0.5)",
-                  zIndex: 1,
-                },
-              }}
+              className={`${theme} ${styles.topPicksSection}`}
+              style={{ backgroundImage: `url(${restaurantData.bannerURL})` }}
             >
               <Typography
                 variant="h3"
                 component="h3"
                 gutterBottom
-                sx={{
-                  textAlign: "left",
-                  marginRight: "10px",
-                  fontWeight: "bold",
-                  color: "#f2f2f2",
-                  zIndex: 3,
-                }}
+                className={`${theme} ${styles.topPicksTitle}`}
               >
                 TOP PICKS
               </Typography>
-              <Container maxWidth="lg" sx={{ marginLeft: "9px", zIndex: 2 }}>
+              <Container
+                maxWidth="lg"
+                className={`${theme} ${styles.topPicksContainer}`}
+              >
                 <Grid container spacing={2}>
                   {[1, 2, 3].map((item) => (
                     <Grid
@@ -280,124 +148,64 @@ export default function RestaurantDetail() {
                       xs={12}
                       sm={4}
                       key={item}
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                      }}
+                      className={`${theme} ${styles.topPickItem}`}
                     >
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                          "&:hover img": {
-                            filter: "brightness(0.9)",
-                          },
-                          "&:hover h3": {
-                            color: "#333",
-                          },
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.1)",
-                            width: 250,
-                            height: 250,
-                            position: "relative",
-                          }}
-                        >
+                      <Box className={`${theme} ${styles.topPickItemBox}`}>
+                        <Box className={`${theme} ${styles.categoryImageBox}`}>
                           <Image
-                            src="https://images.pexels.com/photos/12516840/pexels-photo-12516840.jpeg"
+                            src="/category_placeholder.jpeg"
                             alt={`Top Pick ${item}`}
-                            layout="fill"
-                            objectFit="cover"
-                            objectPosition="center"
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           />
                         </Box>
-                        <Typography
-                          variant="h5"
-                          component="h3"
-                          sx={{
-                            textAlign: "center",
-                            fontWeight: "bold",
-                            color: "#f2f2f2",
-                            marginTop: "10px",
-                          }}
-                        >
-                          ITEM {item}
-                        </Typography>
                       </Box>
+                      <Typography
+                        variant="h5"
+                        component="h3"
+                        className={`${theme} ${styles.topPickItemTitle}`}
+                      >
+                        ITEM {item}
+                      </Typography>
                     </Grid>
                   ))}
                 </Grid>
               </Container>
             </Box>
-
-            {/* Reviews Section */}
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                margin: "40px 0",
-                paddingTop: "50px",
-                paddingBottom: "50px",
-                paddingLeft: "75px",
-                paddingRight: "50px",
-              }}
-            >
+            {/* REVIEWS */}
+            <Box className={`${theme} ${styles.reviewsSection}`}>
               <Typography
                 variant="h3"
                 component="h3"
-                gutterBottom
-                sx={{
-                  textAlign: "left",
-                  marginRight: "10px",
-                  fontWeight: "bold",
-                  color: "#444",
-                }}
+                className={`${styles.reviewsTitle}`}
               >
                 REVIEWS
               </Typography>
-              <Container maxWidth="lg" sx={{ marginLeft: "47px" }}>
+              <Container
+                maxWidth="lg"
+                className={`${theme} ${styles.reviewsContainer}`}
+              >
                 <Grid container spacing={2}>
-                  {[1, 2, 3].map((review) => (
+                  {[1, 2, 3].map((review, index) => (
                     <Grid
                       item
                       xs={12}
                       sm={4}
-                      key={review}
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                      }}
+                      key={index}
+                      className={`${theme} ${styles.reviewItem}`}
                     >
-                      <Box
-                        sx={{
-                          boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.1)",
-                          width: 250,
-                          height: 250,
-                          position: "relative",
-                          padding: "20px",
-                          backgroundColor: "#f5f5f5",
-                          "&:hover": {
-                            filter: "brightness(0.95)",
-                          },
-                        }}
-                      >
+                      <Box className={`${theme} ${styles.reviewBox}`}>
                         <Typography
                           variant="subtitle1"
                           component="div"
-                          sx={{ textAlign: "center", marginBottom: "5px" }}
+                          className={`${theme} ${styles.reviewSubtitle}`}
                         >
                           Review {review}
                         </Typography>
                         <Typography
                           variant="body2"
                           component="p"
-                          sx={{ textAlign: "center" }}
+                          className={`${theme} ${styles.reviewText}`}
                         >
                           Lorem ipsum dolor sit amet, consectetur adipiscing
                           elit. Vivamus lacinia odio vitae vestibulum.
@@ -408,11 +216,10 @@ export default function RestaurantDetail() {
                 </Grid>
               </Container>
             </Box>
-
             <RestaurantFooter restaurantData={restaurantData} />
           </>
         )}
       </Box>
-    </>
+    </div>
   );
 }

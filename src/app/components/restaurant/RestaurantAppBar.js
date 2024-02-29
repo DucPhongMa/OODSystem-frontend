@@ -18,15 +18,12 @@ import { Modal as BaseModal } from "@mui/base/Modal";
 import CartContent from "./CartContent";
 import { Badge } from "@mui/material";
 import { checkCustomerLogin, logoutCustomer } from "@/app/api/auth";
+
 const RestaurantAppBar = ({ restaurantInfo }) => {
-  // console.log(restaurantInfo);
   const currentDate = new Date();
   const dayOfWeek = currentDate
     .toLocaleDateString("en-US", { weekday: "long" })
     .toLowerCase();
-  // console.log(restaurantInfo.hours);
-  // console.log(restaurantInfo.hours.thursday);
-  // console.log(restaurantInfo.hours[dayOfWeek].open);
   const [cartOpen, setCartOpen] = useState(false);
   const [customerLoggedIn, setCustomerLoggedIn] = useState(false);
   const handleOpen = () => setCartOpen(true);
@@ -49,8 +46,16 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
   };
 
   const [cart, setCart] = useAtom(cartAtom);
-  console.log("cart:");
-  console.log(cart);
+
+  // console.log("cart:");
+  // console.log(cart);
+
+  const hoursOpen = restaurantInfo.hours?.[dayOfWeek]?.open || "Not Available";
+  const hoursClose =
+    restaurantInfo.hours?.[dayOfWeek]?.close || "Not Available";
+  const restaurantAddress =
+    restaurantInfo.restaurant_contact?.address || "Address not available";
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -65,7 +70,7 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
           }}
         >
           <Typography variant="h6" component="div" sx={{ display: "inline" }}>
-            {restaurantInfo.name}: {restaurantInfo.restaurant_contact.address}
+            {restaurantInfo.name}: {restaurantAddress}
           </Typography>
         </Box>
         <Toolbar>
@@ -87,7 +92,7 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
                 color: "white",
               }}
             >
-              Hours: {restaurantInfo.hours[dayOfWeek].open} -
+              Hours: {hoursOpen} -
             </span>
             <span
               style={{
@@ -97,19 +102,9 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
                 color: "white",
               }}
             >
-              {restaurantInfo.hours[dayOfWeek].close}
+              {hoursClose}
             </span>
-            {/* <div>
-              <Typography variant="h6" component="div">
-                4.5(198 ratings)
-              </Typography> */}
-            {/* <Typography variant="body1" component="div">
-              Hours 10:00 AM - 11:00 PM
-            </Typography> */}
-            {/* </div> */}
           </div>
-
-          {/* ORDER PICKUP */}
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {(customerLoggedIn || (!customerLoggedIn && pickupClicked > 0)) && (
               <Link href={`/${restaurantInfo.route}/menu`}>ORDER PICKUP</Link>
@@ -118,7 +113,7 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
               <Typography
                 variant="h6"
                 component="div"
-                sx={{ flexGrow: 1 }}
+                sx={{ cursor: "pointer", flexGrow: 1 }}
                 onClick={() => {
                   handleLoginModalOpen();
                   setPickupClicked(1);
