@@ -9,7 +9,7 @@ const PickupLocation = ({ address }) => {
       <Typography variant="h6">{address}</Typography>
       <Box
         sx={{
-          height: '200px',
+          height: "200px",
           backgroundColor: "#eee",
           position: "relative",
         }}
