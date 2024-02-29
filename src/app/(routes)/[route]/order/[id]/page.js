@@ -9,7 +9,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 
-import {  getOrderByUUID, updateOrder } from "@/app/api/order";
+import { getOrderByUUID, updateOrder } from "@/app/api/order";
 import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
 import { useParams } from "next/navigation";
 import { getRestaurantByRoute } from "@/app/api/restaurant";
@@ -29,27 +29,35 @@ export default function Order() {
 
   useEffect(() => {
     async function fetchOrder() {
-      const order = await getOrderByUUID(orderUUID);
-      console.log(order);
-      setOrderData(order);
-      const transformedOrderDetails = order.attributes.order_details.data.map(
-        (detail) => {
-          // Assuming 'detail' represents each item in the 'order_details.data' array
-          const menuItem = detail.attributes.menu_item.data.attributes;
+      try {
+        const order = await getOrderByUUID(orderUUID);
+        setOrderData(order);
+        const transformedOrderDetails = order.attributes.order_details.data.map(
+          (detail) => {
+            // Assuming 'detail' represents each item in the 'order_details.data' array
+            const menuItem = detail.attributes.menu_item.data.attributes;
 
-          return {
-            itemID: detail.attributes.menu_item.data.id, // Assuming you want the 'id' of the order detail as 'itemID'
-            name: menuItem.name,
-            price: menuItem.price,
-            quantity: detail.attributes.quantity,
-          };
-        }
-      );
-      console.log(transformedOrderDetails);
-      setOrderDetail(transformedOrderDetails);
+            return {
+              itemID: detail.attributes.menu_item.data.id, // Assuming you want the 'id' of the order detail as 'itemID'
+              name: menuItem.name,
+              price: menuItem.price,
+              quantity: detail.attributes.quantity,
+            };
+          }
+        );
+        setOrderDetail(transformedOrderDetails);
+      } catch (error) {
+        console.error("Failed to fetch order:", error);
+      }
     }
+
     fetchOrder();
-  }, [params]);
+    // Set up an interval to call fetchOrder every one minute (60000 milliseconds)
+    const intervalId = setInterval(fetchOrder, 60000);
+
+    // Clear the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, [orderUUID]); // Dependency array includes orderUUID to re-run the effect if it changes
 
   useEffect(() => {
     const sTotal = orderDetail
