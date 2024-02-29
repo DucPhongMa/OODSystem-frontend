@@ -1,5 +1,6 @@
 import { Box, Paper, Typography } from "@mui/material";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 
 const PickupLocation = ({ address }) => {
   return (
@@ -8,7 +9,7 @@ const PickupLocation = ({ address }) => {
       <Typography variant="h6">{address}</Typography>
       <Box
         sx={{
-          height: 200,
+          height: '200px',
           backgroundColor: "#eee",
           position: "relative",
         }}

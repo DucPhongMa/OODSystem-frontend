@@ -61,7 +61,6 @@ export const addOrder = async (
         username: userCheckIn ? null : username,
         phone_number: userCheckIn ? null : phoneNumber,
         status: "pending",
-        checkID: uuid,
       },
     }),
   })

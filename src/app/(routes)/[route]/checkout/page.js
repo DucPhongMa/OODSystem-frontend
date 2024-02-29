@@ -35,16 +35,48 @@ export default function Checkout() {
     phoneNum: "",
     customerName: "",
     additionalNotes: "",
+    userId: null,
   });
+
+  const getUserId = (token) => {
+    // Split the token to get the payload part
+    const base64UrlPayload = token.split(".")[1];
+
+    // Decode the payload from Base64 URL encoding
+    const base64Payload = base64UrlPayload
+      .replace(/-/g, "+")
+      .replace(/_/g, "/");
+    const payload = decodeURIComponent(
+      atob(base64Payload)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+
+    // Parse the payload as JSON and access the id
+    const payloadData = JSON.parse(payload);
+    const id = payloadData.id;
+
+    console.log(id); // Should log the id, which is 56 in this case
+    return id;
+  };
+
   const [subTotal, setSubTotal] = useState(0);
   console.log("cart:");
   console.log(cart);
   useEffect(() => {
     const customerInfo = checkCustomerLogin();
     if (customerInfo) {
-      setFormData({ ...formData, phoneNum: JSON.parse(customerInfo).phoneNum });
+      setFormData({
+        ...formData,
+        phoneNum: JSON.parse(customerInfo).phoneNum,
+        customerName: JSON.parse(customerInfo).fullName,
+        userId: getUserId(JSON.parse(customerInfo).value),
+      });
     }
-  }, [formData]);
+  }, []);
 
   useEffect(() => {
     async function fetchMyAPI() {
@@ -86,8 +118,17 @@ export default function Checkout() {
     setSubTotal(sTotal);
   }, [cart]);
 
+  const isValidPhoneNumber = (phone) => {
+    return /^\d{10}$/.test(phone);
+  };
+
   // // Sample submit order call to API
   const submitOrder = async () => {
+    // Check if name or phone number is empty
+    if (!formData.customerName || !formData.phoneNum) {
+      alert("Customer name and phone number are required."); // You can replace this with a more sophisticated error handling mechanism
+      return; // Exit the function to prevent further execution
+    }
     const orderItems = cart.map((item) => ({
       quantity: item.quantity,
       unit_price: item.price,
@@ -100,28 +141,12 @@ export default function Checkout() {
       orderItems,
       restaurantId,
       formData.additionalNotes,
-      uuid
+      formData.customerName,
+      formData.phoneNum,
+      formData.userId
     );
     setCart([]);
     router.push(`/${restaurantRoute}/order/${uuid}`);
-
-    //     await addOrder(
-    //       [
-    //         {
-    //           quantity: 3,
-    //           unit_price: 6.25,
-    //           menu_item: 119, // item ID
-    //         },
-    //         {
-    //           quantity: 2,
-    //           unit_price: 14.95,
-    //           menu_item: 142,
-    //         },
-    //       ],
-    //       55, // user ID
-    //       50, // restaurant ID
-    //        "Some Note"
-    //     )
   };
 
   return (
@@ -134,20 +159,6 @@ export default function Checkout() {
           <CircularProgress color="inherit" />
         </Backdrop>
       )}
-      {/* <h1>this is a checkout page</h1>
-      <Grid item xs={12}>
-        <TextField
-          autoComplete="phoneNum"
-          required
-          fullWidth
-          id="phoneNum"
-          label="Phone Number"
-          value={formData.phoneNum}
-          onChange={(event) =>
-            setFormData({ ...formData, phoneNum: event.target.value.trim() })
-          }
-        />
-      </Grid> */}
 
       {restaurantData && (
         <>
@@ -170,7 +181,7 @@ export default function Checkout() {
                     customerName: event.target.value.trim(),
                   })
                 }
-                // fullWidth
+                fullWidth
                 margin="normal"
               />
               <br />
@@ -183,8 +194,20 @@ export default function Checkout() {
                     phoneNum: event.target.value.trim(),
                   })
                 }
-                // fullWidth
+                fullWidth
                 margin="normal"
+                inputProps={{
+                  pattern: "d{10}",
+                  title: "Phone number format: (123) 456-7890",
+                }}
+                error={
+                  formData.phoneNum && !isValidPhoneNumber(formData.phoneNum)
+                } // Assuming you have a validation function
+                helperText={
+                  formData.phoneNum &&
+                  !isValidPhoneNumber(formData.phoneNum) &&
+                  "Invalid phone number format: 1112223333"
+                }
               />
             </Paper>
 
@@ -193,7 +216,7 @@ export default function Checkout() {
 
             <Paper sx={{ marginBottom: 2, padding: 2 }}>
               <Typography variant="h6">Additional Notes</Typography>
-              <TextareaAutosize
+              <TextField
                 minRows={3}
                 placeholder="You can put additional notes here"
                 value={formData.additionalNotes}
@@ -203,7 +226,7 @@ export default function Checkout() {
                     additionalNotes: event.target.value.trim(),
                   })
                 }
-                style={{ width: "100%" }}
+                fullWidth
               />
             </Paper>
             <Typography variant="h6">
