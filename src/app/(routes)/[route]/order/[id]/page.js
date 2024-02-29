@@ -28,8 +28,11 @@ export default function Order() {
   const [subTotal, setSubTotal] = useState(0);
 
   useEffect(() => {
+    let isMounted = true;
+
     async function fetchOrder() {
       try {
+        console.log(`Fetching order at ${new Date().toLocaleTimeString()}`); //
         const order = await getOrderByUUID(orderUUID);
         setOrderData(order);
         const transformedOrderDetails = order.attributes.order_details.data.map(
@@ -54,9 +57,14 @@ export default function Order() {
     fetchOrder();
     // Set up an interval to call fetchOrder every one minute (60000 milliseconds)
     const intervalId = setInterval(fetchOrder, 60000);
+    // const intervalId = setInterval(fetchOrder, 6000);
 
     // Clear the interval when the component unmounts
-    return () => clearInterval(intervalId);
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+      console.log("reload");
+    };
   }, [orderUUID]); // Dependency array includes orderUUID to re-run the effect if it changes
 
   useEffect(() => {
