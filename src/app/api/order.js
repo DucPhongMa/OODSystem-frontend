@@ -54,7 +54,7 @@ export const addOrder = async (
         note: note,
         matchID: matchID,
         total_price: orderTotal,
-        tax: orderTotal + orderTotal * 0.13,
+        tax: 0.13,
         order_details: orderDetailIDs,
         restaurant: restaurantID,
         users_permissions_user: userCheckIn ? userID : null,

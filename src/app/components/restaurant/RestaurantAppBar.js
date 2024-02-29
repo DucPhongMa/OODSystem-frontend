@@ -251,12 +251,12 @@ const Backdrop = React.forwardRef((props, ref) => {
   );
 });
 
-Backdrop.displayName = "Back Drop";
-
 Backdrop.propTypes = {
   className: PropTypes.string.isRequired,
   open: PropTypes.bool,
 };
+
+Backdrop.displayName = "Backdrop";
 
 const blue = {
   200: "#99CCFF",
