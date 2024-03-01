@@ -4,7 +4,7 @@ export const addOrder = async (
   dishesArray,
   restaurantID,
   note,
-  username,
+  input_username,
   phoneNumber,
   userID
 ) => {
@@ -58,7 +58,7 @@ export const addOrder = async (
         order_details: orderDetailIDs,
         restaurant: restaurantID,
         users_permissions_user: userCheckIn ? userID : null,
-        username: username,
+        username: input_username,
         phone_number: phoneNumber,
         status: "pending",
       },
@@ -108,7 +108,7 @@ export const getOrderBasedOnStatus = async (restaurantID, status) => {
   return orderArray;
 };
 
-export const updateOrder = async (orderID, status) => {
+export const updateOrder = async (orderID, status, estimateTime) => {
   let updatedStatus = status.toLowerCase();
   let timeComplete;
 
@@ -126,6 +126,7 @@ export const updateOrder = async (orderID, status) => {
       data: {
         status: updatedStatus,
         time_completed: timeComplete ? timeComplete : null,
+        time_estimated: estimateTime ? estimateTime : null,
       },
     }),
   })
