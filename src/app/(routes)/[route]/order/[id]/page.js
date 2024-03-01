@@ -255,8 +255,8 @@ export default function Order() {
                 <Typography variant="h8" sx={{ paddingTop: "50px" }}>
                   Your order is cancelled.
                   <br />
-                  Please call{" "}
-                  {restaurantData.restaurant_contact?.phone} for inquiries.
+                  Please call {restaurantData.restaurant_contact?.phone} for
+                  inquiries.
                 </Typography>
                 <Box
                   sx={{
