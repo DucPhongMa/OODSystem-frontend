@@ -8,10 +8,15 @@ import {
   Box,
   Paper,
   Typography,
-  TextareaAutosize,
   Button,
   Backdrop,
   CircularProgress,
+  Snackbar,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
 
@@ -19,8 +24,6 @@ import { addOrder } from "@/app/api/order";
 import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
 import { useParams, useRouter } from "next/navigation";
 import { getRestaurantByRoute } from "@/app/api/restaurant";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
 import PickupLocation from "@/app/components/restaurant/PickupLocation";
 import PickupDetails from "@/app/components/restaurant/PickupDetails";
 
@@ -31,6 +34,10 @@ export default function Checkout() {
   const [restaurantId, setRestaurantId] = useState(null);
   const params = useParams();
   const restaurantRoute = params.route;
+  const [openDialog, setOpenDialog] = useState(false);
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
   const [formData, setFormData] = useState({
     phoneNum: "",
     customerName: "",
@@ -64,8 +71,6 @@ export default function Checkout() {
   };
 
   const [subTotal, setSubTotal] = useState(0);
-  console.log("cart:");
-  console.log(cart);
   useEffect(() => {
     const customerInfo = checkCustomerLogin();
     if (customerInfo) {
@@ -122,31 +127,31 @@ export default function Checkout() {
     return /^\d{10}$/.test(phone);
   };
 
-  // // Sample submit order call to API
   const submitOrder = async () => {
-    // Check if name or phone number is empty
-    if (!formData.customerName || !formData.phoneNum) {
-      alert("Customer name and phone number are required."); // You can replace this with a more sophisticated error handling mechanism
-      return; // Exit the function to prevent further execution
+    // Assuming validation has already been done before opening the dialog
+    try {
+      const orderItems = cart.map((item) => ({
+        quantity: item.quantity,
+        unit_price: item.price,
+        menu_item: item.itemID,
+      }));
+      const uuid = uuidv4();
+      await addOrder(
+        uuid,
+        orderItems,
+        restaurantId,
+        formData.additionalNotes,
+        formData.customerName,
+        formData.phoneNum,
+        formData.userId
+      );
+      setOpenDialog(false); // Close the dialog after submission
+      setCart([]);
+      router.push(`/${restaurantRoute}/order/${uuid}`, { scroll: false });
+    } catch (error) {
+      console.error("Failed to submit order:", error);
+      // Handle submission error
     }
-    const orderItems = cart.map((item) => ({
-      quantity: item.quantity,
-      unit_price: item.price,
-      menu_item: item.itemID,
-    }));
-    const uuid = uuidv4();
-    console.log(uuid);
-    await addOrder(
-      uuid,
-      orderItems,
-      restaurantId,
-      formData.additionalNotes,
-      formData.customerName,
-      formData.phoneNum,
-      formData.userId
-    );
-    setCart([]);
-    router.push(`/${restaurantRoute}/order/${uuid}`);
   };
 
   return (
@@ -165,9 +170,9 @@ export default function Checkout() {
           <RestaurantAppBar restaurantInfo={restaurantData} />
           <Box sx={{ padding: 2 }}>
             {/* Address map */}
-            <PickupLocation
+            {/* <PickupLocation
               address={restaurantData.restaurant_contact.address}
-            />
+            /> */}
 
             {/* Name and phone number */}
             <Paper sx={{ marginBottom: 2, padding: 2 }}>
@@ -178,7 +183,7 @@ export default function Checkout() {
                 onChange={(event) =>
                   setFormData({
                     ...formData,
-                    customerName: event.target.value.trim(),
+                    customerName: event.target.value,
                   })
                 }
                 fullWidth
@@ -223,7 +228,7 @@ export default function Checkout() {
                 onChange={(event) =>
                   setFormData({
                     ...formData,
-                    additionalNotes: event.target.value.trim(),
+                    additionalNotes: event.target.value,
                   })
                 }
                 fullWidth
@@ -242,11 +247,36 @@ export default function Checkout() {
                 flexDirection: "column",
               }}
             >
-              <Button variant="outlined" color="primary" onClick={submitOrder}>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={handleOpenDialog}
+              >
                 PLACE PICKUP ORDER
               </Button>
             </Box>
           </Box>
+          <Dialog
+            open={openDialog}
+            onClose={() => setOpenDialog(false)}
+            aria-labelledby="confirmation-dialog-title"
+            aria-describedby="confirmation-dialog-description"
+          >
+            <DialogTitle id="confirmation-dialog-title">
+              {"Confirm Order Submission"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="confirmation-dialog-description">
+                Are you sure you want to submit this order?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
+              <Button onClick={submitOrder} color="primary" autoFocus>
+                Submit
+              </Button>
+            </DialogActions>
+          </Dialog>
         </>
       )}
     </>
