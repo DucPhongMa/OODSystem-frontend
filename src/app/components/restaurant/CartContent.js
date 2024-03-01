@@ -11,9 +11,6 @@ const CartContent = ({ handleClose }) => {
   const restaurantRoute = params.route;
   const [cart, setCart] = useAtom(cartAtom);
 
-  console.log("cart:");
-  console.log(cart);
-
   const addToItemQuantity = (itemID) => {
     setCart((prevCart) => {
       return prevCart.map((item) =>
@@ -44,7 +41,7 @@ const CartContent = ({ handleClose }) => {
   const handleCheckout = () => {
     // link to checkout
     console.log(cart);
-    router.push(`/${restaurantRoute}/checkout`);
+    router.push(`/${restaurantRoute}/checkout`, { scroll: false });
   };
 
   return (

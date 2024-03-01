@@ -7,6 +7,11 @@ import {
   Button,
   Backdrop,
   CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 
 import { getOrderByUUID, updateOrder } from "@/app/api/order";
@@ -26,6 +31,21 @@ export default function Order() {
   const [orderData, setOrderData] = useState(null);
   const [orderDetail, setOrderDetail] = useState([]);
   const [subTotal, setSubTotal] = useState(0);
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleCancelClick = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handleConfirmCancellation = async () => {
+    await cancelOrder(); // Assuming this function updates the order status to 'cancelled'
+    setOpenDialog(false);
+    window.location.reload(); // Refresh the page
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -56,8 +76,7 @@ export default function Order() {
 
     fetchOrder();
     // Set up an interval to call fetchOrder every one minute (60000 milliseconds)
-    const intervalId = setInterval(fetchOrder, 60000);
-    // const intervalId = setInterval(fetchOrder, 6000);
+    const intervalId = setInterval(fetchOrder, 10000);
 
     // Clear the interval when the component unmounts
     return () => {
@@ -155,7 +174,8 @@ export default function Order() {
                   <Button
                     variant="outlined"
                     color="primary"
-                    onClick={cancelOrder}
+                    // onClick={cancelOrder}
+                    onClick={handleCancelClick}
                   >
                     CANCEL ORDER
                   </Button>
@@ -172,8 +192,6 @@ export default function Order() {
                 </Typography>
                 <Typography variant="h8" sx={{ paddingTop: "50px" }}>
                   Your order is being prepared.
-                  <br />
-                  Estimated pick up time:
                   <br />
                   Your order cannot be changed at this time. Please call{" "}
                   {restaurantData.restaurant_contact?.phone} for inquiries.
@@ -226,15 +244,45 @@ export default function Order() {
                 </Box>
               </>
             )}
+            {orderData.attributes.status == "cancelled" && (
+              <>
+                <Typography variant="h6" sx={{ marginTop: "30px" }}>
+                  Cancelled
+                </Typography>
+                <Typography variant="h6" sx={{ marginTop: "30px" }}>
+                  Your Order Number: {orderData.id}
+                </Typography>
+                <Typography variant="h8" sx={{ paddingTop: "50px" }}>
+                  Your order is cancelled.
+                  <br />
+                  Please call{" "}
+                  {restaurantData.restaurant_contact?.phone} for inquiries.
+                </Typography>
+                <Box
+                  sx={{
+                    marginBottom: 2,
+                    marginTop: 2,
+                  }}
+                >
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    // onClick={addReview}
+                  >
+                    LEAVE REVIEW
+                  </Button>
+                </Box>
+              </>
+            )}
           </Paper>
 
           <Box sx={{ padding: 2 }}>
             {/* Address map */}
-            {orderData.attributes.status != "pending" && (
+            {/* {orderData.attributes.status != "pending" && (
               <PickupLocation
                 address={restaurantData.restaurant_contact.address}
               />
-            )}
+            )} */}
 
             {/* pickup details */}
             <PickupDetails cart={orderDetail} subTotal={subTotal} />
@@ -243,6 +291,29 @@ export default function Order() {
               Pay in Person ${(subTotal * 1.13).toFixed(2)}
             </Typography>
           </Box>
+          <Dialog
+            open={openDialog}
+            onClose={handleCloseDialog}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">{"Cancel Order"}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Are you sure you want to cancel this order?
+                <br />
+                <br />
+                Please call {restaurantData.restaurant_contact?.phone} for
+                inquiries.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseDialog}>No</Button>
+              <Button onClick={handleConfirmCancellation} autoFocus>
+                Yes
+              </Button>
+            </DialogActions>
+          </Dialog>
         </>
       )}
     </>
