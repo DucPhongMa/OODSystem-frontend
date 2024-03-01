@@ -126,7 +126,7 @@ export const updateOrder = async (orderID, status, estimateTime) => {
       data: {
         status: updatedStatus,
         time_completed: timeComplete ? timeComplete : null,
-        time_estimated: estimateTime ? estimateTime : null
+        time_estimated: estimateTime ? estimateTime : null,
       },
     }),
   })
