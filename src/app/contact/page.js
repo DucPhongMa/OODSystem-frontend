@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
   Container,
@@ -11,32 +11,32 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions
+  DialogActions,
 } from "@mui/material";
 import MainNavbar from "../components/admin/register/MainNavbar";
 
 export default function ContactPage() {
   const [formValues, setFormValues] = useState({
-    name: '',
-    email: '',
-    message: ''
+    name: "",
+    email: "",
+    message: "",
   });
   const [errors, setErrors] = useState({});
   const [openSuccessDialog, setOpenSuccessDialog] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormValues(prev => ({ ...prev, [name]: value }));
+    setFormValues((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formValues.name.trim()) newErrors.name = 'Name is required.';
-    if (!formValues.email.trim()) newErrors.email = 'Email is required.';
-    if (!formValues.message.trim()) newErrors.message = 'Message is required.';
+    if (!formValues.name.trim()) newErrors.name = "Name is required.";
+    if (!formValues.email.trim()) newErrors.email = "Email is required.";
+    if (!formValues.message.trim()) newErrors.message = "Message is required.";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -46,33 +46,33 @@ export default function ContactPage() {
     if (!validateForm()) {
       return;
     }
-  
+
     try {
-      const response = await fetch('https://formspree.io/f/meqykbra', {
-        method: 'POST',
+      const response = await fetch("https://formspree.io/f/meqykbra", {
+        method: "POST",
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          Accept: "application/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           name: formValues.name,
           _replyto: formValues.email,
-          message: formValues.message
-        })
+          message: formValues.message,
+        }),
       });
-  
+
       if (response.ok) {
         setOpenSuccessDialog(true);
-        setFormValues({ name: '', email: '', message: '' });
+        setFormValues({ name: "", email: "", message: "" });
       } else {
-        console.error('Form submission failed');
-        alert('There was an error submitting your form. Please try again.');
+        console.error("Form submission failed");
+        alert("There was an error submitting your form. Please try again.");
       }
     } catch (error) {
-      console.error('Form submission error', error);
-      alert('There was a problem with your submission. Please try again.');
+      console.error("Form submission error", error);
+      alert("There was a problem with your submission. Please try again.");
     }
-  };  
+  };
 
   return (
     <>
@@ -172,7 +172,10 @@ export default function ContactPage() {
       </Container>
 
       {/* Success Dialog */}
-      <Dialog open={openSuccessDialog} onClose={() => setOpenSuccessDialog(false)}>
+      <Dialog
+        open={openSuccessDialog}
+        onClose={() => setOpenSuccessDialog(false)}
+      >
         <DialogTitle>Submission Successful</DialogTitle>
         <DialogContent>
           Thank you for your message. We will get back to you soon.
