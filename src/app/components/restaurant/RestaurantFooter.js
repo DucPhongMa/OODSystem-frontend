@@ -100,10 +100,10 @@ export default function RestaurantFooter({ restaurantData }) {
             <Typography variant="subtitle1">support@restaurant.com</Typography>
           </Box>
           <Typography variant="subtitle1" sx={{ textDecoration: "underline" }}>
-            www.restaurant.com/help
+            https://ood-system-frontend.vercel.app/help
           </Typography>
           <Typography variant="subtitle1" sx={{ textDecoration: "underline" }}>
-            www.restaurant.com/chat
+            https://ood-system-frontend.vercel.app/chat
           </Typography>
         </Grid>
       </Grid>

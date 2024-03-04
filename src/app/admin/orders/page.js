@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { getOrderBasedOnStatus, updateOrder } from "@/app/api/order";
 import {
   Box,
@@ -55,6 +55,7 @@ function stableSort(array, comparator) {
 }
 
 export default function AdminOrders() {
+  const [windowHeight, setWindowHeight] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [orders, setOrders] = useState([]);
@@ -64,71 +65,131 @@ export default function AdminOrders() {
   const [orderBy, setOrderBy] = useState("dateTime");
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [showEstimatedTimeInput, setShowEstimatedTimeInput] = useState(false);
+  const [estimatedPrepTime, setEstimatedPrepTime] = useState("");
   const [currentOrder, setCurrentOrder] = useState({
     id: null,
     currentStatus: null,
   });
-
   const [tabValue, setTabValue] = useState("all");
 
   useEffect(() => {
-    async function authenticateAndFetchOrders() {
-      const isLoggedInResult = await checkBusinessLogin();
-      setIsLoggedIn(isLoggedInResult);
+    const hash = window.location.hash.replace("#", "");
+    setTabValue(hash === "past" ? "past" : "all");
+  }, []);
 
-      if (isLoggedInResult) {
-        const status = tabValue === "past" ? "completed" : "";
-        const orderData = await getOrderBasedOnStatus(50, status);
-        console.log(orderData);
-
-        if (orderData && Array.isArray(orderData)) {
-          const formattedOrders = orderData
-            .map((order) => ({
-              id: order.id,
-              createdAt: order.attributes.createdAt,
-              dateTime: order.attributes.time_placed,
-              note: order.attributes.note,
-              details: order.attributes.order_details.data.map((detail) => ({
-                id: detail.id,
-                name: detail.attributes.menu_item.data.attributes.name,
-                quantity: detail.attributes.quantity,
-                unitPrice: detail.attributes.unit_price,
-              })),
-              status: order.attributes.status,
-              tax: order.attributes.tax,
-              totalPrice: order.attributes.total_price,
-              customer:
-                order.attributes.users_permissions_user?.data?.attributes
-                  ?.fullname ?? "N/A",
-              phoneNumber: order.attributes.phone_number,
-              timeCompleted: order.attributes.time_completed,
-            }))
-            .sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime));
-
-          setOrders(formattedOrders);
-          setFilteredOrders(formattedOrders);
-        } else {
-          console.error("Fetched data is not an array:", orderData);
-        }
-      }
-      setIsLoading(false);
-    }
-
-    authenticateAndFetchOrders();
+  useEffect(() => {
+    window.location.hash = tabValue;
   }, [tabValue]);
 
   useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash.replace("#", "");
-      setTabValue(hash === "past" ? "past" : "all");
+    setWindowHeight(window.innerHeight);
+    const handleResize = () => {
+      setWindowHeight(window.innerHeight);
     };
-
-    handleHashChange();
-
-    window.addEventListener("hashchange", handleHashChange);
-
-    return () => window.removeEventListener("hashchange", handleHashChange);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    window.location.hash = tabValue;
+  }, [tabValue]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowHeight(window.innerHeight);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const dialogMaxHeight = Math.max(windowHeight * 0.8, 300);
+
+  const fetchAndFormatOrders = async (statusFilter) => {
+    const isLoggedInResult = await checkBusinessLogin();
+    setIsLoggedIn(isLoggedInResult);
+
+    if (!isLoggedInResult) {
+      setIsLoading(false);
+      return;
+    }
+
+    let allOrderData = [];
+
+    if (statusFilter === "past") {
+      const completedOrders = await getOrderBasedOnStatus(50, "completed");
+      const cancelledOrders = await getOrderBasedOnStatus(50, "cancelled");
+
+      if (!Array.isArray(completedOrders) || !Array.isArray(cancelledOrders)) {
+        console.error(
+          "Fetched data is not an array:",
+          completedOrders,
+          cancelledOrders
+        );
+        setIsLoading(false);
+        return;
+      }
+      allOrderData = [...completedOrders, ...cancelledOrders];
+    } else {
+      const orderData = await getOrderBasedOnStatus(50);
+
+      if (!Array.isArray(orderData)) {
+        console.error("Fetched data is not an array:", orderData);
+        setIsLoading(false);
+        return;
+      }
+      allOrderData = orderData;
+    }
+
+    console.log(allOrderData);
+
+    const formattedOrders = allOrderData
+      .map((order) => {
+        const taxRate = order.attributes.tax;
+        const subtotal = order.attributes.total_price;
+        const taxAmount = subtotal * taxRate;
+        const totalWithTax = subtotal + taxAmount;
+
+        return {
+          id: order.id,
+          createdAt: order.attributes.createdAt,
+          dateTime: order.attributes.time_placed,
+          note: order.attributes.note,
+          details: order.attributes.order_details.data.map((detail) => ({
+            id: detail.id,
+            name: detail.attributes.menu_item.data.attributes.name,
+            quantity: detail.attributes.quantity,
+            unitPrice: detail.attributes.unit_price,
+          })),
+          status: order.attributes.status,
+          subtotal: subtotal,
+          tax: taxAmount,
+          totalPrice: totalWithTax,
+          customer: order.attributes.username ?? "N/A",
+          phoneNumber: order.attributes.phone_number,
+          timeCompleted: order.attributes.time_completed,
+        };
+      })
+      .sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime));
+
+    setOrders(formattedOrders);
+    setFilteredOrders(formattedOrders);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchAndFormatOrders(tabValue);
+  }, [tabValue]);
+
+  // Auto-refresh orders every 10 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchAndFormatOrders(tabValue);
+      console.log("Orders refreshed");
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [tabValue]);
 
   const theme = useTheme();
 
@@ -137,71 +198,38 @@ export default function AdminOrders() {
   };
 
   const handleDialogOpen = (orderId, newStatus) => {
-    setCurrentOrder({ id: orderId, newStatus });
+    const statusLower = newStatus.toLowerCase();
+
+    setCurrentOrder({
+      id: orderId,
+      newStatus: statusLower,
+    });
+
+    setShowEstimatedTimeInput(statusLower === "in progress");
+
     setOpenDialog(true);
+    setEstimatedPrepTime("");
   };
 
   const handleDialogClose = () => {
     setOpenDialog(false);
   };
 
-  const fetchOrders = useCallback(async () => {
-    const isLoggedInResult = await checkBusinessLogin();
-    setIsLoggedIn(isLoggedInResult);
-
-    if (isLoggedInResult) {
-      const status = tabValue === "past" ? "completed" : "";
-      const orderData = await getOrderBasedOnStatus(50, status);
-
-      if (orderData && Array.isArray(orderData)) {
-        const formattedOrders =
-          orderData
-            .map((order) => ({
-              id: order.id,
-              createdAt: order.attributes.createdAt,
-              dateTime: order.attributes.time_placed,
-              note: order.attributes.note,
-              details: order.attributes.order_details.data.map((detail) => ({
-                id: detail.id,
-                name: detail.attributes.menu_item.data.attributes.name,
-                quantity: detail.attributes.quantity,
-                unitPrice: detail.attributes.unit_price,
-              })),
-              status: order.attributes.status,
-              tax: order.attributes.tax,
-              totalPrice: order.attributes.total_price,
-              customer:
-                order.attributes.users_permissions_user?.data?.attributes
-                  ?.fullname ||
-                order.attributes.username ||
-                "",
-              phoneNumber: order.attributes.phone_number,
-              timeCompleted: order.attributes.time_completed,
-            }))
-            .sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime)) || [];
-
-        setOrders(formattedOrders);
-        setFilteredOrders(formattedOrders);
-      } else {
-        console.error("Fetched data is not an array:", orderData);
-      }
-    }
-  }, [tabValue]);
-
-  useEffect(() => {
-    fetchOrders();
-    const interval = setInterval(() => {
-      fetchOrders(); // Refetch the orders every 10 seconds
-      console.log("Orders refreshed");
-    }, 10000);
-
-    return () => clearInterval(interval);
-  }, [fetchOrders]);
-
   const handleStatusChange = async (newStatus) => {
     if (currentOrder.id && newStatus) {
-      await updateOrder(currentOrder.id, newStatus);
-      fetchOrders();
+      let estimateTime = null;
+
+      if (newStatus.toLowerCase() === "in progress" && estimatedPrepTime > 0) {
+        const currentTime = new Date();
+        const futureTime = new Date(
+          currentTime.getTime() + estimatedPrepTime * 60000
+        );
+        estimateTime = futureTime.toISOString();
+      }
+
+      await updateOrder(currentOrder.id, newStatus, estimateTime);
+
+      fetchAndFormatOrders();
       setOpenDialog(false);
     }
   };
@@ -211,10 +239,9 @@ export default function AdminOrders() {
     const statusColorMap = {
       pending: "#f8f4cc",
       "in progress": "#b9d5b2",
-      completed: "#e2e8f0",
-      "ready pickup": "#84b29e",
       "ready for pickup": "#84b29e",
-      "ready for pick up": "#84b29e",
+      completed: "#e2e8f0",
+      cancelled: "#f7fafc",
       default: "#f7fafc",
     };
 
@@ -287,6 +314,10 @@ export default function AdminOrders() {
         </Typography>
       </Box>
     );
+  }
+
+  if (windowHeight === null) {
+    return null;
   }
 
   return (
@@ -448,7 +479,14 @@ export default function AdminOrders() {
         </Table>
       </Box>
 
-      <Dialog open={!!selectedOrder} onClose={() => setSelectedOrder(null)}>
+      <Dialog
+        open={!!selectedOrder}
+        onClose={() => setSelectedOrder(null)}
+        PaperProps={{
+          style: { maxHeight: `${dialogMaxHeight}px` },
+        }}
+        scroll="paper"
+      >
         <DialogContent dividers>
           {selectedOrder && (
             <>
@@ -493,7 +531,7 @@ export default function AdminOrders() {
               >
                 <Typography variant="body2">Subtotal</Typography>
                 <Typography variant="body2" style={{ textAlign: "right" }}>
-                  {`$${selectedOrder.totalPrice.toFixed(2)}`}
+                  {`$${selectedOrder.subtotal.toFixed(2)}`}
                 </Typography>
               </div>
               <div
@@ -508,22 +546,6 @@ export default function AdminOrders() {
                   {`$${selectedOrder.tax.toFixed(2)}`}
                 </Typography>
               </div>
-              {selectedOrder.marketplaceFacilitatorTax && (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginBottom: "4px",
-                  }}
-                >
-                  <Typography variant="body2">
-                    Marketplace Facilitator Tax
-                  </Typography>
-                  <Typography variant="body2" style={{ textAlign: "right" }}>
-                    {`$${selectedOrder.marketplaceFacilitatorTax.toFixed(2)}`}
-                  </Typography>
-                </div>
-              )}
               <div
                 style={{
                   display: "flex",
@@ -558,17 +580,39 @@ export default function AdminOrders() {
             Are you sure you want to change the status of this order to "
             {currentOrder.newStatus}"?
           </DialogContentText>
+          {showEstimatedTimeInput && (
+            <>
+              <Box mt={2} />
+              <TextField
+                autoFocus
+                margin="dense"
+                id="estimatedPrepTime"
+                label="Estimated Prep Time (min)"
+                type="number"
+                variant="outlined"
+                value={estimatedPrepTime}
+                onChange={(e) => setEstimatedPrepTime(e.target.value)}
+                inputProps={{ min: "1" }}
+                size="small"
+                sx={{ width: "200px" }}
+              />
+            </>
+          )}
         </DialogContent>
         <DialogActions>
+          <Button onClick={handleDialogClose} color="primary">
+            CANCEL
+          </Button>
           <Button
             onClick={() => handleStatusChange(currentOrder.newStatus)}
             color="primary"
+            disabled={
+              showEstimatedTimeInput &&
+              (!estimatedPrepTime || parseInt(estimatedPrepTime, 10) <= 0)
+            }
             autoFocus
           >
             CONFIRM
-          </Button>
-          <Button onClick={handleDialogClose} color="primary">
-            CANCEL
           </Button>
         </DialogActions>
       </Dialog>

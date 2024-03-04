@@ -115,6 +115,20 @@ export const updateOrder = async (orderID, status, estimateTime) => {
   if (status == "completed" || status == "cancelled") {
     timeComplete = Date.now();
   }
+
+  // Define the payload with conditionally included time_estimated
+  const payload = {
+    data: {
+      status: updatedStatus,
+      time_completed: timeComplete ? timeComplete : null,
+    },
+  };
+
+  // Only include time_estimated if the status is in progress
+  if (updatedStatus === "in progress" && estimateTime) {
+    payload.data.time_estimated = estimateTime;
+  }
+
   // persist order to database
   await fetch(`${API_BACKEND}api/orders/${orderID}`, {
     method: "PUT",
@@ -122,13 +136,7 @@ export const updateOrder = async (orderID, status, estimateTime) => {
       "Access-Control-Allow-Origin": "*",
       "Content-type": "application/json",
     },
-    body: JSON.stringify({
-      data: {
-        status: updatedStatus,
-        time_completed: timeComplete ? timeComplete : null,
-        time_estimated: estimateTime ? estimateTime : null,
-      },
-    }),
+    body: JSON.stringify(payload),
   })
     .then((res) => res.json())
     .then((jsonData) => {
