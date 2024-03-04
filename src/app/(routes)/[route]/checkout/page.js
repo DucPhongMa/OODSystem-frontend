@@ -26,6 +26,7 @@ import { useParams, useRouter } from "next/navigation";
 import { getRestaurantByRoute } from "@/app/api/restaurant";
 import PickupLocation from "@/app/components/restaurant/PickupLocation";
 import PickupDetails from "@/app/components/restaurant/PickupDetails";
+import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
 
 export default function Checkout() {
   const router = useRouter();
@@ -256,6 +257,7 @@ export default function Checkout() {
               </Button>
             </Box>
           </Box>
+          <RestaurantFooter restaurantData={restaurantData} />
           <Dialog
             open={openDialog}
             onClose={() => setOpenDialog(false)}
