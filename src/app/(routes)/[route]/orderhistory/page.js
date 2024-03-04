@@ -2,8 +2,12 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { getOrderByCustomer } from "../../../api/order";
-import { Button } from "@mui/material";
+import { Button, Container, Typography } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { getRestaurantByRoute } from "../../../api/restaurant";
+import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
 import Link from "next/link";
+import styles from "../../../styles/RestaurantHomepage.module.scss";
 
 export default function OrderHistory() {
   const [orderHistory, setOrderHistory] = useState(null);
@@ -12,8 +16,14 @@ export default function OrderHistory() {
   const [error, setError] = useState(null);
   const restaurantRoute = params.route;
 
+  const [restaurantData, setRestaurantData] = useState("");
+  const [theme, setTheme] = useState("");
+
   useEffect(() => {
+    setTheme(styles.theme1); // Set page theme
+
     async function fetchMyAPI() {
+      const restaurantData = await getRestaurantByRoute(restaurantRoute);
       try {
         const orderHistoryData = await getOrderByCustomer();
         setOrderHistory(orderHistoryData);
@@ -22,55 +32,113 @@ export default function OrderHistory() {
         setError("Fail to call the Order. Please Login!!!");
         setLoading(false);
       }
+
+      const menuItems =
+        restaurantData.attributes.menu.data.attributes.menu_items.data.map(
+          (item) => {
+            return {
+              name: item.attributes.name,
+              price: item.attributes.price,
+              imageURL: item.attributes.imageURL,
+              categoryID: item.attributes.menu_category.data.id,
+              id: item.id,
+              description: item.attributes.description,
+            };
+          }
+        );
+      const menuCate =
+        restaurantData.attributes.menu.data.attributes.menu_categories.data.map(
+          (cat) => {
+            const items = menuItems.filter((item) => item.categoryID == cat.id);
+            return {
+              name: cat.attributes.nameCate,
+              id: cat.id,
+              items,
+              image: items[0]?.imageURL, // use the first item's image
+            };
+          }
+        );
+      setRestaurantData({ ...restaurantData.attributes, menuCate });
     }
 
     fetchMyAPI();
-  }, []);
+    localStorage.setItem("restaurant-route", restaurantRoute);
+  }, [restaurantRoute]);
 
   console.log("order History", orderHistory);
   const orderHistoryList = orderHistory
     ? orderHistory.map((order) => ({
-        orderId: order.id,
-        orderStatus: order.status,
-        orderDate: order.time_placed,
-        orderTotalPrice: order.total_price,
-      }))
+      orderId: order.id,
+      orderStatus: order.status,
+      orderDate: order.time_placed,
+      orderTotalPrice: order.total_price,
+    }))
     : [];
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
   console.log("Order Data", orderHistoryList);
+
   return (
     <div>
-      <h1>This is the order history page</h1>
-      {orderHistoryList &&
-        orderHistoryList.map((order, index) => (
-          <div key={index}>
-            {/* Based on the example below, create a table with the list of orders*/}
-            <p>Order ID: {order.orderId}</p>
-            <p>Order Date: {order.orderDate}</p>
-            <p>Order Status: {order.orderStatus}</p>
-            <p>Order Total Price: {order.orderTotalPrice}</p>
-            <Link href={`orderhistory/${order.orderId}`} passHref>
-              <Button
-                variant="contained"
-                sx={{
-                  mt: 2,
-                  backgroundColor: (theme) =>
-                    `${theme.palette.primary.main} !important`,
-                  "&:hover": {
-                    backgroundColor: (theme) =>
-                      `${theme.palette.primary.dark} !important`,
-                  },
-                }}
-                fullWidth
-              >
-                View
-              </Button>
-            </Link>
-            <br />
-          </div>
-        ))}
+      <RestaurantAppBar restaurantInfo={restaurantData} />
+      <Container maxWidth="xl">
+        <Typography variant="h2">Order History</Typography>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell align="center" width="200em">Order #</TableCell>
+                <TableCell align="center" width="400em">Date</TableCell>
+                <TableCell align="center" width="200em">Status</TableCell>
+                <TableCell align="center" width="150em">Total Price</TableCell>
+                <TableCell align="center" width="250em"></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {orderHistoryList.map((order, index) => (
+                <TableRow key={order.orderId}>
+                  <TableCell align="center" >{order.orderId}</TableCell>
+                  <TableCell align="center" >{order.orderDate}</TableCell>
+                  <TableCell align="center" >{order.orderStatus}</TableCell>
+                  <TableCell align="center" >{order.orderTotalPrice}</TableCell>
+                  <TableCell align="center" >
+                    <Link href={`orderhistory/${order.orderId}`} passHref>
+                      <Button
+                        variant="contained"
+                        sx={{
+                          backgroundColor: (theme) =>
+                            `${theme.palette.primary.main} !important`,
+                          "&:hover": {
+                            backgroundColor: (theme) =>
+                              `${theme.palette.primary.dark} !important`,
+                          },
+                        }}
+                      >
+                        View
+                      </Button>
+                    </Link>
+                    <Button
+                      variant="contained"
+                      sx={{
+                        ml: "2em",
+                        backgroundColor: (theme) =>
+                          `${theme.palette.primary.main} !important`,
+                        "&:hover": {
+                          backgroundColor: (theme) =>
+                            `${theme.palette.primary.dark} !important`,
+                        },
+                      }}
+                    >
+                      Reorder
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Container>
     </div>
   );
 }
