@@ -20,6 +20,7 @@ import { useParams } from "next/navigation";
 import { getRestaurantByRoute } from "@/app/api/restaurant";
 import PickupLocation from "@/app/components/restaurant/PickupLocation";
 import PickupDetails from "@/app/components/restaurant/PickupDetails";
+import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
 
 export default function Order() {
   const params = useParams();
@@ -45,6 +46,31 @@ export default function Order() {
     await cancelOrder(); // Assuming this function updates the order status to 'cancelled'
     setOpenDialog(false);
     window.location.reload(); // Refresh the page
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    // Get the year, month, and day
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Months are 0-based
+    const day = date.getDate().toString().padStart(2, "0");
+
+    // Get hours and minutes
+    let hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+
+    // Determine AM or PM suffix
+    const ampm = hours >= 12 ? "pm" : "am";
+
+    // Convert 24h time to 12h time
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+
+    // Format the time
+    const time = hours + ":" + minutes + ampm;
+
+    // Combine the date and time
+    return `${year}-${month}-${day} ${time}`;
   };
 
   useEffect(() => {
@@ -193,15 +219,20 @@ export default function Order() {
                 <Typography variant="h8" sx={{ paddingTop: "50px" }}>
                   Your order is being prepared.
                   <br />
+                  Estimated pick up time:{" "}
+                  {formatDate(orderData.attributes?.time_estimated)}
+                  .
+                  <br />
                   Your order cannot be changed at this time. Please call{" "}
                   {restaurantData.restaurant_contact?.phone} for inquiries.
                 </Typography>
               </>
             )}
-            {orderData.attributes.status == "ready for pick up" && (
+            {orderData.attributes.status == "ready for pickup" && (
               <>
                 <Typography variant="h6" sx={{ marginTop: "30px" }}>
-                  Ready for Pick Up
+                  Ready for Pick Up. Address:{" "}
+                  {restaurantData.restaurant_contact?.address}
                 </Typography>
                 <Typography variant="h6" sx={{ marginTop: "30px" }}>
                   Your Order Number: {orderData.id}
@@ -291,6 +322,7 @@ export default function Order() {
               Pay in Person ${(subTotal * 1.13).toFixed(2)}
             </Typography>
           </Box>
+          <RestaurantFooter restaurantData={restaurantData} />
           <Dialog
             open={openDialog}
             onClose={handleCloseDialog}
