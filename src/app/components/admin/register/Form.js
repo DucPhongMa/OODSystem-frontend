@@ -345,7 +345,8 @@ function Form() {
           <DialogContentText id="alert-dialog-description">
             Username: {formData.email}
             <br />
-            Restaurant URL: https://ood-system-frontend.vercel.app/{formData.route}
+            Restaurant URL: https://ood-system-frontend.vercel.app/
+            {formData.route}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

@@ -123,7 +123,10 @@ export default function DashboardPage() {
             <Typography>Monthly visitors: 254</Typography>
             <Typography>Most Traffic Month: August</Typography>
             <br />
-            <Link href={`https://ood-system-frontend.vercel.app/${restaurantRoute}`} passHref>
+            <Link
+              href={`https://ood-system-frontend.vercel.app/${restaurantRoute}`}
+              passHref
+            >
               <Button
                 variant="contained"
                 style={{ marginTop: "35px" }}
