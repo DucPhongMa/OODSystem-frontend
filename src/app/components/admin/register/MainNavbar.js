@@ -103,12 +103,15 @@ export default function MainNavbar({ isLoggedin }) {
         <AppBar position="static">
           <Toolbar>
             <Typography style={{ marginRight: "40px" }}>
+            {isLoggedin ?
+              <Link href="/admin/dashboard">RestaurantWeb ADMIN Portal</Link> :
               <Link href="/admin">RestaurantWeb ADMIN Portal</Link>
+            }
             </Typography>
             <Typography style={{ marginRight: "20px" }}>
               <Link href="/about">About</Link>
             </Typography>
-            <Typography>
+            <Typography style={{ marginRight: "20px" }}>
               <Link href="/contact">Contact</Link>
             </Typography>
 
