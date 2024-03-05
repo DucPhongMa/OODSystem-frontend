@@ -2,14 +2,21 @@ import React, { useState } from "react";
 import { TextField, Grid, Box, Input } from "@mui/material";
 import { useAtom } from "jotai";
 import { selectedFileAtom } from "../../../../../store";
+import { selectedLogoAtom } from "../../../../../store";
 
 function RestaurantInfo({ formData, setFormData }) {
   //const [file, setFile] = useState(null);
   const [, setSelectedFile] = useAtom(selectedFileAtom);
+  const [, setSelectedLogo] = useAtom(selectedLogoAtom);
   const handleImageUpload = (e) => {
     //e.preventDefault();
     const uploadedFile = e.target.files[0];
     setSelectedFile(uploadedFile);
+  };
+  const handleLogoUpload = (e) => {
+    //e.preventDefault();
+    const uploadedFile = e.target.files[0];
+    setSelectedLogo(uploadedFile);
   };
   return (
     <Box sx={{ mt: 3 }}>
@@ -204,6 +211,20 @@ function RestaurantInfo({ formData, setFormData }) {
               })
             }
           />
+        </Grid>
+        <Grid item xs={12}>
+          <label>Upload Logo Image: </label>
+          <Input
+            type="file"
+            id="upload-logo"
+            onChange={handleLogoUpload}
+            inputProps={{
+              accept: "image/*",
+            }}
+            fullWidth
+          />
+          <br />
+          <br />
         </Grid>
         <Grid item xs={12}>
           <label>Upload Image for Banner: </label>

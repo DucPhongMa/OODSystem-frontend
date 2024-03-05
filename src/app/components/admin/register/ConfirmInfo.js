@@ -7,6 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { selectedFileAtom } from "../../../../../store";
+import { selectedLogoAtom } from "../../../../../store";
 import { useAtom } from "jotai";
 
 function createData(field, value) {
@@ -15,6 +16,7 @@ function createData(field, value) {
 
 function ConfirmInfo({ formData, setFormData }) {
   const [selectedFile, setSelectedFile] = useAtom(selectedFileAtom);
+  const [selectedLogo, setSelectedLogo] = useAtom(selectedLogoAtom);
   const themeMap = {
     0: "Classic",
   };
@@ -38,6 +40,7 @@ function ConfirmInfo({ formData, setFormData }) {
     createData("Postal Code", formData.restaurant_contact.postalCode),
     createData("Phone Number", formData.restaurant_contact.phone),
     createData("Restaurant Banner Image", selectedFile.name),
+    createData("Restaurant Logo Image", selectedLogo.name),
     createData("Mon Opening Time", formData.hours["monday"]["open"]),
     createData("Mon Closing Time", formData.hours["monday"]["close"]),
     createData("Tue Opening Time", formData.hours["tuesday"]["open"]),

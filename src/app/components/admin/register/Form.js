@@ -17,6 +17,7 @@ import ConfirmInfo from "./ConfirmInfo";
 import { addRestaurant } from "../../../api/restaurant";
 import { registerBusiness } from "@/app/api/auth";
 import { selectedFileAtom } from "../../../../../store";
+import { selectedLogoAtom } from "../../../../../store";
 import { useAtom } from "jotai";
 
 function validateEmail(email) {
@@ -69,6 +70,7 @@ function Form() {
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [selectedFile, setSelectedFile] = useAtom(selectedFileAtom);
+  const [selectedLogo, setSelectedLogo] = useAtom(selectedLogoAtom);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -125,6 +127,7 @@ function Form() {
       return (
         <>
           <RestaurantInfo formData={formData} setFormData={setFormData} />
+          {selectedLogo && <p>Selected Logo: {selectedLogo.name}</p>}
           {selectedFile && <p>Selected file: {selectedFile.name}</p>}
         </>
       );
@@ -233,6 +236,30 @@ function Form() {
                     formData.confirmPassword
                   );
 
+                  //===========================Upload Logo============================
+                  const formData3 = new FormData();
+                  formData3.append("file", selectedLogo);
+                  formData3.append("upload_preset", "my-uploads");
+
+                  const logoData = await fetch(
+                    "https://api.cloudinary.com/v1_1/dyu1deqdg/image/upload",
+                    {
+                      method: "POST",
+                      body: formData3,
+                    }
+                  ).then((r) => r.json());
+                  console.log("data", logoData);
+                  console.log("image_url", logoData.secure_url);
+
+                  const uploadLogo = logoData.secure_url;
+                  if (!uploadLogo) {
+                    console.error("Image upload failed.");
+                    return;
+                  }
+
+                  //console.log("Cloudinary: ", uploadLogo);
+                  //============================================================================
+
                   //===========================Upload Images============================
                   const formData2 = new FormData();
                   formData2.append("file", selectedFile);
@@ -281,7 +308,8 @@ function Form() {
                       name: "classic",
                     },
                     formData.email,
-                    uploadImage
+                    uploadImage,
+                    uploadLogo
                   );
 
                   // Save data to database
