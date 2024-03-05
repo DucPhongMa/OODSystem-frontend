@@ -77,7 +77,7 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
           <div style={{ position: "relative", width: 240 }}>
             <Link href={`/${restaurantInfo.route}/`}>
               <Image
-                src="/sushi.png"
+                src={restaurantInfo.logoURL}
                 alt="sushi logo"
                 width={100}
                 height={100}

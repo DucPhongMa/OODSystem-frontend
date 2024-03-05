@@ -9,7 +9,8 @@ export const addRestaurant = async (
   hoursObj,
   themeObj,
   inputBusinessName,
-  inputBannerImage
+  inputBannerImage,
+  inputLogoImage
 ) => {
   const categoryListID = [];
   const menuItemList = [];
@@ -94,6 +95,7 @@ export const addRestaurant = async (
       hours: hoursObj,
       restaurant_owner: inputBusinessName,
       bannerURL: inputBannerImage,
+      logoURL: inputLogoImage
     },
   };
   await fetch(`${API_BACKEND}api/restaurants`, {
