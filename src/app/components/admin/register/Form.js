@@ -109,15 +109,15 @@ function Form() {
 
   const handleClose = () => {
     setOpen(false);
-    window.location.href = "http://localhost:3000/admin/login";
+    window.location.href = "https://ood-system-frontend.vercel.app/admin/login";
   };
 
   const handleLogin = () => {
-    window.location.href = "http://localhost:3000/admin/login";
+    window.location.href = "https://ood-system-frontend.vercel.app/admin/login";
   };
 
   const handleRestaurant = () => {
-    window.location.href = `http://localhost:3000/${formData.route}`;
+    window.location.href = `https://ood-system-frontend.vercel.app/${formData.route}`;
   };
 
   const PageDisplay = () => {
@@ -345,7 +345,7 @@ function Form() {
           <DialogContentText id="alert-dialog-description">
             Username: {formData.email}
             <br />
-            Restaurant URL: http://localhost:3000/{formData.route}
+            Restaurant URL: https://ood-system-frontend.vercel.app/{formData.route}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
