@@ -91,6 +91,7 @@ export default function CustomerLoginPage() {
                 <TextField
                   autoComplete="password"
                   required
+                  fullWidth
                   id="password"
                   label="Password"
                   type="password"
