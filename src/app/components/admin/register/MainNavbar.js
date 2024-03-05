@@ -61,7 +61,10 @@ export default function MainNavbar({ isLoggedin }) {
           >
             <List>
               <ListItem button>
-                <Link href="/admin">RestaurantWeb ADMIN Portal</Link>
+                {isLoggedin ?
+                  <Link href="/admin/dashboard">RestaurantWeb ADMIN Portal</Link> :
+                  <Link href="/admin">RestaurantWeb ADMIN Portal</Link>
+                }               
               </ListItem>
               <ListItem button>
                 <Link href="/about">About</Link>
