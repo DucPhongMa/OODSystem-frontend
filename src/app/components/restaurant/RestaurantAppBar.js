@@ -187,9 +187,11 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link href={`/${restaurantInfo.route}/reviews`}>REVIEWS</Link>
           </Typography>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <Link href={`/${restaurantInfo.route}/orderhistory`}>ORDERS</Link>
-          </Typography>
+          {customerLoggedIn && (
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              <Link href={`/${restaurantInfo.route}/orderhistory`}>ORDERS</Link>
+            </Typography>
+          )}
           {!customerLoggedIn && (
             <Button color="inherit" variant="outlined">
               <Link href={`/customer/login`}>Log In</Link>
