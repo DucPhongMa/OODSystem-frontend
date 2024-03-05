@@ -72,18 +72,22 @@ export default function OrderHistory() {
       orderStatus: order.status,
       orderDate: order.time_placed,
       orderTotalPrice: order.total_price,
+      restaurantName: order.restaurant.name
     }))
     : [];
+
+  const completedOrders = orderHistoryList.filter((order) => order.orderStatus === 'completed');
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
-  console.log("Order Data", orderHistoryList);
+  console.log("Order Data", completedOrders);
 
   return (
     <div>
       <RestaurantAppBar restaurantInfo={restaurantData} />
       <Container maxWidth="xl">
-        <Typography variant="h2">Order History</Typography>
+        <Typography variant="h2" align="center" style={{ margin: "40px 0" }}>Order History</Typography>
         <TableContainer>
           <Table>
             <TableHead>
@@ -91,6 +95,7 @@ export default function OrderHistory() {
                 <TableCell align="center" width="200em">Order #</TableCell>
                 <TableCell align="center" width="400em">Date</TableCell>
                 <TableCell align="center" width="200em">Status</TableCell>
+                <TableCell align="center" width="150em">Restaurant</TableCell>
                 <TableCell align="center" width="150em">Total Price</TableCell>
                 <TableCell align="center" width="250em"></TableCell>
               </TableRow>
@@ -101,6 +106,7 @@ export default function OrderHistory() {
                   <TableCell align="center" >{order.orderId}</TableCell>
                   <TableCell align="center" >{order.orderDate}</TableCell>
                   <TableCell align="center" >{order.orderStatus}</TableCell>
+                  <TableCell align="center" >{order.restaurantName}</TableCell>
                   <TableCell align="center" >{order.orderTotalPrice}</TableCell>
                   <TableCell align="center" >
                     <Link href={`orderhistory/${order.orderId}`} passHref>
@@ -118,7 +124,7 @@ export default function OrderHistory() {
                         View
                       </Button>
                     </Link>
-                    <Button
+                    {/*<Button
                       variant="contained"
                       sx={{
                         ml: "2em",
@@ -131,7 +137,7 @@ export default function OrderHistory() {
                       }}
                     >
                       Reorder
-                    </Button>
+                    </Button>*/}
                   </TableCell>
                 </TableRow>
               ))}

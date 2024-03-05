@@ -100,7 +100,7 @@ export default function OrderHistoryDetails() {
     <div>
       <RestaurantAppBar restaurantInfo={restaurantData} />
       <Container maxWidth="xl">
-        <Typography variant="h2" mb="15px">Order Detail</Typography>
+        <Typography variant="h2" mb="15px" style={{ margin: "40px 0" }} align="center">Order History Detail</Typography>
         <Link href={`/${restaurantRoute}/orderhistory`} passHref>
           <Button
             variant="contained"
@@ -119,7 +119,7 @@ export default function OrderHistoryDetails() {
             Back to Order List
           </Button>
         </Link>
-        <Button
+        {/*<Button
           variant="contained"
           sx={{
             width: "15em",
@@ -133,16 +133,15 @@ export default function OrderHistoryDetails() {
           }}
         >
           Reorder
-        </Button>
+        </Button>*/}
         <Typography mt="15px" >Order Number: {orderHistoryID}</Typography>
         <Typography>Order Date: {orderHistoryDetails.time_placed}</Typography>
-        <Container maxWidth="md">
-          <Typography variant="h3" mb="15px">Information</Typography>
-          <Typography>Name: {orderHistoryDetails.users_permissions_user.fullname}</Typography>
-          <Typography>Email: {orderHistoryDetails.users_permissions_user.data.attributes.email}</Typography>
-          <Typography>Phone Number: {orderHistoryDetails.users_permissions_user.data.attributes.phonenumber}</Typography>
-          <Typography mb="15px">Notes: {orderHistoryDetails.note}</Typography>
-          
+        <Typography variant="h3" mb="15px">Information</Typography>
+        <Typography>Name: {orderHistoryDetails.users_permissions_user.fullname}</Typography>
+        <Typography>Email: {orderHistoryDetails.users_permissions_user.data.attributes.email}</Typography>
+        <Typography>Phone Number: {orderHistoryDetails.users_permissions_user.data.attributes.phonenumber}</Typography>
+        <Typography mb="15px">Notes: {orderHistoryDetails.note}</Typography>
+        <Container maxWidth="md">        
           <TableContainer>
           <Table>
             <TableHead>
