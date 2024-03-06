@@ -142,8 +142,14 @@ export default function AdminOrders() {
     }
 
     if (statusFilter === "past") {
-      const completedOrders = await getOrderBasedOnStatus(restaurantID, "completed");
-      const cancelledOrders = await getOrderBasedOnStatus(restaurantID, "cancelled");
+      const completedOrders = await getOrderBasedOnStatus(
+        restaurantID,
+        "completed"
+      );
+      const cancelledOrders = await getOrderBasedOnStatus(
+        restaurantID,
+        "cancelled"
+      );
 
       if (!Array.isArray(completedOrders) || !Array.isArray(cancelledOrders)) {
         console.error(
