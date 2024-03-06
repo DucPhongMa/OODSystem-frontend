@@ -95,7 +95,7 @@ export const addRestaurant = async (
       hours: hoursObj,
       restaurant_owner: inputBusinessName,
       bannerURL: inputBannerImage,
-      logoURL: inputLogoImage
+      logoURL: inputLogoImage,
     },
   };
   await fetch(`${API_BACKEND}api/restaurants`, {

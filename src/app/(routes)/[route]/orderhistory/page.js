@@ -3,7 +3,14 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { getOrderByCustomer } from "../../../api/order";
 import { Button, Container, Typography } from "@mui/material";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import { getRestaurantByRoute } from "../../../api/restaurant";
 import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
 import Link from "next/link";
@@ -68,15 +75,17 @@ export default function OrderHistory() {
   console.log("order History", orderHistory);
   const orderHistoryList = orderHistory
     ? orderHistory.map((order) => ({
-      orderId: order.id,
-      orderStatus: order.status,
-      orderDate: order.time_placed,
-      orderTotalPrice: order.total_price,
-      restaurantName: order.restaurant.name
-    }))
+        orderId: order.id,
+        orderStatus: order.status,
+        orderDate: order.time_placed,
+        orderTotalPrice: order.total_price,
+        restaurantName: order.restaurant.name,
+      }))
     : [];
 
-  const completedOrders = orderHistoryList.filter((order) => order.orderStatus === 'completed');
+  const completedOrders = orderHistoryList.filter(
+    (order) => order.orderStatus === "completed"
+  );
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -87,28 +96,40 @@ export default function OrderHistory() {
     <div>
       <RestaurantAppBar restaurantInfo={restaurantData} />
       <Container maxWidth="xl">
-        <Typography variant="h2" align="center" style={{ margin: "40px 0" }}>Order History</Typography>
+        <Typography variant="h2" align="center" style={{ margin: "40px 0" }}>
+          Order History
+        </Typography>
         <TableContainer>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell align="center" width="200em">Order #</TableCell>
-                <TableCell align="center" width="400em">Date</TableCell>
-                <TableCell align="center" width="200em">Status</TableCell>
-                <TableCell align="center" width="150em">Restaurant</TableCell>
-                <TableCell align="center" width="150em">Total Price</TableCell>
+                <TableCell align="center" width="200em">
+                  Order #
+                </TableCell>
+                <TableCell align="center" width="400em">
+                  Date
+                </TableCell>
+                <TableCell align="center" width="200em">
+                  Status
+                </TableCell>
+                <TableCell align="center" width="150em">
+                  Restaurant
+                </TableCell>
+                <TableCell align="center" width="150em">
+                  Total Price
+                </TableCell>
                 <TableCell align="center" width="250em"></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {orderHistoryList.map((order, index) => (
                 <TableRow key={order.orderId}>
-                  <TableCell align="center" >{order.orderId}</TableCell>
-                  <TableCell align="center" >{order.orderDate}</TableCell>
-                  <TableCell align="center" >{order.orderStatus}</TableCell>
-                  <TableCell align="center" >{order.restaurantName}</TableCell>
-                  <TableCell align="center" >{order.orderTotalPrice}</TableCell>
-                  <TableCell align="center" >
+                  <TableCell align="center">{order.orderId}</TableCell>
+                  <TableCell align="center">{order.orderDate}</TableCell>
+                  <TableCell align="center">{order.orderStatus}</TableCell>
+                  <TableCell align="center">{order.restaurantName}</TableCell>
+                  <TableCell align="center">{order.orderTotalPrice}</TableCell>
+                  <TableCell align="center">
                     <Link href={`orderhistory/${order.orderId}`} passHref>
                       <Button
                         variant="contained"

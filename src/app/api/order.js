@@ -150,7 +150,7 @@ export const getOrderByCustomer = async () => {
   const jwtToken = tokenData.value;
   console.log(jwtToken);
   const userInfo = await fetch(
-    //`${API_BACKEND}api/users/me?populate=orders&populate=orders.order_details.menu_item`, 
+    //`${API_BACKEND}api/users/me?populate=orders&populate=orders.order_details.menu_item`,
     `${API_BACKEND}api/users/me?populate=orders&populate=orders.order_details.menu_item&populate=orders.restaurant`,
     {
       headers: {
