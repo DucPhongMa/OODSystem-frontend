@@ -162,80 +162,88 @@ export default function AdminOrders() {
 
   const dialogMaxHeight = Math.max(windowHeight * 0.8, 300);
 
-  const fetchAndFormatOrders = useCallback(async (statusFilter) => {
-    if (!restaurantID || !isLoggedIn) {
-      console.log("Waiting for auth and restaurant ID...");
-      setIsLoading(false);
-      return;
-    }
+  const fetchAndFormatOrders = useCallback(
+    async (statusFilter) => {
+      if (!restaurantID || !isLoggedIn) {
+        console.log("Waiting for auth and restaurant ID...");
+        setIsLoading(false);
+        return;
+      }
 
-    let allOrderData = [];
+      let allOrderData = [];
 
-    if (statusFilter === "past") {
-      const completedOrders = await getOrderBasedOnStatus(
-        restaurantID,
-        "completed"
-      );
-      const cancelledOrders = await getOrderBasedOnStatus(
-        restaurantID,
-        "cancelled"
-      );
-
-      if (!Array.isArray(completedOrders) || !Array.isArray(cancelledOrders)) {
-        console.error(
-          "Fetched data is not an array:",
-          completedOrders,
-          cancelledOrders
+      if (statusFilter === "past") {
+        const completedOrders = await getOrderBasedOnStatus(
+          restaurantID,
+          "completed"
         );
-        setIsLoading(false);
-        return;
+        const cancelledOrders = await getOrderBasedOnStatus(
+          restaurantID,
+          "cancelled"
+        );
+
+        if (
+          !Array.isArray(completedOrders) ||
+          !Array.isArray(cancelledOrders)
+        ) {
+          console.error(
+            "Fetched data is not an array:",
+            completedOrders,
+            cancelledOrders
+          );
+          setIsLoading(false);
+          return;
+        }
+        allOrderData = [...completedOrders, ...cancelledOrders];
+      } else {
+        const orderData = await getOrderBasedOnStatus(restaurantID);
+
+        if (!Array.isArray(orderData)) {
+          console.error("Fetched data is not an array:", orderData);
+          setIsLoading(false);
+          return;
+        }
+        allOrderData = orderData;
       }
-      allOrderData = [...completedOrders, ...cancelledOrders];
-    } else {
-      const orderData = await getOrderBasedOnStatus(restaurantID);
 
-      if (!Array.isArray(orderData)) {
-        console.error("Fetched data is not an array:", orderData);
-        setIsLoading(false);
-        return;
-      }
-      allOrderData = orderData;
-    }
+      const formattedOrders = allOrderData
+        .map((order) => {
+          const taxRate = order.attributes.tax;
+          const subtotal = order.attributes.total_price;
+          const taxAmount = subtotal * taxRate;
+          const totalWithTax = subtotal + taxAmount;
 
-    const formattedOrders = allOrderData
-      .map((order) => {
-        const taxRate = order.attributes.tax;
-        const subtotal = order.attributes.total_price;
-        const taxAmount = subtotal * taxRate;
-        const totalWithTax = subtotal + taxAmount;
+          return {
+            id: order.id,
+            createdAt: order.attributes.createdAt,
+            dateTime: order.attributes.time_placed,
+            note: order.attributes.note,
+            details: order.attributes.order_details.data.map((detail) => ({
+              id: detail.id,
+              name: detail.attributes.menu_item.data.attributes.name,
+              quantity: detail.attributes.quantity,
+              unitPrice: detail.attributes.unit_price,
+            })),
+            status: order.attributes.status,
+            subtotal: subtotal,
+            tax: taxAmount,
+            totalPrice: totalWithTax,
+            customer: order.attributes.username ?? "N/A",
+            phoneNumber: order.attributes.phone_number,
+            timeCompleted: order.attributes.time_completed,
+          };
+        })
+        .sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime));
 
-        return {
-          id: order.id,
-          createdAt: order.attributes.createdAt,
-          dateTime: order.attributes.time_placed,
-          note: order.attributes.note,
-          details: order.attributes.order_details.data.map((detail) => ({
-            id: detail.id,
-            name: detail.attributes.menu_item.data.attributes.name,
-            quantity: detail.attributes.quantity,
-            unitPrice: detail.attributes.unit_price,
-          })),
-          status: order.attributes.status,
-          subtotal: subtotal,
-          tax: taxAmount,
-          totalPrice: totalWithTax,
-          customer: order.attributes.username ?? "N/A",
-          phoneNumber: order.attributes.phone_number,
-          timeCompleted: order.attributes.time_completed,
-        };
-      })
-      .sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime));
+      setOrders(formattedOrders);
+      setFilteredOrders(formattedOrders);
 
-    setOrders(formattedOrders);
-    setFilteredOrders(formattedOrders);
-
-    console.log(`Fetched orders for restaurant id# ${restaurantID} at:  ${new Date()}`);
-  }, [restaurantID, isLoggedIn]);
+      console.log(
+        `Fetched orders for restaurant id# ${restaurantID} at:  ${new Date()}`
+      );
+    },
+    [restaurantID, isLoggedIn]
+  );
 
   // When page tab changes, refetch orders
   useEffect(() => {
