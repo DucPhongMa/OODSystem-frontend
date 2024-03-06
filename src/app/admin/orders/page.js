@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { getOrderBasedOnStatus, updateOrder } from "@/app/api/order";
+import { getRestaurantByBusinessName } from "@/app/api/restaurant";
 import {
   Box,
   Table,
@@ -116,9 +117,33 @@ export default function AdminOrders() {
 
     let allOrderData = [];
 
+    // Retrieve the username from local storage
+    const storedUsername = localStorage.getItem("username");
+    if (!storedUsername) {
+      console.error("No username found in local storage.");
+      setIsLoading(false);
+      return;
+    }
+
+    // Use the username to get restaurant ID
+    let restaurantID = 0;
+    try {
+      const restaurantData = await getRestaurantByBusinessName(storedUsername);
+      if (!restaurantData) {
+        console.error("Failed to retrieve restaurant data.");
+        setIsLoading(false);
+        return;
+      }
+      restaurantID = restaurantData.id;
+    } catch (error) {
+      console.error("Error fetching restaurant or orders:", error);
+      setIsLoading(false);
+      return;
+    }
+
     if (statusFilter === "past") {
-      const completedOrders = await getOrderBasedOnStatus(50, "completed");
-      const cancelledOrders = await getOrderBasedOnStatus(50, "cancelled");
+      const completedOrders = await getOrderBasedOnStatus(restaurantID, "completed");
+      const cancelledOrders = await getOrderBasedOnStatus(restaurantID, "cancelled");
 
       if (!Array.isArray(completedOrders) || !Array.isArray(cancelledOrders)) {
         console.error(
@@ -131,7 +156,7 @@ export default function AdminOrders() {
       }
       allOrderData = [...completedOrders, ...cancelledOrders];
     } else {
-      const orderData = await getOrderBasedOnStatus(50);
+      const orderData = await getOrderBasedOnStatus(restaurantID);
 
       if (!Array.isArray(orderData)) {
         console.error("Fetched data is not an array:", orderData);
