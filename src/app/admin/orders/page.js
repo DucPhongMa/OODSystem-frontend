@@ -1,7 +1,11 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { getOrderBasedOnStatus, updateOrder } from "@/app/api/order";
-import { getRestaurantByBusinessName } from "@/app/api/restaurant";
+import {
+  getRestaurantByBusinessName,
+  getRestaurantByRoute,
+} from "@/app/api/restaurant";
+import { checkBusinessLogin } from "@/app/api/auth";
 import {
   Box,
   Table,
@@ -27,7 +31,6 @@ import { alpha } from "@mui/material/styles";
 import { visuallyHidden } from "@mui/utils";
 import MainNavbar from "../../components/admin/register/MainNavbar";
 import ActionButtons from "../../components/admin/orders/ActionButtons";
-import { checkBusinessLogin } from "@/app/api/auth";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -57,6 +60,7 @@ function stableSort(array, comparator) {
 
 export default function AdminOrders() {
   const [windowHeight, setWindowHeight] = useState(null);
+  const [restaurantID, setRestaurantID] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [orders, setOrders] = useState([]);
@@ -73,6 +77,58 @@ export default function AdminOrders() {
     currentStatus: null,
   });
   const [tabValue, setTabValue] = useState("all");
+
+  // Check if user is authenticated and store in state variable
+  // Get restaurant id and store in state variable
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const isLoggedInResult = await checkBusinessLogin();
+        setIsLoggedIn(isLoggedInResult);
+
+        if (!isLoggedInResult) {
+          console.error("User is not authenticated");
+          setIsLoading(false);
+          return;
+        }
+        console.log("User is authenticated");
+
+        // Get the username from localStorage
+        const storedUsername = localStorage.getItem("username");
+        if (!storedUsername) {
+          console.error("No username found in local storage.");
+          setIsLoading(false);
+          return;
+        }
+        console.log(`Fetched username from localStorage: ${storedUsername}`);
+
+        // Use username to get the route
+        const route = await getRestaurantByBusinessName(storedUsername);
+        if (!route) {
+          console.error("Error fetching route");
+          setIsLoading(false);
+          return;
+        }
+        console.log(`Fetched route: ${route}`);
+
+        // Use route to get restaurant id
+        getRestaurantByRoute(route)
+          .then((restaurantData) => {
+            setRestaurantID(restaurantData.id);
+            console.log(`Fetched restaurant id: ${restaurantData.id}`);
+          })
+          .catch((err) => {
+            console.error("Error fetching restaurant id", err);
+          })
+          .finally(() => setIsLoading(false));
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const hash = window.location.hash.replace("#", "");
@@ -106,40 +162,14 @@ export default function AdminOrders() {
 
   const dialogMaxHeight = Math.max(windowHeight * 0.8, 300);
 
-  const fetchAndFormatOrders = async (statusFilter) => {
-    const isLoggedInResult = await checkBusinessLogin();
-    setIsLoggedIn(isLoggedInResult);
-
-    if (!isLoggedInResult) {
+  const fetchAndFormatOrders = useCallback(async (statusFilter) => {
+    if (!restaurantID || !isLoggedIn) {
+      console.log("Waiting for auth and restaurant ID...");
       setIsLoading(false);
       return;
     }
 
     let allOrderData = [];
-
-    // Retrieve the username from local storage
-    const storedUsername = localStorage.getItem("username");
-    if (!storedUsername) {
-      console.error("No username found in local storage.");
-      setIsLoading(false);
-      return;
-    }
-
-    // Use the username to get restaurant ID
-    let restaurantID = 0;
-    try {
-      const restaurantData = await getRestaurantByBusinessName(storedUsername);
-      if (!restaurantData) {
-        console.error("Failed to retrieve restaurant data.");
-        setIsLoading(false);
-        return;
-      }
-      restaurantID = restaurantData.id;
-    } catch (error) {
-      console.error("Error fetching restaurant or orders:", error);
-      setIsLoading(false);
-      return;
-    }
 
     if (statusFilter === "past") {
       const completedOrders = await getOrderBasedOnStatus(
@@ -172,8 +202,6 @@ export default function AdminOrders() {
       allOrderData = orderData;
     }
 
-    console.log(allOrderData);
-
     const formattedOrders = allOrderData
       .map((order) => {
         const taxRate = order.attributes.tax;
@@ -205,22 +233,23 @@ export default function AdminOrders() {
 
     setOrders(formattedOrders);
     setFilteredOrders(formattedOrders);
-    setIsLoading(false);
-  };
 
+    console.log(`Fetched orders for restaurant id# ${restaurantID} at:  ${new Date()}`);
+  }, [restaurantID, isLoggedIn]);
+
+  // When page tab changes, refetch orders
   useEffect(() => {
     fetchAndFormatOrders(tabValue);
-  }, [tabValue]);
+  }, [fetchAndFormatOrders, tabValue]);
 
   // Auto-refresh orders every 10 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       fetchAndFormatOrders(tabValue);
-      console.log("Orders refreshed");
     }, 10000);
 
     return () => clearInterval(interval);
-  }, [tabValue]);
+  }, [fetchAndFormatOrders, tabValue]);
 
   const theme = useTheme();
 
@@ -259,7 +288,6 @@ export default function AdminOrders() {
       }
 
       await updateOrder(currentOrder.id, newStatus, estimateTime);
-
       fetchAndFormatOrders();
       setOpenDialog(false);
     }
