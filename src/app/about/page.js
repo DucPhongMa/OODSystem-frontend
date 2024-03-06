@@ -50,7 +50,7 @@ export default function AboutPage() {
           </Typography>
           <Typography variant="body1" paragraph>
             Born from the need to bridge the gap between restaurants and digital
-            convenience, our platform was envisioned as a one-stop solution for
+            convenience, our platform was envisioned as an one-stop solution for
             restaurant owners. From humble beginnings, we have grown into a
             service trusted by numerous establishments across the country.
           </Typography>
