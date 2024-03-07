@@ -184,14 +184,16 @@ export default function OrderHistoryDetails() {
                   (orderDetail, index) => (
                     <TableRow
                       key={
-                        orderDetail.attributes.menu_item.data?.attributes.name ?? "Unknown Item"
+                        orderDetail.attributes.menu_item.data?.attributes
+                          .name ?? "Unknown Item"
                       }
                     >
                       <TableCell align="center">
                         {orderDetail.attributes.quantity}
                       </TableCell>
                       <TableCell align="center">
-                        {orderDetail.attributes.menu_item.data?.attributes.name ?? "Unknown Item"}
+                        {orderDetail.attributes.menu_item.data?.attributes
+                          .name ?? "Unknown Item"}
                       </TableCell>
                       <TableCell align="center">
                         {
