@@ -75,12 +75,12 @@ export default function Checkout() {
   useEffect(() => {
     const customerInfo = checkCustomerLogin();
     if (customerInfo) {
-      setFormData({
-        ...formData,
+      setFormData((currentFormData) => ({
+        ...currentFormData,
         phoneNum: JSON.parse(customerInfo).phoneNum,
         customerName: JSON.parse(customerInfo).fullName,
         userId: getUserId(JSON.parse(customerInfo).value),
-      });
+      }));
     }
   }, []);
 
