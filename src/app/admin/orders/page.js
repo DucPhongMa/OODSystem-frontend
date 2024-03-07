@@ -220,7 +220,9 @@ export default function AdminOrders() {
             note: order.attributes.note,
             details: order.attributes.order_details.data.map((detail) => ({
               id: detail.id,
-              name: detail.attributes.menu_item.data.attributes.name,
+              name:
+                detail.attributes.menu_item.data?.attributes.name ??
+                "Unknown Item",
               quantity: detail.attributes.quantity,
               unitPrice: detail.attributes.unit_price,
             })),

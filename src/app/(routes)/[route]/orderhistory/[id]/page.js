@@ -51,7 +51,7 @@ export default function OrderHistoryDetails() {
               name: item.attributes.name,
               price: item.attributes.price,
               imageURL: item.attributes.imageURL,
-              categoryID: item.attributes.menu_category.data.id,
+              categoryID: item.attributes.menu_category.data?.id,
               id: item.id,
               description: item.attributes.description,
             };
@@ -184,14 +184,14 @@ export default function OrderHistoryDetails() {
                   (orderDetail, index) => (
                     <TableRow
                       key={
-                        orderDetail.attributes.menu_item.data.attributes.name
+                        orderDetail.attributes.menu_item.data?.attributes.name ?? "Unknown Item"
                       }
                     >
                       <TableCell align="center">
                         {orderDetail.attributes.quantity}
                       </TableCell>
                       <TableCell align="center">
-                        {orderDetail.attributes.menu_item.data.attributes.name}
+                        {orderDetail.attributes.menu_item.data?.attributes.name ?? "Unknown Item"}
                       </TableCell>
                       <TableCell align="center">
                         {

@@ -60,7 +60,7 @@ export default function EditMenuPage() {
               name: item.attributes.name,
               price: item.attributes.price,
               imageURL: item.attributes.imageURL,
-              categoryID: item.attributes.menu_category.data.id,
+              categoryID: item.attributes.menu_category.data?.id,
               id: item.id,
               description: item.attributes.description,
             };

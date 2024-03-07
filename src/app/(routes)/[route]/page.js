@@ -28,7 +28,7 @@ export default function RestaurantHomepage() {
               name: item.attributes.name,
               price: item.attributes.price,
               imageURL: item.attributes.imageURL,
-              categoryID: item.attributes.menu_category.data.id,
+              categoryID: item.attributes.menu_category.data?.id,
               id: item.id,
               description: item.attributes.description,
             };
@@ -42,7 +42,10 @@ export default function RestaurantHomepage() {
               name: cat.attributes.nameCate,
               id: cat.id,
               items,
-              image: items[0]?.imageURL, // use the first item's image
+              image:
+                items.length > 0
+                  ? items[0].imageURL
+                  : "/category_placeholder.jpeg", // Use either first item's image or placeholder
             };
           }
         );
