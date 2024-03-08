@@ -46,10 +46,9 @@ export default function EditMenuPage() {
     // check user auth
     const checkLoggedIn = checkBusinessLogin();
     setIsLoggedIn(checkLoggedIn);
-
     // Get username from localStorage
     const storedUsername = localStorage.getItem("username");
-
+    setIsLoading(true);
     if (storedUsername && checkLoggedIn) {
       async function fetchMyAPI() {
         const restaurantMenu = await getRestaurantMenuData(storedUsername);
