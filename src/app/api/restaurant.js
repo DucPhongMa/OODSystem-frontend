@@ -225,7 +225,6 @@ export const updateRestaurantMenu = async (
     })
       .then((res) => res.json())
       .then((jsonData) => {
-        console.log(jsonData);
         currentMenuItemID.push(jsonData.data.id);
       });
   }
@@ -233,11 +232,15 @@ export const updateRestaurantMenu = async (
     currentCatID = currentCatID.filter((cat) => cat !== removeCatID);
   }
 
+  console.log("After remove cat" + currentCatID);
   for (const removeDish of dishRemoveList) {
+    console.log(removeDish.id);
     currentMenuItemID = currentMenuItemID.filter(
       (item) => item !== removeDish.id
     );
   }
+
+  console.log("After remove dish" + currentMenuItemID);
 
   // update restaurant menu
   await fetch(`${API_BACKEND}api/menus/${menuID}`, {

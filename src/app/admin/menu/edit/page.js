@@ -104,6 +104,13 @@ export default function EditMenuPage() {
       if (category.items.length > 0) {
         setItemDeleteList([...itemDeleteList, ...category.items]);
       }
+    } else {
+      const updatedCatAdd = catAdd.filter((cat) => cat != category.name);
+      const updatedItemAdd = dishAdd.filter(
+        (dish) => dish.categoryName != category.name
+      );
+      setCatAdd(updatedCatAdd);
+      setDishAdd(updatedItemAdd);
     }
   };
 
@@ -170,6 +177,9 @@ export default function EditMenuPage() {
     setActiveCategory(updatedActiveCate);
     setMenuCats(updatedCategories);
     setDishAdd([...dishAdd, updatedItem]);
+    newItem.name = "";
+    newItem.description = "";
+    newItem.price = "";
   };
 
   const saveMenuChange = async () => {
@@ -181,6 +191,10 @@ export default function EditMenuPage() {
       dishAdd
     );
 
+    setCatDeleteList([]);
+    setItemDeleteList([]);
+    setCatAdd([]);
+    setDishAdd([]);
     alert("Update Successfully");
   };
 
@@ -205,6 +219,11 @@ export default function EditMenuPage() {
 
     if (itemToDelete.id) {
       setItemDeleteList([...itemDeleteList, { ...itemToDelete }]);
+    } else {
+      const newDishAdd = dishAdd.filter(
+        (dish) => dish.name != itemToDelete.name
+      );
+      setDishAdd(newDishAdd);
     }
   };
 
