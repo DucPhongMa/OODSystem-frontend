@@ -154,7 +154,8 @@ export default function OrderHistoryDetails() {
           Information
         </Typography>
         <Typography>
-          Name: {orderHistoryDetails.users_permissions_user.data.attributes.fullname}
+          Name:{" "}
+          {orderHistoryDetails.users_permissions_user.data.attributes.fullname}
         </Typography>
         <Typography>
           Email:{" "}
