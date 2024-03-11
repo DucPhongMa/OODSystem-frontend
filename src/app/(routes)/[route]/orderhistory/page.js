@@ -122,7 +122,7 @@ export default function OrderHistory() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orderHistoryList.map((order, index) => (
+              {completedOrders.map((order, index) => (
                 <TableRow key={order.orderId}>
                   <TableCell align="center">{order.orderId}</TableCell>
                   <TableCell align="center">{order.orderDate}</TableCell>
