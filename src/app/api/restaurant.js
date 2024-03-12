@@ -127,10 +127,13 @@ export const getRestaurantByRoute = async (route) => {
       restaurantData = jsonData.data[0];
     });
 
-  localStorage.setItem("restaurant-data", {
-    route: restaurantRoute,
-    themeID: restaurantData.attributes.theme.id,
-  });
+  localStorage.setItem(
+    "restaurant-data",
+    JSON.stringify({
+      route: route,
+      themeID: restaurantData.attributes.theme.id,
+    })
+  );
 
   return restaurantData;
 };
