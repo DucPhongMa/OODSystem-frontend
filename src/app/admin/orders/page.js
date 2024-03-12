@@ -173,7 +173,10 @@ export default function AdminOrders() {
       let allOrderData = [];
 
       if (statusFilter === "past") {
-        console.log("Before calling getOrderBasedOnStatus, here is restaurantID: " + restaurantID);
+        console.log(
+          "Before calling getOrderBasedOnStatus, here is restaurantID: " +
+            restaurantID
+        );
         const completedOrders = await getOrderBasedOnStatus(
           restaurantID,
           "completed"
@@ -181,7 +184,10 @@ export default function AdminOrders() {
         console.log("Got the compeleted orders below");
         console.log(completedOrders);
 
-        console.log("Before calling getOrderBasedOnStatus, here is restaurantID: " + restaurantID);
+        console.log(
+          "Before calling getOrderBasedOnStatus, here is restaurantID: " +
+            restaurantID
+        );
         const cancelledOrders = await getOrderBasedOnStatus(
           restaurantID,
           "cancelled"
@@ -203,7 +209,10 @@ export default function AdminOrders() {
         }
         allOrderData = [...completedOrders, ...cancelledOrders];
       } else {
-        console.log("Before calling getOrderBasedOnStatus, here is restaurantID: " + restaurantID);
+        console.log(
+          "Before calling getOrderBasedOnStatus, here is restaurantID: " +
+            restaurantID
+        );
         const orderData = await getOrderBasedOnStatus(restaurantID);
         console.log("Got the list of all orders below");
         console.log(orderData);
