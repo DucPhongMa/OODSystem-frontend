@@ -126,6 +126,12 @@ export const getRestaurantByRoute = async (route) => {
     .then((jsonData) => {
       restaurantData = jsonData.data[0];
     });
+
+  localStorage.setItem("restaurant-data", {
+    route: restaurantRoute,
+    themeID: restaurantData.attributes.theme.id,
+  });
+
   return restaurantData;
 };
 
@@ -165,11 +171,6 @@ export const updateRestaurantMenu = async (
   const newCat = {};
   let currentCatID = [];
   let currentMenuItemID = [];
-  console.log(menuID);
-  console.log(catRemoveList);
-  console.log(catAddList);
-  console.log(dishRemoveList);
-  console.log(dishAddList);
 
   await fetch(`${API_BACKEND}api/menus/${menuID}?populate=*`)
     .then((res) => res.json())

@@ -21,7 +21,7 @@ export default function CustomerLoginPage() {
   const router = useRouter();
 
   const handleFormSubmit = async (formData) => {
-    const currentRestaurant = localStorage.getItem("restaurant-route");
+    const currentRestaurant = localStorage.getItem("restaurant-data").route;
     const error = await loginUser(formData.email, formData.password);
     if (error) {
       console.log(error);
