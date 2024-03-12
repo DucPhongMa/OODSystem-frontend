@@ -173,14 +173,21 @@ export default function AdminOrders() {
       let allOrderData = [];
 
       if (statusFilter === "past") {
+        console.log("Before calling getOrderBasedOnStatus, here is restaurantID: " + restaurantID);
         const completedOrders = await getOrderBasedOnStatus(
           restaurantID,
           "completed"
         );
+        console.log("Got the compeleted orders below");
+        console.log(completedOrders);
+
+        console.log("Before calling getOrderBasedOnStatus, here is restaurantID: " + restaurantID);
         const cancelledOrders = await getOrderBasedOnStatus(
           restaurantID,
           "cancelled"
         );
+        console.log("Got the cancelled orders below");
+        console.log(cancelledOrders);
 
         if (
           !Array.isArray(completedOrders) ||
@@ -196,7 +203,10 @@ export default function AdminOrders() {
         }
         allOrderData = [...completedOrders, ...cancelledOrders];
       } else {
+        console.log("Before calling getOrderBasedOnStatus, here is restaurantID: " + restaurantID);
         const orderData = await getOrderBasedOnStatus(restaurantID);
+        console.log("Got the list of all orders below");
+        console.log(orderData);
 
         if (!Array.isArray(orderData)) {
           console.error("Fetched data is not an array:", orderData);
