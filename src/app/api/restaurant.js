@@ -271,15 +271,4 @@ export const updateRestaurantMenu = async (
       },
     });
   }
-
-  // TO DO remove the item
-  for (const removeDish of dishRemoveList) {
-    await fetch(`${API_BACKEND}api/menu-items/${removeDish.id}`, {
-      method: "DELETE",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      },
-    });
-  }
 };
