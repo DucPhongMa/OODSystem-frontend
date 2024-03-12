@@ -89,7 +89,7 @@ export const getOrderBasedOnStatus = async (restaurantID, status) => {
   let orderArray;
   if (status) {
     await fetch(
-      `${API_BACKEND}api/orders??filters[restaurantID][$eq]=${restaurantID}&filters[status][$eq]=${status}&populate[order_details][populate][0]=menu_item&populate[users_permissions_user]=*`
+      `${API_BACKEND}api/orders?filters[restaurant][id][$eq]=${restaurantID}&filters[status][$eq]=${status}&populate[order_details][populate][0]=menu_item&populate[users_permissions_user]=*`
     )
       .then((res) => res.json())
       .then((jsonData) => {
@@ -97,7 +97,7 @@ export const getOrderBasedOnStatus = async (restaurantID, status) => {
       });
   } else {
     await fetch(
-      `${API_BACKEND}api/orders??filters[restaurantID][$eq]=${restaurantID}&populate[order_details][populate][0]=menu_item&populate[users_permissions_user]=*`
+      `${API_BACKEND}api/orders?filters[restaurant][id][$eq]=${restaurantID}&populate[order_details][populate][0]=menu_item&populate[users_permissions_user]=*`
     )
       .then((res) => res.json())
       .then((jsonData) => {
