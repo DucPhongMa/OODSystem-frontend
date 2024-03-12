@@ -26,6 +26,7 @@ import {
   DialogContentText,
   DialogTitle,
   useTheme,
+  TablePagination,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { visuallyHidden } from "@mui/utils";
@@ -59,6 +60,9 @@ function stableSort(array, comparator) {
 }
 
 export default function AdminOrders() {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const columnWidths = ["10%", "10%", "16%", "20%", "12%", "10%", "10%", "12%"];
   const [windowHeight, setWindowHeight] = useState(null);
   const [restaurantID, setRestaurantID] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -82,48 +86,56 @@ export default function AdminOrders() {
   // Get restaurant id and store in state variable
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const isLoggedInResult = await checkBusinessLogin();
-        setIsLoggedIn(isLoggedInResult);
+      setIsLoading(true); // Set loading to true at start of any async operation
 
-        if (!isLoggedInResult) {
-          console.error("User is not authenticated");
-          setIsLoading(false);
-          return;
-        }
-        console.log("User is authenticated");
+      const isLoggedInResult = checkBusinessLogin();
+      setIsLoggedIn(isLoggedInResult);
 
-        // Get the username from localStorage
-        const storedUsername = localStorage.getItem("username");
-        if (!storedUsername) {
-          console.error("No username found in local storage.");
-          setIsLoading(false);
-          return;
-        }
-        console.log(`Fetched username from localStorage: ${storedUsername}`);
-
-        // Use username to get the route
-        const route = await getRestaurantByBusinessName(storedUsername);
-        if (!route) {
-          console.error("Error fetching route");
-          setIsLoading(false);
-          return;
-        }
-        console.log(`Fetched route: ${route}`);
-
-        // Use route to get restaurant id
-        getRestaurantByRoute(route)
-          .then((restaurantData) => {
-            setRestaurantID(restaurantData.id);
-            console.log(`Fetched restaurant id: ${restaurantData.id}`);
-          })
-          .catch((err) => {
-            console.error("Error fetching restaurant id", err);
-          })
-          .finally(() => setIsLoading(false));
-      } catch (error) {
-        console.error("Error fetching data:", error);
+      // Check if user is logged in
+      if (!isLoggedInResult) {
+        console.error("User is not authenticated");
         setIsLoading(false);
+        return;
+      }
+      console.log("User is authenticated");
+
+      // Get the username from localStorage
+      const storedUsername = localStorage.getItem("username");
+      if (!storedUsername) {
+        console.error("No username found in local storage.");
+        setIsLoading(false);
+        return;
+      }
+      console.log(`Fetched username from localStorage: ${storedUsername}`);
+
+      // Use username to get the route
+      let route;
+      try {
+        route = await getRestaurantByBusinessName(storedUsername);
+      } catch (error) {
+        console.error(
+          "Error fetching route, getRestaurantByBusinessName failed: ",
+          error
+        );
+        setIsLoading(false);
+        return;
+      }
+      console.log(`Fetched route: ${route}`);
+
+      // Use route to get restaurant id
+      try {
+        const restaurantData = await getRestaurantByRoute(route);
+        setRestaurantID(restaurantData.id);
+        console.log(`Fetched restaurant id: ${restaurantData.id}`);
+        setIsLoading(false);
+        return;
+      } catch (error) {
+        console.error(
+          "Error fetching restaurant id, getRestaurantByBusinessName failed: ",
+          error
+        );
+        setIsLoading(false);
+        return;
       }
     };
 
@@ -166,34 +178,39 @@ export default function AdminOrders() {
     async (statusFilter) => {
       if (!restaurantID || !isLoggedIn) {
         console.log("Waiting for auth and restaurant ID...");
-        setIsLoading(false);
         return;
       }
 
       let allOrderData = [];
 
       if (statusFilter === "past") {
-        console.log(
-          "Before calling getOrderBasedOnStatus, here is restaurantID: " +
-            restaurantID
-        );
-        const completedOrders = await getOrderBasedOnStatus(
-          restaurantID,
-          "completed"
-        );
-        console.log("Got the compeleted orders below");
-        console.log(completedOrders);
+        let completedOrders;
+        try {
+          completedOrders = await getOrderBasedOnStatus(
+            restaurantID,
+            "completed"
+          );
+        } catch (error) {
+          console.error(
+            "getOrderBasedOnStatus failed for completed orders: ",
+            error
+          );
+          return;
+        }
 
-        console.log(
-          "Before calling getOrderBasedOnStatus, here is restaurantID: " +
-            restaurantID
-        );
-        const cancelledOrders = await getOrderBasedOnStatus(
-          restaurantID,
-          "cancelled"
-        );
-        console.log("Got the cancelled orders below");
-        console.log(cancelledOrders);
+        let cancelledOrders;
+        try {
+          cancelledOrders = await getOrderBasedOnStatus(
+            restaurantID,
+            "cancelled"
+          );
+        } catch (error) {
+          console.error(
+            "getOrderBasedOnStatus failed for cancelled orders: ",
+            error
+          );
+          return;
+        }
 
         if (
           !Array.isArray(completedOrders) ||
@@ -204,22 +221,24 @@ export default function AdminOrders() {
             completedOrders,
             cancelledOrders
           );
-          setIsLoading(false);
           return;
         }
         allOrderData = [...completedOrders, ...cancelledOrders];
       } else {
-        console.log(
-          "Before calling getOrderBasedOnStatus, here is restaurantID: " +
-            restaurantID
-        );
-        const orderData = await getOrderBasedOnStatus(restaurantID);
-        console.log("Got the list of all orders below");
-        console.log(orderData);
+        let orderData;
+        try {
+          orderData = await getOrderBasedOnStatus(restaurantID);
+          console.log(orderData);
+        } catch (error) {
+          console.error(
+            "getOrderBasedOnStatus failed for getting all orders: ",
+            error
+          );
+          return;
+        }
 
         if (!Array.isArray(orderData)) {
           console.error("Fetched data is not an array:", orderData);
-          setIsLoading(false);
           return;
         }
         allOrderData = orderData;
@@ -263,7 +282,7 @@ export default function AdminOrders() {
         `Fetched orders for restaurant id# ${restaurantID} at:  ${new Date()}`
       );
     },
-    [restaurantID, isLoggedIn]
+    [isLoggedIn, restaurantID]
   );
 
   // When page tab changes, refetch orders
@@ -305,6 +324,8 @@ export default function AdminOrders() {
   };
 
   const handleStatusChange = async (newStatus) => {
+    setIsLoading(true); // Set loading to true at start of any async operation
+
     if (currentOrder.id && newStatus) {
       let estimateTime = null;
 
@@ -316,10 +337,25 @@ export default function AdminOrders() {
         estimateTime = futureTime.toISOString();
       }
 
-      await updateOrder(currentOrder.id, newStatus, estimateTime);
-      fetchAndFormatOrders();
+      try {
+        await updateOrder(currentOrder.id, newStatus, estimateTime);
+      } catch (error) {
+        console.error("Status change updateOrder failed: ", error);
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        await fetchAndFormatOrders();
+      } catch (error) {
+        console.error("Status change fetchAndFormatOrders failed: ", error);
+        setIsLoading(false);
+        return;
+      }
+
       setOpenDialog(false);
     }
+    setIsLoading(false);
   };
 
   // Get row bg color based on order status
@@ -370,6 +406,16 @@ export default function AdminOrders() {
       order.customer.toLowerCase().includes(value)
     );
     setFilteredOrders(filtered);
+    setPage(0); // Reset page to 0 when search changes
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset to the first page
   };
 
   const handleTabChange = (event, newValue) => {
@@ -393,12 +439,12 @@ export default function AdminOrders() {
     );
   }
 
-  if (!isLoggedIn) {
+  if (!isLoading && !isLoggedIn) {
     return (
       <Box>
         <MainNavbar isLoggedin={isLoggedIn} />
         <Typography variant="h6" textAlign="center" marginTop={2}>
-          You are not authenticated.
+          You are not not logged in.
         </Typography>
       </Box>
     );
@@ -436,7 +482,10 @@ export default function AdminOrders() {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sortDirection={orderBy === "status" ? order : false}>
+              <TableCell
+                sx={{ width: columnWidths[0] }}
+                sortDirection={orderBy === "status" ? order : false}
+              >
                 <TableSortLabel
                   active={orderBy === "status"}
                   direction={orderBy === "status" ? order : "asc"}
@@ -452,7 +501,10 @@ export default function AdminOrders() {
                   ) : null}
                 </TableSortLabel>
               </TableCell>
-              <TableCell sortDirection={orderBy === "id" ? order : false}>
+              <TableCell
+                sx={{ width: columnWidths[1] }}
+                sortDirection={orderBy === "id" ? order : false}
+              >
                 <TableSortLabel
                   active={orderBy === "id"}
                   direction={orderBy === "id" ? order : "asc"}
@@ -468,7 +520,10 @@ export default function AdminOrders() {
                   ) : null}
                 </TableSortLabel>
               </TableCell>
-              <TableCell sortDirection={orderBy === "customer" ? order : false}>
+              <TableCell
+                sx={{ width: columnWidths[2] }}
+                sortDirection={orderBy === "customer" ? order : false}
+              >
                 <TableSortLabel
                   active={orderBy === "customer"}
                   direction={orderBy === "customer" ? order : "asc"}
@@ -484,9 +539,12 @@ export default function AdminOrders() {
                   ) : null}
                 </TableSortLabel>
               </TableCell>
-              <TableCell>Items</TableCell>
-              <TableCell>Notes</TableCell>
-              <TableCell sortDirection={orderBy === "dateTime" ? order : false}>
+              <TableCell sx={{ width: columnWidths[3] }}>Items</TableCell>
+              <TableCell sx={{ width: columnWidths[4] }}>Notes</TableCell>
+              <TableCell
+                sx={{ width: columnWidths[5] }}
+                sortDirection={orderBy === "dateTime" ? order : false}
+              >
                 <TableSortLabel
                   active={orderBy === "dateTime"}
                   direction={orderBy === "dateTime" ? order : "asc"}
@@ -503,6 +561,7 @@ export default function AdminOrders() {
                 </TableSortLabel>
               </TableCell>
               <TableCell
+                sx={{ width: columnWidths[6] }}
                 sortDirection={orderBy === "timeCompleted" ? order : false}
               >
                 <TableSortLabel
@@ -520,52 +579,73 @@ export default function AdminOrders() {
                   ) : null}
                 </TableSortLabel>
               </TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell sx={{ width: columnWidths[7] }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {stableSort(filteredOrders, getComparator(order, orderBy)).map(
-              (order) => (
-                <TableRow
-                  key={order.id}
-                  sx={getRowBackgroundColor(order.status, theme)}
-                  onClick={() => handleRowClick(order)}
-                >
-                  <TableCell>{order.status}</TableCell>
-                  <TableCell>{order.id}</TableCell>
-                  <TableCell>{order.customer}</TableCell>
-                  <TableCell>
-                    {order.details.map((detail, index) => (
-                      <span key={index}>
-                        {`${detail.quantity} x ${detail.name}`}
-                        {index < order.details.length - 1 ? <br /> : null}
-                      </span>
-                    ))}
-                  </TableCell>
-                  <TableCell>
-                    {order.note && order.note.length > 50
-                      ? `${order.note.substring(0, 50)}...`
-                      : order.note || ""}
-                  </TableCell>
-                  <TableCell>{formatDate(order.dateTime)}</TableCell>
-                  <TableCell>
-                    {order.timeCompleted ? formatDate(order.timeCompleted) : ""}
-                  </TableCell>
-                  <TableCell>
-                    <ActionButtons
-                      status={order.status}
-                      orderId={order.id}
-                      onActionClick={(action, id) => {
-                        handleDialogOpen(id, action);
-                      }}
-                    />
-                  </TableCell>
-                </TableRow>
-              )
+            {isLoading ? (
+              // Render a row with a spinner if data is still loading
+              <TableRow>
+                <TableCell colSpan={1000} style={{ textAlign: "center" }}>
+                  <CircularProgress />
+                </TableCell>
+              </TableRow>
+            ) : (
+              stableSort(filteredOrders, getComparator(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((order) => (
+                  <TableRow
+                    key={order.id}
+                    sx={getRowBackgroundColor(order.status, theme)}
+                    onClick={() => handleRowClick(order)}
+                  >
+                    <TableCell>{order.status}</TableCell>
+                    <TableCell>{order.id}</TableCell>
+                    <TableCell>{order.customer}</TableCell>
+                    <TableCell>
+                      {order.details.map((detail, index) => (
+                        <span key={index}>
+                          {`${detail.quantity} x ${detail.name}`}
+                          {index < order.details.length - 1 ? <br /> : null}
+                        </span>
+                      ))}
+                    </TableCell>
+                    <TableCell>
+                      {order.note && order.note.length > 50
+                        ? `${order.note.substring(0, 50)}...`
+                        : order.note || ""}
+                    </TableCell>
+                    <TableCell>{formatDate(order.dateTime)}</TableCell>
+                    <TableCell>
+                      {order.timeCompleted
+                        ? formatDate(order.timeCompleted)
+                        : ""}
+                    </TableCell>
+                    <TableCell>
+                      <ActionButtons
+                        status={order.status}
+                        orderId={order.id}
+                        onActionClick={(action, id) => {
+                          handleDialogOpen(id, action);
+                        }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))
             )}
           </TableBody>
         </Table>
       </Box>
+
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={filteredOrders.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
 
       <Dialog
         open={!!selectedOrder}
@@ -689,7 +769,7 @@ export default function AdminOrders() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose} color="primary">
-            CANCEL
+            CANCELgit
           </Button>
           <Button
             onClick={() => handleStatusChange(currentOrder.newStatus)}
