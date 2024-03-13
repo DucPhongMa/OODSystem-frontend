@@ -189,7 +189,7 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
           </Typography>
           {customerLoggedIn && (
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              <Link href={`/${restaurantInfo.route}/orderhistory`}>ORDERS</Link>
+              <Link href={`/customer/orderhistory`}>ORDERS</Link>
             </Typography>
           )}
           {!customerLoggedIn && (
