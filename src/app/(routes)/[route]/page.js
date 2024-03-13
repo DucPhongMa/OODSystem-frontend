@@ -10,7 +10,7 @@ import Link from "next/link";
 import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
 import styles from "../../styles/RestaurantHomepage.module.scss";
 import { useAtom } from "jotai";
-import {getRouteAtom} from "../../../../store"
+import { getRouteAtom } from "../../../../store";
 
 export default function RestaurantHomepage() {
   const [restaurantData, setRestaurantData] = useState("");

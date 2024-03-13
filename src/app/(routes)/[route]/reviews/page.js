@@ -16,7 +16,6 @@ import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
 import Link from "next/link";
 import styles from "../../../styles/RestaurantHomepage.module.scss";
 
-
 export default function OrderHistory() {
   //const [orderHistory, setOrderHistory] = useState(null);
   const params = useParams();
@@ -26,7 +25,6 @@ export default function OrderHistory() {
 
   const [restaurantData, setRestaurantData] = useState("");
   const [theme, setTheme] = useState("");
-
 
   useEffect(() => {
     setTheme(styles.theme1); // Set page theme
@@ -72,12 +70,8 @@ export default function OrderHistory() {
     localStorage.setItem("restaurant-route", restaurantRoute);
   }, [restaurantRoute]);
 
-  
-
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
-
-
 
   return (
     <div>
@@ -86,7 +80,6 @@ export default function OrderHistory() {
         <Typography variant="h2" align="center" style={{ margin: "40px 0" }}>
           Reviews
         </Typography>
-       
       </Container>
     </div>
   );
