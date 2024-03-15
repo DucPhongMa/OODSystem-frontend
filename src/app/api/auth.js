@@ -145,4 +145,5 @@ export const checkCustomerLogin = () => {
 
 export const logoutCustomer = () => {
   localStorage.removeItem("customer-authorization");
+  localStorage.removeItem("customer-username");
 };
