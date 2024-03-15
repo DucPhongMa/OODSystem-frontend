@@ -57,11 +57,14 @@ export const loginUser = async (identifier, password) => {
       };
       if (userInfoData.role.name == "Business") {
         localStorage.setItem("business-authorization", JSON.stringify(item));
+        localStorage.setItem("business-username", identifier);
+
       } else {
         localStorage.setItem("customer-authorization", JSON.stringify(item));
+        localStorage.setItem("customer-username", identifier);
+
       }
 
-      localStorage.setItem("username", identifier);
     } else {
       return "Email or password is incorrect! Please check!";
     }
@@ -87,7 +90,7 @@ export const checkBusinessLogin = () => {
 
 export const removeToken = () => {
   localStorage.removeItem("business-authorization");
-  localStorage.removeItem("username");
+  localStorage.removeItem("business-username");
 };
 
 export const registerCustomer = async (email, password, fullName, phoneNum) => {

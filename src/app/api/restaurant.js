@@ -55,6 +55,7 @@ export const addRestaurant = async (
           price: dish.price,
           menu_category: categoryListID[dish.category_id],
           imageURL: dish.imageURL,
+          discount: 0,
         },
       }),
     })
@@ -126,6 +127,15 @@ export const getRestaurantByRoute = async (route) => {
     .then((jsonData) => {
       restaurantData = jsonData.data[0];
     });
+
+  localStorage.setItem(
+    "restaurant-data",
+    JSON.stringify({
+      route: route,
+      themeID: restaurantData.attributes.theme.id,
+    })
+  );
+
   return restaurantData;
 };
 
@@ -155,6 +165,28 @@ export const getRestaurantMenuData = async (username) => {
   return restaurantData.attributes.menu;
 };
 
+export const updatePromotionByDish = async (dishID, discount) => {
+  console.log(dishID);
+  console.log(discount);
+  await fetch(`${API_BACKEND}api/menu-items/${dishID}`, {
+    method: "PUT",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-type": "application/json",
+    },
+
+    body: JSON.stringify({
+      data: {
+        discount: discount,
+      },
+    }),
+  })
+    .then((res) => res.json())
+    .then((jsonData) => {
+      return jsonData.data;
+    });
+};
+
 export const updateRestaurantMenu = async (
   menuID,
   catRemoveList,
@@ -165,11 +197,6 @@ export const updateRestaurantMenu = async (
   const newCat = {};
   let currentCatID = [];
   let currentMenuItemID = [];
-  console.log(menuID);
-  console.log(catRemoveList);
-  console.log(catAddList);
-  console.log(dishRemoveList);
-  console.log(dishAddList);
 
   await fetch(`${API_BACKEND}api/menus/${menuID}?populate=*`)
     .then((res) => res.json())
@@ -260,17 +287,6 @@ export const updateRestaurantMenu = async (
   // TO DO remove the category
   for (const removeCatID of catRemoveList) {
     await fetch(`${API_BACKEND}api/menu-categories/${removeCatID}`, {
-      method: "DELETE",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      },
-    });
-  }
-
-  // TO DO remove the item
-  for (const removeDish of dishRemoveList) {
-    await fetch(`${API_BACKEND}api/menu-items/${removeDish.id}`, {
       method: "DELETE",
       headers: {
         "Access-Control-Allow-Origin": "*",

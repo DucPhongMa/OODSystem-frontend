@@ -36,6 +36,7 @@ export default function RestaurantHomepage() {
               categoryID: item.attributes.menu_category.data?.id,
               id: item.id,
               description: item.attributes.description,
+              theme: item.attributes.theme,
             };
           }
         );
@@ -58,7 +59,6 @@ export default function RestaurantHomepage() {
     }
 
     fetchMyAPI();
-    localStorage.setItem("restaurant-route", restaurantRoute);
   }, [restaurantRoute]);
 
   return (
