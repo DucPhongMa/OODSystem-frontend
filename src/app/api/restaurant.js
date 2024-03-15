@@ -55,6 +55,7 @@ export const addRestaurant = async (
           price: dish.price,
           menu_category: categoryListID[dish.category_id],
           imageURL: dish.imageURL,
+          discount: 0,
         },
       }),
     })
@@ -162,6 +163,28 @@ export const getRestaurantMenuData = async (username) => {
     });
 
   return restaurantData.attributes.menu;
+};
+
+export const updatePromotionByDish = async (dishID, discount) => {
+  console.log(dishID);
+  console.log(discount);
+  await fetch(`${API_BACKEND}api/menu-items/${dishID}`, {
+    method: "PUT",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-type": "application/json",
+    },
+
+    body: JSON.stringify({
+      data: {
+        discount: discount,
+      },
+    }),
+  })
+    .then((res) => res.json())
+    .then((jsonData) => {
+      return jsonData.data;
+    });
 };
 
 export const updateRestaurantMenu = async (
