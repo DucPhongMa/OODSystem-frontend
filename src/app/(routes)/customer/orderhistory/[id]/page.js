@@ -16,6 +16,9 @@ import {
   TableRow,
 } from "@mui/material";
 
+import { getRouteAtom } from "../../../../../../store";
+import { useAtom } from "jotai";
+
 export default function OrderHistoryDetails() {
   const [orderHistoryDetails, setOrderHistoryDetails] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -23,15 +26,16 @@ export default function OrderHistoryDetails() {
   const [orderHistoryID, setorderHistoryID] = useState("");
 
   const params = useParams();
-  const restaurantRoute = params.route;
   const [restaurantData, setRestaurantData] = useState("");
   const [theme, setTheme] = useState("");
+
+  const [route, setRoute] = useAtom(getRouteAtom);
 
   useEffect(() => {
     setTheme(styles.theme1); // Set page theme
 
     async function fetchMyAPI() {
-      const restaurantData = await getRestaurantByRoute(restaurantRoute);
+      const restaurantData = await getRestaurantByRoute(route);
       try {
         const pathname = window.location.pathname;
         const id = pathname.split("/").pop();
@@ -73,8 +77,8 @@ export default function OrderHistoryDetails() {
     }
 
     fetchMyAPI();
-    localStorage.setItem("restaurant-route", restaurantRoute);
-  }, [restaurantRoute]);
+    localStorage.setItem("restaurant-route", route);
+  }, [route]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -115,7 +119,7 @@ export default function OrderHistoryDetails() {
         >
           Order History Detail
         </Typography>
-        <Link href={`/${restaurantRoute}/orderhistory`} passHref>
+        <Link href={`/customer/orderhistory`} passHref>
           <Button
             variant="contained"
             sx={{

@@ -16,6 +16,9 @@ import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
 import Link from "next/link";
 import styles from "../../../styles/RestaurantHomepage.module.scss";
 
+import { getRouteAtom } from "../../../../../store";
+import { useAtom } from "jotai";
+
 export default function OrderHistory() {
   const [orderHistory, setOrderHistory] = useState(null);
   const params = useParams();
@@ -26,11 +29,13 @@ export default function OrderHistory() {
   const [restaurantData, setRestaurantData] = useState("");
   const [theme, setTheme] = useState("");
 
+  const [route, setRoute] = useAtom(getRouteAtom);
+
   useEffect(() => {
     setTheme(styles.theme1); // Set page theme
 
     async function fetchMyAPI() {
-      const restaurantData = await getRestaurantByRoute(restaurantRoute);
+      const restaurantData = await getRestaurantByRoute(route);
       try {
         const orderHistoryData = await getOrderByCustomer();
         setOrderHistory(orderHistoryData);
@@ -69,8 +74,8 @@ export default function OrderHistory() {
     }
 
     fetchMyAPI();
-    localStorage.setItem("restaurant-route", restaurantRoute);
-  }, [restaurantRoute]);
+    localStorage.setItem("restaurant-route", route);
+  }, [route]);
 
   console.log("order History", orderHistory);
   const orderHistoryList = orderHistory
