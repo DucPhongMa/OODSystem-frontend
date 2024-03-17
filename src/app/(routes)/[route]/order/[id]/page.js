@@ -12,6 +12,11 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Modal,
+  TextField,
+  Grid,
+  Rating,
+  Container
 } from "@mui/material";
 
 import { getOrderByUUID, updateOrder } from "@/app/api/order";
@@ -34,6 +39,14 @@ export default function Order() {
   const [subTotal, setSubTotal] = useState(0);
   const [openDialog, setOpenDialog] = useState(false);
 
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [reviewSubmitted, setReviewSubmitted] = useState(false);
+
+  const [rating, setRating] = useState(2.5);
+  const [reviewText, setReviewText] = useState(null);
+
   const handleCancelClick = () => {
     setOpenDialog(true);
   };
@@ -47,6 +60,14 @@ export default function Order() {
     setOpenDialog(false);
     window.location.reload(); // Refresh the page
   };
+
+  const handleSubmitReview = async () => {
+    console.log(rating);
+    console.log(reviewText);
+
+    handleClose();
+    setReviewSubmitted(true);
+  }
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -268,10 +289,74 @@ export default function Order() {
                   <Button
                     variant="outlined"
                     color="primary"
-                    // onClick={addReview}
+                    onClick={handleOpen}
+                    disabled={reviewSubmitted}
                   >
-                    LEAVE REVIEW
+                    {!reviewSubmitted && (<>LEAVE REVIEW</>)}
+                    {reviewSubmitted && (<>REVIEW SUBMITTED</>)}
                   </Button>
+                  <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    open={open}
+                    onClose={handleClose}
+                    closeAfterTransition
+                    slots={{ backdrop: Backdrop }}
+                    slotProps={{
+                      backdrop: {
+                        timeout: 500,
+                      },
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '50em',
+                        bgcolor: 'background.paper',
+                        border: '1px solid',
+                        boxShadow: 24,
+                        p: 4
+                      }}>
+                      <TextField
+                        id="outlined-multiline-static"
+                        label="Write your thoughts here (max 300 characters)"
+                        multiline
+                        fullWidth
+                        inputProps={{ maxLength: 300 }}
+                        onChange={(event) =>
+                          setReviewText(event.target.value)
+                        }
+                        rows={4}
+                        sx={{ marginBottom: '2em' }}
+                      />
+                      <Container>
+                        <Grid container>
+                          <Grid item xs={6}>
+                            <Rating
+                              defaultValue={rating}
+                              precision={0.5}
+                              onChange={(event, newValue) => {
+                                setRating(newValue);
+                              }}
+                              size="large"
+                            />
+                          </Grid>
+                          <Grid item xs={6} textAlign='right'>
+                            <Button
+                              onClick={handleSubmitReview}
+                              variant="outlined"
+                              color="primary"
+                            >
+                              Submit
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Container>
+                    </Box>
+                  </Modal>
                 </Box>
               </>
             )}
@@ -298,10 +383,74 @@ export default function Order() {
                   <Button
                     variant="outlined"
                     color="primary"
-                    // onClick={addReview}
+                    onClick={handleOpen}
+                    disabled={reviewSubmitted}
                   >
-                    LEAVE REVIEW
+                    {!reviewSubmitted && (<>LEAVE REVIEW</>)}
+                    {reviewSubmitted && (<>REVIEW SUBMITTED</>)}
                   </Button>
+                  <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    open={open}
+                    onClose={handleClose}
+                    closeAfterTransition
+                    slots={{ backdrop: Backdrop }}
+                    slotProps={{
+                      backdrop: {
+                        timeout: 500,
+                      },
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '50em',
+                        bgcolor: 'background.paper',
+                        border: '1px solid',
+                        boxShadow: 24,
+                        p: 4
+                      }}>
+                      <TextField
+                        id="outlined-multiline-static"
+                        label="Write your thoughts here (max 300 characters)"
+                        multiline
+                        fullWidth
+                        inputProps={{ maxLength: 300 }}
+                        onChange={(event) =>
+                          setReviewText(event.target.value)
+                        }
+                        rows={4}
+                        sx={{ marginBottom: '2em' }}
+                      />
+                      <Container>
+                        <Grid container>
+                          <Grid item xs={6}>
+                            <Rating
+                              defaultValue={rating}
+                              precision={0.5}
+                              onChange={(event, newValue) => {
+                                setRating(newValue);
+                              }}
+                              size="large"
+                            />
+                          </Grid>
+                          <Grid item xs={6} textAlign='right'>
+                            <Button
+                              onClick={handleSubmitReview}
+                              variant="outlined"
+                              color="primary"
+                            >
+                              Submit
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Container>
+                    </Box>
+                  </Modal>
                 </Box>
               </>
             )}
