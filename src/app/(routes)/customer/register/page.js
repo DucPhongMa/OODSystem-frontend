@@ -90,7 +90,11 @@ export default function CustomerRegisterPage() {
   const handleFormSubmit = async (formData) => {
     if (validateForm(formData)) {
       const fullName = formData.firstName + " " + formData.lastName;
-      const currentRestaurant = localStorage.getItem("restaurant-route");
+      const currentRestaurant = JSON.parse(
+        localStorage.getItem("restaurant-data")
+      ).route;
+      console.log(currentRestaurant);
+
       const error = await registerCustomer(
         formData.email,
         formData.password,
