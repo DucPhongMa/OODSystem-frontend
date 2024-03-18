@@ -29,8 +29,11 @@ export default function OrderHistory() {
   const [restaurantData, setRestaurantData] = useState("");
   const [theme, setTheme] = useState("");
 
-  const [route, setRoute] = useAtom(getRouteAtom);
-
+  //const [route, setRoute] = useAtom(getRouteAtom);
+  if (typeof window !== 'undefined') {
+    var route = localStorage.getItem("restaurant-route")
+  } 
+  
   useEffect(() => {
     setTheme(styles.theme1); // Set page theme
 
@@ -74,7 +77,7 @@ export default function OrderHistory() {
     }
 
     fetchMyAPI();
-    localStorage.setItem("restaurant-route", route);
+    //localStorage.setItem("restaurant-route", route);
   }, [route]);
 
   console.log("order History", orderHistory);
