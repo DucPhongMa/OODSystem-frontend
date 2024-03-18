@@ -10,7 +10,7 @@ import Link from "next/link";
 import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
 import styles from "../../styles/RestaurantHomepage.module.scss";
 import { useAtom } from "jotai";
-import {getRouteAtom} from "../../../../store"
+import { getRouteAtom } from "../../../../store";
 
 export default function RestaurantHomepage() {
   const [restaurantData, setRestaurantData] = useState("");
@@ -36,6 +36,7 @@ export default function RestaurantHomepage() {
               categoryID: item.attributes.menu_category.data?.id,
               id: item.id,
               description: item.attributes.description,
+              theme: item.attributes.theme,
             };
           }
         );
@@ -58,7 +59,6 @@ export default function RestaurantHomepage() {
     }
 
     fetchMyAPI();
-    localStorage.setItem("restaurant-route", restaurantRoute);
   }, [restaurantRoute]);
 
   return (

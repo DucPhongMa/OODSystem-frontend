@@ -102,6 +102,19 @@ export default function OrderHistoryDetails() {
     return "$" + formattedPrice;
   }
 
+  const formatDate = (dateString) => {
+    const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return new Date(dateString)
+      .toLocaleString("default", options)
+      .replace(",", "");
+  };
+
   return !checkEmail() ? (
     <div>
       <RestaurantAppBar restaurantInfo={restaurantData} />
@@ -137,23 +150,10 @@ export default function OrderHistoryDetails() {
             Back to Order List
           </Button>
         </Link>
-        {/*<Button
-          variant="contained"
-          sx={{
-            width: "15em",
-            height: "3em",
-            backgroundColor: (theme) =>
-              `${theme.palette.primary.main} !important`,
-            "&:hover": {
-              backgroundColor: (theme) =>
-                `${theme.palette.primary.dark} !important`,
-            },
-          }}
-        >
-          Reorder
-        </Button>*/}
         <Typography mt="15px">Order Number: {orderHistoryID}</Typography>
-        <Typography>Order Date: {orderHistoryDetails.time_placed}</Typography>
+        <Typography>
+          Order Date: {formatDate(orderHistoryDetails.time_placed)}
+        </Typography>
         <Typography variant="h3" mb="15px">
           Information
         </Typography>

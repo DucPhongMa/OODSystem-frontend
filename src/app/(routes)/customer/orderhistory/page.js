@@ -97,6 +97,19 @@ export default function OrderHistory() {
 
   console.log("Order Data", completedOrders);
 
+  const formatDate = (dateString) => {
+    const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return new Date(dateString)
+      .toLocaleString("default", options)
+      .replace(",", "");
+  };
+
   return (
     <div>
       <RestaurantAppBar restaurantInfo={restaurantData} />
@@ -130,7 +143,9 @@ export default function OrderHistory() {
               {completedOrders.map((order, index) => (
                 <TableRow key={order.orderId}>
                   <TableCell align="center">{order.orderId}</TableCell>
-                  <TableCell align="center">{order.orderDate}</TableCell>
+                  <TableCell align="center">
+                    {formatDate(order.orderDate)}
+                  </TableCell>
                   <TableCell align="center">{order.orderStatus}</TableCell>
                   <TableCell align="center">{order.restaurantName}</TableCell>
                   <TableCell align="center">{order.orderTotalPrice}</TableCell>
