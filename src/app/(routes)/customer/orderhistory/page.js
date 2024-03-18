@@ -30,10 +30,10 @@ export default function OrderHistory() {
   const [theme, setTheme] = useState("");
 
   //const [route, setRoute] = useAtom(getRouteAtom);
-  if (typeof window !== 'undefined') {
-    var route = localStorage.getItem("restaurant-route")
-  } 
-  
+  if (typeof window !== "undefined") {
+    var route = localStorage.getItem("restaurant-route");
+  }
+
   useEffect(() => {
     setTheme(styles.theme1); // Set page theme
 

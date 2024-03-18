@@ -41,7 +41,7 @@ export default function OrderHistory() {
         setError("Fail to call the Order. Please Login!!!");
         setLoading(false);
       }
-     
+
       const menuItems =
         restaurantData.attributes.menu.data.attributes.menu_items.data.map(
           (item) => {
@@ -87,13 +87,13 @@ export default function OrderHistory() {
           Reviews
         </Typography>
         {reviewData.map((review, index) => (
-            <div key={index}>
-              <p>customer Name: {review.attributes.customerName}</p>
-              <p>Rating: {review.attributes.rating}</p>
-              <p>Content: {review.attributes.reviewContent}</p>
-              <p>Date: {review.attributes.createdAt}</p>
-              <br />
-            </div>
+          <div key={index}>
+            <p>customer Name: {review.attributes.customerName}</p>
+            <p>Rating: {review.attributes.rating}</p>
+            <p>Content: {review.attributes.reviewContent}</p>
+            <p>Date: {review.attributes.createdAt}</p>
+            <br />
+          </div>
         ))}
       </Container>
     </div>
