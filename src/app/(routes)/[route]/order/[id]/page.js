@@ -16,7 +16,7 @@ import {
   TextField,
   Grid,
   Rating,
-  Container
+  Container,
 } from "@mui/material";
 
 import { getOrderByUUID, updateOrder } from "@/app/api/order";
@@ -67,7 +67,7 @@ export default function Order() {
 
     handleClose();
     setReviewSubmitted(true);
-  }
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -292,8 +292,8 @@ export default function Order() {
                     onClick={handleOpen}
                     disabled={reviewSubmitted}
                   >
-                    {!reviewSubmitted && (<>LEAVE REVIEW</>)}
-                    {reviewSubmitted && (<>REVIEW SUBMITTED</>)}
+                    {!reviewSubmitted && <>LEAVE REVIEW</>}
+                    {reviewSubmitted && <>REVIEW SUBMITTED</>}
                   </Button>
                   <Modal
                     aria-labelledby="transition-modal-title"
@@ -310,27 +310,26 @@ export default function Order() {
                   >
                     <Box
                       sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: '50em',
-                        bgcolor: 'background.paper',
-                        border: '1px solid',
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: "50em",
+                        bgcolor: "background.paper",
+                        border: "1px solid",
                         boxShadow: 24,
-                        p: 4
-                      }}>
+                        p: 4,
+                      }}
+                    >
                       <TextField
                         id="outlined-multiline-static"
                         label="Write your thoughts here (max 300 characters)"
                         multiline
                         fullWidth
                         inputProps={{ maxLength: 300 }}
-                        onChange={(event) =>
-                          setReviewText(event.target.value)
-                        }
+                        onChange={(event) => setReviewText(event.target.value)}
                         rows={4}
-                        sx={{ marginBottom: '2em' }}
+                        sx={{ marginBottom: "2em" }}
                       />
                       <Container>
                         <Grid container>
@@ -344,7 +343,7 @@ export default function Order() {
                               size="large"
                             />
                           </Grid>
-                          <Grid item xs={6} textAlign='right'>
+                          <Grid item xs={6} textAlign="right">
                             <Button
                               onClick={handleSubmitReview}
                               variant="outlined"
@@ -386,8 +385,8 @@ export default function Order() {
                     onClick={handleOpen}
                     disabled={reviewSubmitted}
                   >
-                    {!reviewSubmitted && (<>LEAVE REVIEW</>)}
-                    {reviewSubmitted && (<>REVIEW SUBMITTED</>)}
+                    {!reviewSubmitted && <>LEAVE REVIEW</>}
+                    {reviewSubmitted && <>REVIEW SUBMITTED</>}
                   </Button>
                   <Modal
                     aria-labelledby="transition-modal-title"
@@ -404,27 +403,26 @@ export default function Order() {
                   >
                     <Box
                       sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: '50em',
-                        bgcolor: 'background.paper',
-                        border: '1px solid',
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: "50em",
+                        bgcolor: "background.paper",
+                        border: "1px solid",
                         boxShadow: 24,
-                        p: 4
-                      }}>
+                        p: 4,
+                      }}
+                    >
                       <TextField
                         id="outlined-multiline-static"
                         label="Write your thoughts here (max 300 characters)"
                         multiline
                         fullWidth
                         inputProps={{ maxLength: 300 }}
-                        onChange={(event) =>
-                          setReviewText(event.target.value)
-                        }
+                        onChange={(event) => setReviewText(event.target.value)}
                         rows={4}
-                        sx={{ marginBottom: '2em' }}
+                        sx={{ marginBottom: "2em" }}
                       />
                       <Container>
                         <Grid container>
@@ -438,7 +436,7 @@ export default function Order() {
                               size="large"
                             />
                           </Grid>
-                          <Grid item xs={6} textAlign='right'>
+                          <Grid item xs={6} textAlign="right">
                             <Button
                               onClick={handleSubmitReview}
                               variant="outlined"

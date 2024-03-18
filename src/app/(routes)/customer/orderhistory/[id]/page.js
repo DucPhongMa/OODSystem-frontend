@@ -151,7 +151,9 @@ export default function OrderHistoryDetails() {
           </Button>
         </Link>
         <Typography mt="15px">Order Number: {orderHistoryID}</Typography>
-        <Typography>Order Date: {formatDate(orderHistoryDetails.time_placed)}</Typography>
+        <Typography>
+          Order Date: {formatDate(orderHistoryDetails.time_placed)}
+        </Typography>
         <Typography variant="h3" mb="15px">
           Information
         </Typography>
