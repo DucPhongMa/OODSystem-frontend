@@ -18,7 +18,7 @@ import { Modal as BaseModal } from "@mui/base/Modal";
 import CartContent from "./CartContent";
 import { Badge } from "@mui/material";
 import { checkCustomerLogin, logoutCustomer } from "@/app/api/auth";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
 const RestaurantAppBar = ({ restaurantInfo }) => {
   const currentDate = new Date();

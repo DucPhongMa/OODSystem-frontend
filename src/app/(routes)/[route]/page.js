@@ -27,7 +27,7 @@ export default function RestaurantHomepage() {
 
     async function fetchMyAPI() {
       const restaurantData = await getRestaurantByRoute(restaurantRoute);
-      
+
       try {
         const ReviewData = await getAllReviews(restaurantRoute);
         setReviewData(ReviewData);
@@ -75,7 +75,7 @@ export default function RestaurantHomepage() {
     ? reviewData.map((review) => ({
         reviewCusName: review.attributes.customerName,
         reviewRating: review.attributes.rating,
-        reviewContent: review.attributes.reviewContent
+        reviewContent: review.attributes.reviewContent,
       }))
     : [];
 
@@ -243,13 +243,12 @@ export default function RestaurantHomepage() {
                             component="p"
                             className={`${theme} ${styles.reviewText}`}
                           >
-                              <p>{review.reviewCusName}</p>
-                              <p>Rating: {review.reviewRating}</p>
-                              <p>{review.reviewContent}</p>
+                            <p>{review.reviewCusName}</p>
+                            <p>Rating: {review.reviewRating}</p>
+                            <p>{review.reviewContent}</p>
                           </Typography>
                         </Box>
                       </Link>
-                      
                     </Grid>
                   ))}
                 </Grid>
