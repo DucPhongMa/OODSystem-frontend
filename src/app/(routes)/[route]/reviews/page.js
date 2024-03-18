@@ -15,6 +15,7 @@ import { getRestaurantByRoute } from "../../../api/restaurant";
 import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
 import Link from "next/link";
 import styles from "../../../styles/RestaurantHomepage.module.scss";
+import { getAllReviews } from "../../../api/review";
 
 export default function OrderHistory() {
   //const [orderHistory, setOrderHistory] = useState(null);
@@ -24,6 +25,7 @@ export default function OrderHistory() {
   const restaurantRoute = params.route;
 
   const [restaurantData, setRestaurantData] = useState("");
+  const [reviewData, setReviewData] = useState(null);
   const [theme, setTheme] = useState("");
 
   useEffect(() => {
@@ -32,12 +34,14 @@ export default function OrderHistory() {
     async function fetchMyAPI() {
       const restaurantData = await getRestaurantByRoute(restaurantRoute);
       try {
+        const ReviewData = await getAllReviews(restaurantRoute);
+        setReviewData(ReviewData);
         setLoading(false);
       } catch (error) {
         setError("Fail to call the Order. Please Login!!!");
         setLoading(false);
       }
-
+     
       const menuItems =
         restaurantData.attributes.menu.data.attributes.menu_items.data.map(
           (item) => {
@@ -73,6 +77,8 @@ export default function OrderHistory() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
+  console.log("All Reviews: ", reviewData);
+
   return (
     <div>
       <RestaurantAppBar restaurantInfo={restaurantData} />
@@ -80,6 +86,15 @@ export default function OrderHistory() {
         <Typography variant="h2" align="center" style={{ margin: "40px 0" }}>
           Reviews
         </Typography>
+        {reviewData.map((review, index) => (
+            <div key={index}>
+              <p>customer Name: {review.attributes.customerName}</p>
+              <p>Rating: {review.attributes.rating}</p>
+              <p>Content: {review.attributes.reviewContent}</p>
+              <p>Date: {review.attributes.createdAt}</p>
+              <br />
+            </div>
+        ))}
       </Container>
     </div>
   );

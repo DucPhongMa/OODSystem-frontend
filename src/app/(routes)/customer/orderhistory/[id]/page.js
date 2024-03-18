@@ -29,8 +29,10 @@ export default function OrderHistoryDetails() {
   const [restaurantData, setRestaurantData] = useState("");
   const [theme, setTheme] = useState("");
 
-  const [route, setRoute] = useAtom(getRouteAtom);
-
+  //const [route, setRoute] = useAtom(getRouteAtom);
+  if (typeof window !== 'undefined') {
+    var route = localStorage.getItem("restaurant-route")
+  } 
   useEffect(() => {
     setTheme(styles.theme1); // Set page theme
 
@@ -85,7 +87,7 @@ export default function OrderHistoryDetails() {
 
   console.log("order Detail History", orderHistoryDetails);
 
-  const storedUsername = localStorage.getItem("username");
+  const storedUsername = localStorage.getItem("customer-username");
 
   function checkEmail() {
     if (
