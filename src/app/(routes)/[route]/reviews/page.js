@@ -38,7 +38,7 @@ export default function OrderHistory() {
         setReviewData(ReviewData);
         setLoading(false);
       } catch (error) {
-        setError("Fail to call the Order. Please Login!!!");
+        setError("Fail to call the Order!!!");
         setLoading(false);
       }
 

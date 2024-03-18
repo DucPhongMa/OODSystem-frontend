@@ -10,9 +10,13 @@ import Link from "next/link";
 import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
 import styles from "../../styles/RestaurantHomepage.module.scss";
 import { useAtom } from "jotai";
+import { getAllReviews } from "../../api/review";
 
 export default function RestaurantHomepage() {
   const [restaurantData, setRestaurantData] = useState("");
+  const [reviewData, setReviewData] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState("");
   const params = useParams();
 
@@ -23,6 +27,15 @@ export default function RestaurantHomepage() {
 
     async function fetchMyAPI() {
       const restaurantData = await getRestaurantByRoute(restaurantRoute);
+      
+      try {
+        const ReviewData = await getAllReviews(restaurantRoute);
+        setReviewData(ReviewData);
+        setLoading(false);
+      } catch (error) {
+        setError("Fail to call the Order!!!");
+        setLoading(false);
+      }
       const menuItems =
         restaurantData.attributes.menu.data.attributes.menu_items.data.map(
           (item) => {
@@ -57,6 +70,23 @@ export default function RestaurantHomepage() {
 
     fetchMyAPI();
   }, [restaurantRoute]);
+
+  const reviewList = reviewData
+    ? reviewData.map((review) => ({
+        reviewCusName: review.attributes.customerName,
+        reviewRating: review.attributes.rating,
+        reviewContent: review.attributes.reviewContent
+      }))
+    : [];
+
+  /*const completedOrders = orderHistoryList.filter(
+    (order) => order.orderStatus === "completed"
+  );*/
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+
+  console.log("All Reviews: ", reviewData);
 
   return (
     <div className={theme}>
@@ -191,7 +221,7 @@ export default function RestaurantHomepage() {
                 className={`${theme} ${styles.reviewsContainer}`}
               >
                 <Grid container spacing={2}>
-                  {[1, 2, 3].map((review, index) => (
+                  {reviewList.slice(0, 3).map((review, index) => (
                     <Grid
                       item
                       xs={12}
@@ -199,23 +229,27 @@ export default function RestaurantHomepage() {
                       key={index}
                       className={`${theme} ${styles.reviewItem}`}
                     >
-                      <Box className={`${theme} ${styles.reviewBox}`}>
-                        <Typography
-                          variant="subtitle1"
-                          component="div"
-                          className={`${theme} ${styles.reviewSubtitle}`}
-                        >
-                          Review {review}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          component="p"
-                          className={`${theme} ${styles.reviewText}`}
-                        >
-                          Lorem ipsum dolor sit amet, consectetur adipiscing
-                          elit. Vivamus lacinia odio vitae vestibulum.
-                        </Typography>
-                      </Box>
+                      <Link href={`/${restaurantRoute}/reviews`}>
+                        <Box className={`${theme} ${styles.reviewBox}`}>
+                          <Typography
+                            variant="subtitle1"
+                            component="div"
+                            className={`${theme} ${styles.reviewSubtitle}`}
+                          >
+                            Review {index + 1}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            component="p"
+                            className={`${theme} ${styles.reviewText}`}
+                          >
+                              <p>{review.reviewCusName}</p>
+                              <p>Rating: {review.reviewRating}</p>
+                              <p>{review.reviewContent}</p>
+                          </Typography>
+                        </Box>
+                      </Link>
+                      
                     </Grid>
                   ))}
                 </Grid>
