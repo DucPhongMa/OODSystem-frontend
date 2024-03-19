@@ -27,6 +27,7 @@ export const addOrder = async (
           quantity: dish.quantity,
           unit_price: dish.unit_price,
           menu_item: dish.menu_item,
+          counter: dish.counter + 1,
         },
       }),
     })

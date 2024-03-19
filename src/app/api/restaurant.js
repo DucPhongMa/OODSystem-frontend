@@ -56,6 +56,7 @@ export const addRestaurant = async (
           menu_category: categoryListID[dish.category_id],
           imageURL: dish.imageURL,
           discount: 0,
+          counter: 0,
         },
       }),
     })
