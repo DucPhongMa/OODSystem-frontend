@@ -27,7 +27,6 @@ export default function ItemDialog({
       const existingItem = prevCart.find(
         (cartItem) => cartItem.itemID === item.id
       );
-
       if (existingItem) {
         // If item already exists in the cart, increase its quantity
         return prevCart.map((cartItem) =>
@@ -44,6 +43,7 @@ export default function ItemDialog({
             name: item.name,
             price: item.price,
             quantity: itemCount,
+            counter: item.counter,
           },
         ];
       }

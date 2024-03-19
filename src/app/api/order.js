@@ -27,7 +27,6 @@ export const addOrder = async (
           quantity: dish.quantity,
           unit_price: dish.unit_price,
           menu_item: dish.menu_item,
-          counter: dish.counter + 1,
         },
       }),
     })
@@ -35,6 +34,24 @@ export const addOrder = async (
       .then((jsonData) => {
         orderDetailIDs.push(jsonData.data.id);
         orderTotal += dish.unit_price * dish.quantity;
+      });
+
+    // // update order counter to database
+    await fetch(`${API_BACKEND}api/menu-items/${dish.itemID}`, {
+      method: "PUT",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        data: {
+          counter: dish.counter + 1,
+        },
+      }),
+    })
+      .then((res) => res.json())
+      .then((jsonData) => {
+        return jsonData;
       });
   }
 
