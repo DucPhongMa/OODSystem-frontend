@@ -2,29 +2,41 @@ import { Grid, Typography, Box } from "@mui/material";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
 import PlaceIcon from "@mui/icons-material/Place";
+import styles from "../../styles/RestaurantFooter.module.scss";
+import { useEffect, useState } from "react";
 
 export default function RestaurantFooter({ restaurantData }) {
+  const themeID = restaurantData.theme?.id || 1;
+  const [theme, setTheme] = useState("");
   const fullAddress = `${restaurantData.restaurant_contact?.address || ""}, ${restaurantData.restaurant_contact?.city || ""}, ${restaurantData.restaurant_contact?.provinceOrState || ""}, ${restaurantData.restaurant_contact?.postalCode || ""}`;
   const encodedAddress = encodeURIComponent(fullAddress);
   const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
 
+  useEffect(() => {
+    switch (themeID) {
+      case 1:
+        setTheme(styles.theme1);
+        break;
+      case 2:
+        setTheme(styles.theme2);
+        break;
+      case 3:
+        setTheme(styles.theme3);
+        break;
+      default:
+        setTheme(styles.theme1);
+    }
+  }, [themeID]);
+
   return (
-    <Box
-      sx={{
-        bgcolor: "#1976d2",
-        color: "white",
-        padding: "20px 0",
-      }}
-    >
+    <Box className={`${theme} ${styles.sectionInfo}`}>
       <Grid container spacing={0} sx={{ maxWidth: 1200, margin: "0 auto" }}>
         {" "}
-        {/* Added paddingLeft here */}
         {/* CONTACT */}
         <Grid item xs={12} sm={4}>
           <Typography
             gutterBottom
-            variant="h6"
-            sx={{ fontWeight: "bold", marginBottom: "10px" }}
+            className={`${theme} ${styles.sectionTitle}`}
           >
             CONTACT
           </Typography>
@@ -50,11 +62,7 @@ export default function RestaurantFooter({ restaurantData }) {
         >
           <Typography
             gutterBottom
-            variant="h6"
-            sx={{
-              fontWeight: "bold",
-              marginBottom: "10px",
-            }}
+            className={`${theme} ${styles.sectionTitle}`}
           >
             LOCATION
           </Typography>
@@ -88,23 +96,25 @@ export default function RestaurantFooter({ restaurantData }) {
         <Grid item xs={12} sm={4} sx={{ padding: "0 200px" }}>
           <Typography
             gutterBottom
-            variant="h6"
-            sx={{ fontWeight: "bold", marginBottom: "10px" }}
+            className={`${theme} ${styles.sectionTitle}`}
           >
             SUPPORT
           </Typography>
           <Box
-            sx={{ display: "flex", alignItems: "center", marginBottom: "5px" }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              marginBottom: "5px",
+              whiteSpace: "nowrap",
+            }}
           >
             <EmailIcon sx={{ marginRight: "5px" }} />
-            <Typography variant="subtitle1">support@restaurant.com</Typography>
+            <Typography variant="subtitle1">
+              <a href="http://ood-system-frontend.vercel.app/contact">
+                IT Support
+              </a>
+            </Typography>
           </Box>
-          <Typography variant="subtitle1" sx={{ textDecoration: "underline" }}>
-            https://ood-system-frontend.vercel.app/help
-          </Typography>
-          <Typography variant="subtitle1" sx={{ textDecoration: "underline" }}>
-            https://ood-system-frontend.vercel.app/chat
-          </Typography>
         </Grid>
       </Grid>
     </Box>

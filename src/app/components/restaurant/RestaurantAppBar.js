@@ -19,8 +19,12 @@ import CartContent from "./CartContent";
 import { Badge } from "@mui/material";
 import { checkCustomerLogin, logoutCustomer } from "@/app/api/auth";
 import { useRouter } from "next/navigation";
+import styles from "../../styles/RestaurantNavbar.module.scss";
+import Root from "postcss/lib/root";
 
 const RestaurantAppBar = ({ restaurantInfo }) => {
+  const themeID = restaurantInfo.theme?.id || 1;
+  const [theme, setTheme] = React.useState("");
   const currentDate = new Date();
   const dayOfWeek = currentDate
     .toLocaleDateString("en-US", { weekday: "long" })
@@ -37,6 +41,22 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
   const router = useRouter();
 
   useEffect(() => {
+    switch (themeID) {
+      case 1:
+        setTheme(styles.theme1);
+        break;
+      case 2:
+        setTheme(styles.theme2);
+        break;
+      case 3:
+        setTheme(styles.theme3);
+        break;
+      default:
+        setTheme(styles.theme1);
+    }
+  }, [themeID]);
+
+  useEffect(() => {
     const customerInformation = checkCustomerLogin();
     if (customerInformation) {
       setCustomerLoggedIn(true);
@@ -50,19 +70,25 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
   };
 
   const [cart, setCart] = useAtom(cartAtom);
-
-  // console.log("cart:");
-  // console.log(cart);
-
   const hoursOpen = restaurantInfo.hours?.[dayOfWeek]?.open || "Not Available";
   const hoursClose =
     restaurantInfo.hours?.[dayOfWeek]?.close || "Not Available";
   const restaurantAddress =
-    restaurantInfo.restaurant_contact?.address || "Address not available";
+    restaurantInfo.restaurant_contact?.address +
+    " " +
+    restaurantInfo.restaurant_contact?.city +
+    ", " +
+    restaurantInfo.restaurant_contact?.provinceOrState;
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+    <Box className={theme} sx={{ flexGrow: 1 }}>
+      <AppBar
+        position="static"
+        sx={{
+          backgroundColor:
+            themeID === 2 ? "#101010" : themeID === 3 ? "#f24e23" : "#1565c0",
+        }}
+      >
         <Box
           sx={{
             display: "flex",
@@ -73,8 +99,12 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
             paddingTop: 2,
           }}
         >
-          <Typography variant="h6" component="div" sx={{ display: "inline" }}>
-            {restaurantInfo.name}: {restaurantAddress}
+          <Typography
+            variant="h6"
+            component="div"
+            className={`${theme} ${styles.restaurantInfo}`}
+          >
+            {restaurantAddress}
           </Typography>
         </Box>
         <Toolbar>
@@ -82,151 +112,174 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
             <Link href={`/${restaurantInfo.route}/`}>
               <Image
                 src={restaurantInfo.logoURL}
-                alt="sushi logo"
+                alt="logo"
                 width={100}
                 height={100}
                 priority={true}
               />
             </Link>
-            <span
-              style={{
-                position: "absolute",
-                bottom: 50,
-                right: 40,
-                color: "white",
-              }}
-            >
+            <span className={`${theme} ${styles.hoursDisplay}`}>
               Hours: {hoursOpen} -
             </span>
             <span
+              className={`${theme} ${styles.hoursDisplay}`}
               style={{
                 position: "absolute",
                 bottom: 30,
-                right: 50,
-                color: "white",
+                right: 10,
               }}
             >
               {hoursClose}
             </span>
           </div>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {(customerLoggedIn || (!customerLoggedIn && pickupClicked > 0)) && (
-              <Link href={`/${restaurantInfo.route}/menu`}>ORDER PICKUP</Link>
-            )}
-            {!customerLoggedIn && pickupClicked < 1 && (
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: "flex",
+              justifyContent: "flex-end",
+              paddingLeft: { xs: "5px", sm: "5px", md: "20px", lg: "100px" },
+            }}
+          >
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              {(customerLoggedIn ||
+                (!customerLoggedIn && pickupClicked > 0)) && (
+                <Link href={`/${restaurantInfo.route}/menu`}>ORDER PICKUP</Link>
+              )}
+              {!customerLoggedIn && pickupClicked < 1 && (
+                <Typography
+                  variant="h6"
+                  component="div"
+                  sx={{ cursor: "pointer", flexGrow: 1 }}
+                  onClick={() => {
+                    handleLoginModalOpen();
+                    setPickupClicked(1);
+                  }}
+                  className={`${theme} ${styles.styledTypography}`}
+                >
+                  ORDER PICKUP
+                </Typography>
+              )}
+            </Typography>
+            <Modal
+              aria-labelledby="unstyled-modal-title"
+              aria-describedby="unstyled-modal-description"
+              open={loginModalOpen}
+              onClose={handleLoginModalClose}
+              slots={{ backdrop: StyledBackdrop }}
+            >
+              <ModalContent sx={{ width: 600, height: 300 }}>
+                <Typography
+                  variant="h6"
+                  component="div"
+                  style={{ padding: 20 }}
+                >
+                  Register for an account to collect rewards!
+                </Typography>
+                <Box
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    padding: 20,
+                  }}
+                >
+                  <Button
+                    style={{
+                      borderColor: "white",
+                      backgroundColor: "blue",
+                      color: "white",
+                      height: 100,
+                      width: 120,
+                    }}
+                  >
+                    <Link href={`/customer/register`}>Register</Link>
+                  </Button>
+                  <Button
+                    style={{
+                      borderColor: "white",
+                      backgroundColor: "blue",
+                      color: "white",
+                      height: 100,
+                      width: 120,
+                    }}
+                  >
+                    <Link href={`/customer/login`}>Sign In</Link>
+                  </Button>
+                  <Button
+                    style={{
+                      borderColor: "white",
+                      backgroundColor: "blue",
+                      color: "white",
+                      height: 100,
+                      width: 120,
+                    }}
+                    onClick={() => {
+                      // setCustomerID(0);
+                      handleLoginModalClose();
+                    }}
+                  >
+                    Proceed without an account
+                  </Button>
+                </Box>
+              </ModalContent>
+            </Modal>
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{ flexGrow: 1 }}
+              className={`${theme} ${styles.styledTypography}`}
+            >
+              <Link href={`/${restaurantInfo.route}/about`}>ABOUT</Link>
+            </Typography>
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{ flexGrow: 1 }}
+              className={`${theme} ${styles.styledTypography}`}
+            >
+              <Link href={`/${restaurantInfo.route}/reviews`}>REVIEWS</Link>
+            </Typography>
+            {customerLoggedIn && (
               <Typography
                 variant="h6"
                 component="div"
-                sx={{ cursor: "pointer", flexGrow: 1 }}
-                onClick={() => {
-                  handleLoginModalOpen();
-                  setPickupClicked(1);
-                }}
+                sx={{ flexGrow: 1 }}
+                className={`${theme} ${styles.styledTypography}`}
               >
-                ORDER PICKUP
+                <Link href={`/customer/orderhistory`}>ORDERS</Link>
               </Typography>
             )}
-          </Typography>
-          <Modal
-            aria-labelledby="unstyled-modal-title"
-            aria-describedby="unstyled-modal-description"
-            open={loginModalOpen}
-            onClose={handleLoginModalClose}
-            slots={{ backdrop: StyledBackdrop }}
-          >
-            <ModalContent sx={{ width: 600, height: 300 }}>
-              <Typography variant="h6" component="div" style={{ padding: 20 }}>
-                Register for an account to collect rewards!
-              </Typography>
-              <Box
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  padding: 20,
-                }}
+            {!customerLoggedIn && (
+              <Button color="inherit" variant="outlined">
+                <Link href={`/customer/login`}>Log In</Link>
+              </Button>
+            )}
+            {customerLoggedIn && (
+              <Button
+                color="inherit"
+                variant="outlined"
+                onClick={logOutCustomerHandler}
               >
-                <Button
-                  style={{
-                    borderColor: "white",
-                    backgroundColor: "blue",
-                    color: "white",
-                    height: 100,
-                    width: 120,
-                  }}
-                >
-                  <Link href={`/customer/register`}>Register</Link>
-                </Button>
-                <Button
-                  style={{
-                    borderColor: "white",
-                    backgroundColor: "blue",
-                    color: "white",
-                    height: 100,
-                    width: 120,
-                  }}
-                >
-                  <Link href={`/customer/login`}>Sign In</Link>
-                </Button>
-                <Button
-                  style={{
-                    borderColor: "white",
-                    backgroundColor: "blue",
-                    color: "white",
-                    height: 100,
-                    width: 120,
-                  }}
-                  onClick={() => {
-                    // setCustomerID(0);
-                    handleLoginModalClose();
-                  }}
-                >
-                  Proceed without an account
-                </Button>
-              </Box>
-            </ModalContent>
-          </Modal>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <Link href={`/${restaurantInfo.route}/about`}>ABOUT</Link>
-          </Typography>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <Link href={`/${restaurantInfo.route}/reviews`}>REVIEWS</Link>
-          </Typography>
-          {customerLoggedIn && (
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              <Link href={`/customer/orderhistory`}>ORDERS</Link>
-            </Typography>
-          )}
-          {!customerLoggedIn && (
-            <Button color="inherit" variant="outlined">
-              <Link href={`/customer/login`}>Log In</Link>
-            </Button>
-          )}
-          {customerLoggedIn && (
-            <Button
+                Log Out
+              </Button>
+            )}
+
+            <IconButton
               color="inherit"
               variant="outlined"
-              onClick={logOutCustomerHandler}
+              aria-label="add to shopping cart"
+              onClick={handleOpen}
             >
-              Log Out
-            </Button>
-          )}
-
-          <IconButton
-            color="inherit"
-            variant="outlined"
-            aria-label="add to shopping cart"
-            onClick={handleOpen}
-          >
-            <Badge
-              badgeContent={cart.reduce(
-                (total, item) => total + item.quantity,
-                0
-              )}
-              color="error"
-            >
-              <AddShoppingCartIcon />
-            </Badge>
-          </IconButton>
+              <Badge
+                badgeContent={cart.reduce(
+                  (total, item) => total + item.quantity,
+                  0
+                )}
+                color="error"
+              >
+                <AddShoppingCartIcon />
+              </Badge>
+            </IconButton>
+          </Box>
           <Modal
             aria-labelledby="unstyled-modal-title"
             aria-describedby="unstyled-modal-description"

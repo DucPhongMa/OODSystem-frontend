@@ -1,0 +1,89 @@
+.theme1 {
+    .styledTypography {
+        font-size: 32px;
+        font-weight: 500;
+        letter-spacing: 0.07em;
+        font-family: "Noto Serif Ethiopic", serif;
+        color: #ffffff;
+      }
+      .hoursDisplay {
+        position: absolute;
+        bottom: 50px;
+        right: 0px;
+        font-size: 20px;
+        font-weight: 500;
+        font-family: "Noto Serif Ethiopic", serif;
+        color: #ffffff;
+      }
+      .restaurantInfo {
+        display: inline;
+        font-size: 20px;
+        font-weight: 500;
+        font-family: "Noto Serif Ethiopic", serif;
+        color: #ffffff;
+      }
+      .loginButton {
+        color: inherit;
+        border: 1px solid; // Assuming you want a default border style that might be adjusted per theme
+      }
+}
+
+.theme2 {
+  .styledTypography {
+    font-size: 32px;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    font-family: "Noto Serif Ethiopic", serif;
+    color: #ffffff;
+  }
+  .hoursDisplay {
+    position: absolute;
+    bottom: 50px;
+    right: 0px;
+    font-size: 20px;
+    font-weight: 500;
+    font-family: "Noto Serif Ethiopic", serif;
+    color: #ffffff;
+  }
+  .restaurantInfo {
+    display: inline;
+    font-size: 20px;
+    font-weight: 500;
+    font-family: "Noto Serif Ethiopic", serif;
+    color: #ffffff;
+  }
+  .loginButton {
+    color: inherit;
+    border: 1px solid; // Assuming you want a default border style that might be adjusted per theme
+  }
+}
+
+.theme3 {
+  .styledTypography {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    font-family: "Lato", sans-serif;
+    color: #101010;
+  }
+  .hoursDisplay {
+    position: absolute;
+    bottom: 50px;
+    right: 0px;
+    font-size: 20px;
+    font-weight: 700;
+    font-family: "Lato", sans-serif;
+    color: #101010;
+  }
+  .restaurantInfo {
+    display: inline;
+    font-size: 20px;
+    font-weight: 700;
+    font-family: "Lato", sans-serif;
+    color: #101010;
+  }
+  .loginButton {
+    color: inherit;
+    border: 1px solid; // Assuming you want a default border style that might be adjusted per theme
+  }
+}

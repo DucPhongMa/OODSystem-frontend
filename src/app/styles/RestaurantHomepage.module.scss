@@ -485,3 +485,251 @@
     text-align: center;
   }
 }
+
+// Modern theme
+.theme3 {
+  .pageBackground {
+    background: linear-gradient(to bottom, #121212, #1c1c1c);
+    min-height: 100vh;
+    background-attachment: fixed;
+  }
+
+  .backdrop {
+    color: #fff;
+  }
+
+  .bannerBox {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100% 75%,
+      90% 81%,
+      79% 85%,
+      65% 88%,
+      52% 89%,
+      35% 88%,
+      21% 85%,
+      10% 81%,
+      0 76%
+    );
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 4%;
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1;
+    }
+  }
+
+  .styledTypography {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    text-align: center;
+    width: 100%;
+    position: relative;
+    color: #fff;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    line-height: 1;
+    font-family: "Roboto Slab", serif;
+    font-weight: normal;
+    font-size: 6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    span {
+      margin-right: 0.4em;
+      &:last-child {
+        margin-right: 0;
+      }
+      &::first-letter {
+        font-size: 120%;
+      }
+    }
+  }
+
+  .categoryBoxContainer {
+    margin: 30px 0;
+    padding-bottom: 10px;
+  }
+
+  .categoryBox {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 35px;
+    &:hover img {
+      filter: brightness(0.75);
+    }
+    &:hover h3 {
+      color: #ddd;
+    }
+  }
+
+  .innerCategoryBox {
+    margin-bottom: "10px";
+    width: 250px;
+    height: 250px;
+    position: relative;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .categoryName {
+    text-align: center;
+    font-weight: bold;
+    color: #ccc;
+  }
+
+  .categoryImageBox {
+    width: 250px;
+    height: 250px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+
+    img {
+      min-width: 100%;
+      min-height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(0.85);
+
+      &:hover {
+        filter: brightness(1.03);
+      }
+    }
+  }
+
+  .topPicksSection {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 40px 0;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    padding-left: 75px;
+    padding-right: 50px;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1;
+    }
+  }
+
+  .topPicksTitle {
+    text-align: left;
+    margin-right: 10px;
+    font-weight: bold;
+    color: #f2f2f2;
+    z-index: 3;
+  }
+
+  .topPicksContainer {
+    margin-left: 9px;
+    z-index: 2;
+  }
+
+  .topPickItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .topPickItemBox {
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    height: 250px;
+    position: relative;
+    img {
+      filter: brightness(0.85);
+      &:hover {
+        filter: brightness(1.03);
+      }
+    }
+  }
+
+  .topPickItemTitle {
+    text-align: center;
+    font-weight: bold;
+    color: #f2f2f2;
+    margin-top: 10px;
+  }
+
+  .reviewsSection {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 40px 0;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    padding-left: 75px;
+    padding-right: 50px;
+  }
+
+  .reviewsTitle {
+    text-align: left;
+    margin-right: 10px;
+    font-weight: bold;
+    color: #f2f2f2d0;
+  }
+
+  .reviewsContainer {
+    margin-left: 47px;
+  }
+
+  .reviewItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .reviewBox {
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    height: 250px;
+    position: relative;
+    padding: 20px;
+    background-color: #535353;
+    &:hover {
+      filter: brightness(1.3);
+    }
+  }
+
+  .reviewSubtitle {
+    text-align: center;
+    margin-bottom: 5px;
+  }
+
+  .reviewText {
+    text-align: center;
+  }
+}
