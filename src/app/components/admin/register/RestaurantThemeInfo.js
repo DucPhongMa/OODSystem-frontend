@@ -9,6 +9,33 @@ import {
 } from "@mui/material";
 
 function RestaurantThemeInfo({ formData, setFormData }) {
+  const handleChangeTheme = (event) => {
+    const themeId = event.target.value;
+    let themeName = "";
+
+    switch (themeId) {
+      case 1:
+        themeName = "Classic";
+        break;
+      case 2:
+        themeName = "Dark";
+        break;
+      case 3:
+        themeName = "Modern";
+        break;
+      default:
+        themeName = "Unknown";
+    }
+
+    setFormData({
+      ...formData,
+      restaurantThemeID: {
+        id: themeId,
+        name: themeName,
+      },
+    });
+  };
+
   return (
     <Box sx={{ mt: 3 }}>
       <Grid container spacing={2} justifyContent="center">
@@ -18,16 +45,13 @@ function RestaurantThemeInfo({ formData, setFormData }) {
             <Select
               labelId="theme-label"
               id="restaurantThemeID"
-              value={formData.restaurantThemeID}
+              value={formData.restaurantThemeID.id}
               label="Theme"
-              onChange={(e) => {
-                setFormData({
-                  ...formData,
-                  restaurantThemeID: e.target.selectedIndex,
-                });
-              }}
+              onChange={handleChangeTheme}
             >
-              <MenuItem value={0}>Classic</MenuItem>
+              <MenuItem value={1}>Classic</MenuItem>
+              <MenuItem value={2}>Dark</MenuItem>
+              <MenuItem value={3}>Modern</MenuItem>
             </Select>
           </FormControl>
         </Grid>

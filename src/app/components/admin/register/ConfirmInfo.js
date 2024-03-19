@@ -17,9 +17,6 @@ function createData(field, value) {
 function ConfirmInfo({ formData, setFormData }) {
   const [selectedFile, setSelectedFile] = useAtom(selectedFileAtom);
   const [selectedLogo, setSelectedLogo] = useAtom(selectedLogoAtom);
-  const themeMap = {
-    0: "Classic",
-  };
 
   const categoriesString = formData.categories
     .map((category) => {
@@ -55,7 +52,7 @@ function ConfirmInfo({ formData, setFormData }) {
     createData("Sat Closing Time", formData.hours["saturday"]["close"]),
     createData("Sun Opening Time", formData.hours["sunday"]["open"]),
     createData("Sun Closing Time", formData.hours["sunday"]["close"]),
-    createData("Restaurant Theme", themeMap[formData.restaurantThemeID]),
+    createData("Restaurant Theme", formData.restaurantThemeID.name),
     createData("Menu", categoriesString),
   ];
 

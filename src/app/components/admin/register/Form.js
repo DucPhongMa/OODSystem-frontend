@@ -92,7 +92,7 @@ function Form() {
       aboutDescription: "",
     },
 
-    restaurantThemeID: 0,
+    restaurantThemeID: { id: 1, name: "Classic" },
 
     categories: [],
 

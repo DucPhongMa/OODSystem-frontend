@@ -23,10 +23,26 @@ export default function RestaurantHomepage() {
   const restaurantRoute = params.route;
 
   useEffect(() => {
-    setTheme(styles.theme1); // Set page theme
-
     async function fetchMyAPI() {
       const restaurantData = await getRestaurantByRoute(restaurantRoute);
+      console.log(restaurantData);
+
+      const themeID = restaurantData.attributes.theme.id;
+
+      // Set the page theme based on the themeID
+      switch (themeID) {
+        case 1:
+          setTheme(styles.theme1);
+          break;
+        case 2:
+          setTheme(styles.theme2);
+          break;
+        case 3:
+          setTheme(styles.theme3);
+          break;
+        default:
+          setTheme(styles.theme1); // Default theme
+      }
 
       try {
         const ReviewData = await getAllReviews(restaurantRoute);
