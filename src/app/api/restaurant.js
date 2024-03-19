@@ -148,6 +148,13 @@ export const getRestaurantByBusinessName = async (username) => {
     .then((jsonData) => {
       restaurantData = jsonData.data[0];
     });
+  localStorage.setItem(
+    "restaurant-data",
+    JSON.stringify({
+      route: restaurantData.attributes.route,
+      themeID: restaurantData.attributes.theme.id,
+    })
+  );
 
   return restaurantData.attributes.route;
 };
@@ -162,6 +169,13 @@ export const getRestaurantMenuData = async (username) => {
       restaurantData = jsonData.data[0];
     });
 
+  localStorage.setItem(
+    "restaurant-data",
+    JSON.stringify({
+      route: restaurantData.attributes.route,
+      themeID: restaurantData.attributes.theme.id,
+    })
+  );
   return restaurantData.attributes.menu;
 };
 

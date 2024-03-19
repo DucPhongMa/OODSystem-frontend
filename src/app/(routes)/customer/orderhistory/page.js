@@ -35,7 +35,20 @@ export default function OrderHistory() {
   }
 
   useEffect(() => {
-    setTheme(styles.theme1); // Set page theme
+    const themeID = JSON.parse(localStorage.getItem("restaurant-data")).themeID;
+    switch (themeID) {
+      case 1:
+        setTheme(styles.theme1); // Set theme1 theme
+        break;
+      case 2:
+        setTheme(styles.theme2); // Set theme2 theme
+        break;
+      case 3:
+        setTheme(styles.theme3); // Set theme3 theme
+        break;
+      default:
+        setTheme(styles.theme1); // Default theme
+    }
 
     async function fetchMyAPI() {
       const restaurantData = await getRestaurantByRoute(route);
@@ -77,7 +90,6 @@ export default function OrderHistory() {
     }
 
     fetchMyAPI();
-    //localStorage.setItem("restaurant-route", route);
   }, [route]);
 
   console.log("order History", orderHistory);
@@ -114,7 +126,7 @@ export default function OrderHistory() {
   };
 
   return (
-    <div>
+    <div className={theme}>
       <RestaurantAppBar restaurantInfo={restaurantData} />
       <Container maxWidth="xl">
         <Typography variant="h2" align="center" style={{ margin: "40px 0" }}>
