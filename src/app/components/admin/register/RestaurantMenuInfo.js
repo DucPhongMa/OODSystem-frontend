@@ -83,15 +83,14 @@ function RestaurantMenuInfo({ formData, setFormData }) {
     //===========================Upload Images============================
     var uploadImage = "";
     var formData2 = null;
-    if(file){
+    if (file) {
       formData2 = new FormData();
       formData2.append("file", file);
       formData2.append("upload_preset", "my-uploads");
     }
-    
 
     try {
-      if(file){
+      if (file) {
         const data = await fetch(
           "https://api.cloudinary.com/v1_1/dyu1deqdg/image/upload",
           {
@@ -101,15 +100,14 @@ function RestaurantMenuInfo({ formData, setFormData }) {
         ).then((r) => r.json());
         console.log("data", data);
         console.log("image_url", data.secure_url);
-  
+
         uploadImage = data.secure_url;
-  
+
         if (!uploadImage) {
           console.error("Image upload failed.");
           return;
         }
       }
-      
 
       // Update newItem state with imageName
       setNewItem({ ...newItem, imageName: uploadImage });

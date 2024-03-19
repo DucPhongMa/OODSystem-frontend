@@ -20,7 +20,7 @@ function RestaurantInfo({ formData, setFormData }) {
     const uploadedFile = e.target.files[0];
     if (uploadedFile) {
       setSelectedLogo(uploadedFile);
-    } 
+    }
   };
   return (
     <Box sx={{ mt: 3 }}>

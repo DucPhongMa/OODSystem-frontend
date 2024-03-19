@@ -52,7 +52,7 @@ export default function DashboardPage() {
               Pick Up Order System
             </Typography>
             <Typography>Placed Orders: 313</Typography>
-            
+
             <Grid container spacing={2} style={{ marginTop: "20px" }}>
               <Grid item xs={6}>
                 <Link href="/admin/orders#past" passHref>
@@ -94,7 +94,6 @@ export default function DashboardPage() {
                 </Link>
               </Grid>
             </Grid>
-      
           </Paper>
         </Grid>
         <Grid item xs={12} md={6}>
@@ -102,7 +101,7 @@ export default function DashboardPage() {
             <Typography variant="h5" fontWeight="bold" gutterBottom>
               Website
             </Typography>
-           
+
             <br />
             <Link
               href={`https://ood-system-frontend.vercel.app/${restaurantRoute}`}
@@ -125,7 +124,6 @@ export default function DashboardPage() {
                 View Website
               </Button>
             </Link>
-    
           </Paper>
         </Grid>
       </Grid>
