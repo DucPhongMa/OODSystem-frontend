@@ -31,7 +31,7 @@ export default function OrderHistory() {
 
   //const [route, setRoute] = useAtom(getRouteAtom);
   if (typeof window !== "undefined") {
-    var route = localStorage.getItem("restaurant-route");
+    var route = JSON.parse(localStorage.getItem("restaurant-data")).route;
   }
 
   useEffect(() => {
