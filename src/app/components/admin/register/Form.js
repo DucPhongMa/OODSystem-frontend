@@ -222,7 +222,7 @@ function Form() {
               if (page === FormTitles.length - 1) {
                 // When user clicks the Submit button to submit the registration form
                 alert("FORM SUBMITTED");
-                
+
                 try {
                   // Get an array of just category names
                   let categoryNames = formData.categories.map(
