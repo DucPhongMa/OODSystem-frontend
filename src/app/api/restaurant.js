@@ -187,8 +187,6 @@ export const getRestaurantMenuData = async (username) => {
 };
 
 export const updatePromotionByDish = async (dishID, discount) => {
-  console.log(dishID);
-  console.log(discount);
   await fetch(`${API_BACKEND}api/menu-items/${dishID}`, {
     method: "PUT",
     headers: {
@@ -202,6 +200,29 @@ export const updatePromotionByDish = async (dishID, discount) => {
       },
     }),
   })
+    .then((res) => res.json())
+    .then((jsonData) => {
+      return jsonData.data;
+    });
+};
+
+export const updateThemeID = async (username, newThemeObj) => {
+  await fetch(
+    `${API_BACKEND}api/restaurants/?filters[restaurant_owner][$eq]=${username}`,
+    {
+      method: "PUT",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      },
+
+      body: JSON.stringify({
+        data: {
+          theme: newThemeObj,
+        },
+      }),
+    }
+  )
     .then((res) => res.json())
     .then((jsonData) => {
       return jsonData.data;
@@ -229,7 +250,6 @@ export const updateRestaurantMenu = async (
         (cat) => cat.id
       );
     });
-  // TO DO loop through catAddList -> add category
   // persist menu_categories to database;
   for (const category of catAddList) {
     await fetch(`${API_BACKEND}api/menu-categories`, {
@@ -280,15 +300,12 @@ export const updateRestaurantMenu = async (
     currentCatID = currentCatID.filter((cat) => cat !== removeCatID);
   }
 
-  console.log("After remove cat" + currentCatID);
   for (const removeDish of dishRemoveList) {
     console.log(removeDish.id);
     currentMenuItemID = currentMenuItemID.filter(
       (item) => item !== removeDish.id
     );
   }
-
-  console.log("After remove dish" + currentMenuItemID);
 
   // update restaurant menu
   await fetch(`${API_BACKEND}api/menus/${menuID}`, {
