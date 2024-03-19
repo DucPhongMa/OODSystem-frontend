@@ -132,9 +132,11 @@ export default function Checkout() {
     // Assuming validation has already been done before opening the dialog
     try {
       const orderItems = cart.map((item) => ({
+        itemID: item.itemID,
         quantity: item.quantity,
         unit_price: item.price,
         menu_item: item.itemID,
+        counter: item.counter,
       }));
       const uuid = uuidv4();
       await addOrder(

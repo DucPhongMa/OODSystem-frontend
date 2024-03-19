@@ -78,6 +78,7 @@ export default function RestaurantMenu() {
               categoryID: item.attributes.menu_category.data?.id,
               id: item.id,
               description: item.attributes.description,
+              counter: item.attributes.counter,
             };
           }
         );
