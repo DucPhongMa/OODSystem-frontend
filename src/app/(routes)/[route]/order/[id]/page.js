@@ -32,7 +32,6 @@ import { getCustomerNameAtom } from "../../../../../../store";
 import { useAtom } from "jotai";
 import { addReviews } from "@/app/api/review";
 
-
 export default function Order() {
   const params = useParams();
   const restaurantRoute = params.route;
@@ -54,7 +53,8 @@ export default function Order() {
   const [rating, setRating] = useState(2.5);
   const [reviewText, setReviewText] = useState(null);
 
-  const [unregisteredCustomerName, setUnregisteredCustomerName] = useAtom(getCustomerNameAtom);
+  const [unregisteredCustomerName, setUnregisteredCustomerName] =
+    useAtom(getCustomerNameAtom);
 
   const handleCancelClick = () => {
     setOpenDialog(true);
@@ -71,26 +71,19 @@ export default function Order() {
   };
 
   const handleSubmitReview = async () => {
-
     const customerInfo = checkCustomerLogin();
-   
+
     let customerName = "";
     if (customerInfo) {
-      customerName = JSON.parse(customerInfo).fullName
-    }
-    else{
+      customerName = JSON.parse(customerInfo).fullName;
+    } else {
       customerName = unregisteredCustomerName;
     }
     console.log("Customer Name: ", customerName);
     console.log(rating);
     console.log(reviewText);
     console.log("Restaurant ID: ", restaurantId);
-    await addReviews(
-      customerName,
-      rating,
-      reviewText,
-      restaurantId
-    );
+    await addReviews(customerName, rating, reviewText, restaurantId);
 
     handleClose();
     setReviewSubmitted(true);

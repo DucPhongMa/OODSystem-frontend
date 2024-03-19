@@ -39,7 +39,8 @@ export default function Checkout() {
   const restaurantRoute = params.route;
   const [openDialog, setOpenDialog] = useState(false);
 
-  const [unregisteredCustomerName, setUnregisteredCustomerName] = useAtom(getCustomerNameAtom);
+  const [unregisteredCustomerName, setUnregisteredCustomerName] =
+    useAtom(getCustomerNameAtom);
 
   const handleOpenDialog = () => {
     setOpenDialog(true);

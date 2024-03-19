@@ -13,9 +13,14 @@ export const getAllReviews = async (restaurantRoute) => {
   return reviews;
 };
 
-export const addReviews = async (customerName, rating, reviewText, restaurantId) => {
+export const addReviews = async (
+  customerName,
+  rating,
+  reviewText,
+  restaurantId
+) => {
   let submittedReviews;
-  
+
   await fetch(`${API_BACKEND}api/reviews`, {
     method: "POST",
     headers: {
@@ -26,8 +31,8 @@ export const addReviews = async (customerName, rating, reviewText, restaurantId)
       data: {
         customerName: customerName,
         reviewContent: reviewText,
-        rating: rating,  
-        restaurant: restaurantId
+        rating: rating,
+        restaurant: restaurantId,
       },
     }),
   })
