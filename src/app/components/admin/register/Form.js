@@ -92,7 +92,7 @@ function Form() {
       aboutDescription: "",
     },
 
-    restaurantThemeID: { id: 1, name: "Classic" },
+    restaurantTheme: { id: 1, name: "Classic" },
 
     categories: [],
 
@@ -303,10 +303,7 @@ function Form() {
                     categoryNames,
                     allItems,
                     formData.hours,
-                    {
-                      id: 1,
-                      name: "classic",
-                    },
+                    formData.restaurantTheme,
                     formData.email,
                     uploadImage,
                     uploadLogo

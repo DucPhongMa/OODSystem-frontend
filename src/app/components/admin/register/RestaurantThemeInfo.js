@@ -29,7 +29,7 @@ function RestaurantThemeInfo({ formData, setFormData }) {
 
     setFormData({
       ...formData,
-      restaurantThemeID: {
+      restaurantTheme: {
         id: themeId,
         name: themeName,
       },
@@ -45,7 +45,7 @@ function RestaurantThemeInfo({ formData, setFormData }) {
             <Select
               labelId="theme-label"
               id="restaurantThemeID"
-              value={formData.restaurantThemeID.id}
+              value={formData.restaurantTheme.id}
               label="Theme"
               onChange={handleChangeTheme}
             >

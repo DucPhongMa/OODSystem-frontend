@@ -52,7 +52,7 @@ function ConfirmInfo({ formData, setFormData }) {
     createData("Sat Closing Time", formData.hours["saturday"]["close"]),
     createData("Sun Opening Time", formData.hours["sunday"]["open"]),
     createData("Sun Closing Time", formData.hours["sunday"]["close"]),
-    createData("Restaurant Theme", formData.restaurantThemeID.name),
+    createData("Restaurant Theme", formData.restaurantTheme.name),
     createData("Menu", categoriesString),
   ];
 
