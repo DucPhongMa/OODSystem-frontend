@@ -26,6 +26,12 @@ import { getRestaurantByRoute } from "@/app/api/restaurant";
 import PickupLocation from "@/app/components/restaurant/PickupLocation";
 import PickupDetails from "@/app/components/restaurant/PickupDetails";
 import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
+import { checkCustomerLogin } from "@/app/api/auth";
+
+import { getCustomerNameAtom } from "../../../../../../store";
+import { useAtom } from "jotai";
+import { addReviews } from "@/app/api/review";
+
 
 export default function Order() {
   const params = useParams();
@@ -33,6 +39,7 @@ export default function Order() {
   const orderUUID = params.id;
 
   const [restaurantData, setRestaurantData] = useState(null);
+  const [restaurantId, setRestaurantId] = useState(null);
 
   const [orderData, setOrderData] = useState(null);
   const [orderDetail, setOrderDetail] = useState([]);
@@ -46,6 +53,8 @@ export default function Order() {
 
   const [rating, setRating] = useState(2.5);
   const [reviewText, setReviewText] = useState(null);
+
+  const [unregisteredCustomerName, setUnregisteredCustomerName] = useAtom(getCustomerNameAtom);
 
   const handleCancelClick = () => {
     setOpenDialog(true);
@@ -62,8 +71,26 @@ export default function Order() {
   };
 
   const handleSubmitReview = async () => {
+
+    const customerInfo = checkCustomerLogin();
+   
+    let customerName = "";
+    if (customerInfo) {
+      customerName = JSON.parse(customerInfo).fullName
+    }
+    else{
+      customerName = unregisteredCustomerName;
+    }
+    console.log("Customer Name: ", customerName);
     console.log(rating);
     console.log(reviewText);
+    console.log("Restaurant ID: ", restaurantId);
+    await addReviews(
+      customerName,
+      rating,
+      reviewText,
+      restaurantId
+    );
 
     handleClose();
     setReviewSubmitted(true);
@@ -143,7 +170,7 @@ export default function Order() {
   useEffect(() => {
     async function fetchMyAPI() {
       const restaurantData = await getRestaurantByRoute(restaurantRoute);
-      // setRestaurantId(restaurantData.id);
+      setRestaurantId(restaurantData.id);
       const menuItems =
         restaurantData.attributes.menu.data.attributes.menu_items.data.map(
           (item) => {
