@@ -222,8 +222,7 @@ function Form() {
               if (page === FormTitles.length - 1) {
                 // When user clicks the Submit button to submit the registration form
                 alert("FORM SUBMITTED");
-                console.log(formData);
-
+                
                 try {
                   // Get an array of just category names
                   let categoryNames = formData.categories.map(
@@ -294,7 +293,7 @@ function Form() {
                         imageURL: item.imageName,
                       }))
                   );
-                  console.log(allItems);
+
                   const restaurantData = await addRestaurant(
                     formData.name,
                     formData.route,
@@ -309,8 +308,8 @@ function Form() {
                     uploadLogo
                   );
 
-                  // Save data to database
-                  // const newRestaurantValue = await addRestaurant(formData.restaurantName);
+                  console.log(formData);
+                  console.log(restaurantData);
 
                   // Open the dialog window
                   setOpen(true);
