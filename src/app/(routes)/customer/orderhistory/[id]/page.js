@@ -16,8 +16,6 @@ import {
   TableRow,
 } from "@mui/material";
 
-import { getRouteAtom } from "../../../../../../store";
-import { useAtom } from "jotai";
 
 export default function OrderHistoryDetails() {
   const [orderHistoryDetails, setOrderHistoryDetails] = useState(null);

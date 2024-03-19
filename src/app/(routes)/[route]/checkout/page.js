@@ -28,6 +28,8 @@ import PickupLocation from "@/app/components/restaurant/PickupLocation";
 import PickupDetails from "@/app/components/restaurant/PickupDetails";
 import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
 
+import { getCustomerNameAtom } from "../../../../../store";
+
 export default function Checkout() {
   const router = useRouter();
   const [cart, setCart] = useAtom(cartAtom);
@@ -36,6 +38,9 @@ export default function Checkout() {
   const params = useParams();
   const restaurantRoute = params.route;
   const [openDialog, setOpenDialog] = useState(false);
+
+  const [unregisteredCustomerName, setUnregisteredCustomerName] = useAtom(getCustomerNameAtom);
+
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
@@ -139,6 +144,7 @@ export default function Checkout() {
         counter: item.counter,
       }));
       const uuid = uuidv4();
+      setUnregisteredCustomerName(formData.customerName);
       await addOrder(
         uuid,
         orderItems,
