@@ -100,7 +100,7 @@ export default function AdminOrders() {
       console.log("User is authenticated");
 
       // Get the username from localStorage
-      const storedUsername = localStorage.getItem("username");
+      const storedUsername = localStorage.getItem("business-username");
       if (!storedUsername) {
         console.error("No username found in local storage.");
         setIsLoading(false);

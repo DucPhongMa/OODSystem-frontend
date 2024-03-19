@@ -20,7 +20,7 @@ export default function DashboardPage() {
     setIsLoading(false);
 
     // Get username from localStorage
-    const storedUsername = localStorage.getItem("username");
+    const storedUsername = localStorage.getItem("business-username");
     if (storedUsername) {
       setUsername(storedUsername);
 
@@ -52,9 +52,7 @@ export default function DashboardPage() {
               Pick Up Order System
             </Typography>
             <Typography>Placed Orders: 313</Typography>
-            <Typography>Success Orders: 290</Typography>
-            <Typography>Fail Orders: 23</Typography>
-            <Typography>Successful Order Rate: 92%</Typography>
+            
             <Grid container spacing={2} style={{ marginTop: "20px" }}>
               <Grid item xs={6}>
                 <Link href="/admin/orders#past" passHref>
@@ -96,22 +94,7 @@ export default function DashboardPage() {
                 </Link>
               </Grid>
             </Grid>
-            <Grid container spacing={2} style={{ marginTop: "20px" }}>
-              <Grid item xs={12}>
-                <Box border={1} height={280}>
-                  <LineChart
-                    xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
-                    series={[
-                      {
-                        data: [2, 5.5, 2, 8.5, 1.5, 5],
-                        area: true,
-                      },
-                    ]}
-                    height={300}
-                  />
-                </Box>
-              </Grid>
-            </Grid>
+      
           </Paper>
         </Grid>
         <Grid item xs={12} md={6}>
@@ -119,9 +102,7 @@ export default function DashboardPage() {
             <Typography variant="h5" fontWeight="bold" gutterBottom>
               Website
             </Typography>
-            <Typography>Total visitors: 900</Typography>
-            <Typography>Monthly visitors: 254</Typography>
-            <Typography>Most Traffic Month: August</Typography>
+           
             <br />
             <Link
               href={`https://ood-system-frontend.vercel.app/${restaurantRoute}`}
@@ -144,24 +125,7 @@ export default function DashboardPage() {
                 View Website
               </Button>
             </Link>
-            <Grid container spacing={2} style={{ marginTop: "20px" }}>
-              <Grid item xs={12}>
-                <Box border={1} height={280}>
-                  <PieChart
-                    series={[
-                      {
-                        data: [
-                          { id: 0, value: 10, label: "series A" },
-                          { id: 1, value: 15, label: "series B" },
-                          { id: 2, value: 20, label: "series C" },
-                        ],
-                      },
-                    ]}
-                    margin={{ top: 30, bottom: 30 }}
-                  />
-                </Box>
-              </Grid>
-            </Grid>
+    
           </Paper>
         </Grid>
       </Grid>

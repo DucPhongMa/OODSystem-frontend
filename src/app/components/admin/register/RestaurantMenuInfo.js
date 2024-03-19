@@ -14,7 +14,6 @@ import {
   IconButton,
   Input,
 } from "@mui/material";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import RemoveIcon from "@mui/icons-material/Remove";
 import Image from "next/image";
 
@@ -82,27 +81,35 @@ function RestaurantMenuInfo({ formData, setFormData }) {
       return;
     }
     //===========================Upload Images============================
-    const formData2 = new FormData();
-    formData2.append("file", file);
-    formData2.append("upload_preset", "my-uploads");
+    var uploadImage = "";
+    var formData2 = null;
+    if(file){
+      formData2 = new FormData();
+      formData2.append("file", file);
+      formData2.append("upload_preset", "my-uploads");
+    }
+    
 
     try {
-      const data = await fetch(
-        "https://api.cloudinary.com/v1_1/dyu1deqdg/image/upload",
-        {
-          method: "POST",
-          body: formData2,
+      if(file){
+        const data = await fetch(
+          "https://api.cloudinary.com/v1_1/dyu1deqdg/image/upload",
+          {
+            method: "POST",
+            body: formData2,
+          }
+        ).then((r) => r.json());
+        console.log("data", data);
+        console.log("image_url", data.secure_url);
+  
+        uploadImage = data.secure_url;
+  
+        if (!uploadImage) {
+          console.error("Image upload failed.");
+          return;
         }
-      ).then((r) => r.json());
-      console.log("data", data);
-      console.log("image_url", data.secure_url);
-
-      const uploadImage = data.secure_url;
-
-      if (!uploadImage) {
-        console.error("Image upload failed.");
-        return;
       }
+      
 
       // Update newItem state with imageName
       setNewItem({ ...newItem, imageName: uploadImage });
@@ -167,7 +174,9 @@ function RestaurantMenuInfo({ formData, setFormData }) {
   const handleImageUpload = async (e) => {
     e.preventDefault();
     const uploadedFile = e.target.files[0];
-    setFile(uploadedFile);
+    if (uploadedFile) {
+      setFile(uploadedFile);
+    }
 
     // Use uploadedFile instead of file because file may not have been updated yet
     console.log("file", uploadedFile);
@@ -279,7 +288,7 @@ function RestaurantMenuInfo({ formData, setFormData }) {
                           <div>
                             Image Name:{" "}
                             <Image
-                              src={item.imageName}
+                              src={item.imageName ? item.imageName : ""}
                               alt="Item Image"
                               style={{ maxWidth: "120px", maxHeight: "120px" }}
                               width={120}

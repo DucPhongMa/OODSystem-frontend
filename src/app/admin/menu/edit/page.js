@@ -47,7 +47,7 @@ export default function EditMenuPage() {
     const checkLoggedIn = checkBusinessLogin();
     setIsLoggedIn(checkLoggedIn);
     // Get username from localStorage
-    const storedUsername = localStorage.getItem("username");
+    const storedUsername = localStorage.getItem("business-username");
     setIsLoading(true);
     if (storedUsername && checkLoggedIn) {
       async function fetchMyAPI() {

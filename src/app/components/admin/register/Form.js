@@ -236,52 +236,54 @@ function Form() {
                   );
 
                   //===========================Upload Logo============================
-                  const formData3 = new FormData();
-                  formData3.append("file", selectedLogo);
-                  formData3.append("upload_preset", "my-uploads");
-
-                  const logoData = await fetch(
-                    "https://api.cloudinary.com/v1_1/dyu1deqdg/image/upload",
-                    {
-                      method: "POST",
-                      body: formData3,
+                  let uploadLogo = "";
+                  if(selectedLogo){
+                    const formData3 = new FormData();
+                    formData3.append("file", selectedLogo);
+                    formData3.append("upload_preset", "my-uploads");
+  
+                    const logoData = await fetch(
+                      "https://api.cloudinary.com/v1_1/dyu1deqdg/image/upload",
+                      {
+                        method: "POST",
+                        body: formData3,
+                      }
+                    ).then((r) => r.json());
+                    console.log("data", logoData);
+                    console.log("image_url", logoData.secure_url);
+  
+                    uploadLogo = logoData.secure_url;
+                    if (!uploadLogo) {
+                      console.error("Image upload failed.");
+                      return;
                     }
-                  ).then((r) => r.json());
-                  console.log("data", logoData);
-                  console.log("image_url", logoData.secure_url);
-
-                  const uploadLogo = logoData.secure_url;
-                  if (!uploadLogo) {
-                    console.error("Image upload failed.");
-                    return;
                   }
-
-                  //console.log("Cloudinary: ", uploadLogo);
-                  //============================================================================
+                  
 
                   //===========================Upload Images============================
-                  const formData2 = new FormData();
-                  formData2.append("file", selectedFile);
-                  formData2.append("upload_preset", "my-uploads");
-
-                  const data = await fetch(
-                    "https://api.cloudinary.com/v1_1/dyu1deqdg/image/upload",
-                    {
-                      method: "POST",
-                      body: formData2,
+                  let uploadImage = "";
+                  if(selectedFile){
+                    const formData2 = new FormData();
+                    formData2.append("file", selectedFile);
+                    formData2.append("upload_preset", "my-uploads");
+  
+                    const data = await fetch(
+                      "https://api.cloudinary.com/v1_1/dyu1deqdg/image/upload",
+                      {
+                        method: "POST",
+                        body: formData2,
+                      }
+                    ).then((r) => r.json());
+                    console.log("data", data);
+                    console.log("image_url", data.secure_url);
+  
+                    uploadImage = data.secure_url;
+                    if (!uploadImage) {
+                      console.error("Image upload failed.");
+                      return;
                     }
-                  ).then((r) => r.json());
-                  console.log("data", data);
-                  console.log("image_url", data.secure_url);
-
-                  const uploadImage = data.secure_url;
-                  if (!uploadImage) {
-                    console.error("Image upload failed.");
-                    return;
                   }
-
-                  //console.log("Cloudinary: ", uploadImage);
-                  //============================================================================
+                  
                   // Get an array containing a list of all items from all categories
                   let allItems = formData.categories.flatMap(
                     (category, index) =>

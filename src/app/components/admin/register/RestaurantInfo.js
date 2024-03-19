@@ -11,12 +11,16 @@ function RestaurantInfo({ formData, setFormData }) {
   const handleImageUpload = (e) => {
     //e.preventDefault();
     const uploadedFile = e.target.files[0];
-    setSelectedFile(uploadedFile);
+    if (uploadedFile) {
+      setSelectedFile(uploadedFile);
+    }
   };
   const handleLogoUpload = (e) => {
     //e.preventDefault();
     const uploadedFile = e.target.files[0];
-    setSelectedLogo(uploadedFile);
+    if (uploadedFile) {
+      setSelectedLogo(uploadedFile);
+    } 
   };
   return (
     <Box sx={{ mt: 3 }}>
