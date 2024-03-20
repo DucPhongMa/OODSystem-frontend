@@ -131,7 +131,7 @@ export const getRestaurantByRoute = async (route) => {
   const topPickArray =
     restaurantData.attributes.menu.data.attributes.menu_items.data;
   topPickArray.sort(function (a, b) {
-    return a.attributes.counter < b.attributes.counter;
+    return b.attributes.counter - a.attributes.counter;
   });
 
   restaurantData = { ...restaurantData, "top-pick": topPickArray.slice(0, 3) };
