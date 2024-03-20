@@ -769,7 +769,7 @@ export default function AdminOrders() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose} color="primary">
-            CANCELgit
+            CANCEL
           </Button>
           <Button
             onClick={() => handleStatusChange(currentOrder.newStatus)}

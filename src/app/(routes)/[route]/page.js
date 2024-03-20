@@ -18,6 +18,7 @@ export default function RestaurantHomepage() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState("");
+  const [topPickItems, setTopPickItems] = useState([]);
   const params = useParams();
 
   const restaurantRoute = params.route;
@@ -46,6 +47,11 @@ export default function RestaurantHomepage() {
           break;
         default:
           setTheme(styles.theme1); // Default theme
+      }
+
+      // Set top-pick items
+      if (restaurantData["top-pick"]) {
+        setTopPickItems(restaurantData["top-pick"]);
       }
 
       try {
@@ -180,53 +186,61 @@ export default function RestaurantHomepage() {
               </Container>
             </Box>
             {/* TOP PICKS */}
-            <Box
-              className={`${theme} ${styles.topPicksSection}`}
-              style={{ backgroundImage: `url(${restaurantData.bannerURL})` }}
-            >
-              <Typography
-                variant="h3"
-                component="h3"
-                gutterBottom
-                className={`${theme} ${styles.topPicksTitle}`}
+            {topPickItems.length > 0 && (
+              <Box
+                className={`${theme} ${styles.topPicksSection}`}
+                style={{ backgroundImage: `url(${restaurantData.bannerURL})` }}
               >
-                TOP PICKS
-              </Typography>
-              <Container
-                maxWidth="lg"
-                className={`${theme} ${styles.topPicksContainer}`}
-              >
-                <Grid container spacing={2}>
-                  {[1, 2, 3].map((item) => (
-                    <Grid
-                      item
-                      xs={12}
-                      sm={4}
-                      key={item}
-                      className={`${theme} ${styles.topPickItem}`}
-                    >
-                      <Box className={`${theme} ${styles.topPickItemBox}`}>
-                        <Box className={`${theme} ${styles.categoryImageBox}`}>
-                          <Image
-                            src="/category_placeholder.jpeg"
-                            alt={`Top Pick ${item}`}
-                            fill
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                          />
-                        </Box>
-                      </Box>
-                      <Typography
-                        variant="h5"
-                        component="h3"
-                        className={`${theme} ${styles.topPickItemTitle}`}
+                <Typography
+                  variant="h3"
+                  component="h3"
+                  gutterBottom
+                  className={`${theme} ${styles.topPicksTitle}`}
+                >
+                  TOP PICKS
+                </Typography>
+                <Container
+                  maxWidth="lg"
+                  className={`${theme} ${styles.topPicksContainer}`}
+                >
+                  <Grid container spacing={2}>
+                    {topPickItems.map((item, index) => (
+                      <Grid
+                        item
+                        xs={12}
+                        sm={4}
+                        key={index}
+                        className={`${theme} ${styles.topPickItem}`}
                       >
-                        ITEM {item}
-                      </Typography>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Container>
-            </Box>
+                        <Link
+                          href={`/${restaurantData.route}/menu#${item.attributes.menu_category.data.attributes.nameCate.replace(/\s+/g, "_")}`}
+                        >
+                          <Box className={`${theme} ${styles.topPickItemBox}`}>
+                            <Box
+                              className={`${theme} ${styles.categoryImageBox}`}
+                            >
+                              <Image
+                                src={item.attributes.imageURL}
+                                alt={item.attributes.name}
+                                fill
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                              />
+                            </Box>
+                          </Box>
+                          <Typography
+                            variant="h5"
+                            component="h3"
+                            className={`${theme} ${styles.topPickItemTitle}`}
+                          >
+                            {item.attributes.name.toUpperCase()}
+                          </Typography>
+                        </Link>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Container>
+              </Box>
+            )}
             {/* REVIEWS */}
             <Box className={`${theme} ${styles.reviewsSection}`}>
               <Typography
