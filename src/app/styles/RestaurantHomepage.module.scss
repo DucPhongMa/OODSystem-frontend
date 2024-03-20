@@ -506,12 +506,7 @@
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    clip-path: polygon(
-      0 0,
-      100% 0,
-      100% 82%,
-      0 82%
-    );
+    clip-path: polygon(0 0, 100% 0, 100% 82%, 0 82%);
     overflow: hidden;
     display: flex;
     align-items: center;
