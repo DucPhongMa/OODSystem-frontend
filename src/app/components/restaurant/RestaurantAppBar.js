@@ -20,11 +20,9 @@ import { Badge } from "@mui/material";
 import { checkCustomerLogin, logoutCustomer } from "@/app/api/auth";
 import { useRouter } from "next/navigation";
 import styles from "../../styles/RestaurantNavbar.module.scss";
-import Root from "postcss/lib/root";
 
 const RestaurantAppBar = ({ restaurantInfo }) => {
-  const themeID = restaurantInfo.theme?.id || 1;
-  const [theme, setTheme] = React.useState("");
+  const [theme, setTheme] = useState("");
   const currentDate = new Date();
   const dayOfWeek = currentDate
     .toLocaleDateString("en-US", { weekday: "long" })
@@ -40,7 +38,19 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
 
   const router = useRouter();
 
+  const handleOrderPickupClick = () => {
+    // Direct navigation if the user is logged in or on subsequent clicks after the first one
+    if (customerLoggedIn || pickupClicked >= 1) {
+      router.push(`/${restaurantInfo.route}/menu`);
+    } else {
+      // Only show the login modal on the first click if not logged in
+      setLoginModalOpen(true);
+      setPickupClicked(1); // Mark the first click
+    }
+  };
+
   useEffect(() => {
+    const themeID = restaurantInfo.theme?.id || 1;
     switch (themeID) {
       case 1:
         setTheme(styles.theme1);
@@ -54,14 +64,14 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
       default:
         setTheme(styles.theme1);
     }
-  }, [themeID]);
 
-  useEffect(() => {
-    const customerInformation = checkCustomerLogin();
-    if (customerInformation) {
-      setCustomerLoggedIn(true);
-    }
-  }, []);
+    const checkLoginStatus = async () => {
+      const customerInformation = checkCustomerLogin();
+      setCustomerLoggedIn(!!customerInformation);
+    };
+
+    checkLoginStatus();
+  }, [restaurantInfo.theme?.id]);
 
   const logOutCustomerHandler = () => {
     logoutCustomer();
@@ -70,6 +80,7 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
   };
 
   const [cart, setCart] = useAtom(cartAtom);
+
   const hoursOpen = restaurantInfo.hours?.[dayOfWeek]?.open || "Not Available";
   const hoursClose =
     restaurantInfo.hours?.[dayOfWeek]?.close || "Not Available";
@@ -86,7 +97,11 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
         position="static"
         sx={{
           backgroundColor:
-            themeID === 2 ? "#101010" : themeID === 3 ? "#f24e23" : "#1565c0",
+            theme === styles.theme2
+              ? "#101010"
+              : theme === styles.theme3
+                ? "#f24e23"
+                : "#1565c0",
         }}
       >
         <Box
@@ -140,25 +155,14 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
               paddingLeft: { xs: "5px", sm: "5px", md: "20px", lg: "100px" },
             }}
           >
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              {(customerLoggedIn ||
-                (!customerLoggedIn && pickupClicked > 0)) && (
-                <Link href={`/${restaurantInfo.route}/menu`}>ORDER PICKUP</Link>
-              )}
-              {!customerLoggedIn && pickupClicked < 1 && (
-                <Typography
-                  variant="h6"
-                  component="div"
-                  sx={{ cursor: "pointer", flexGrow: 1 }}
-                  onClick={() => {
-                    handleLoginModalOpen();
-                    setPickupClicked(1);
-                  }}
-                  className={`${theme} ${styles.styledTypography}`}
-                >
-                  ORDER PICKUP
-                </Typography>
-              )}
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{ flexGrow: 1, cursor: "pointer", textDecoration: "none" }}
+              onClick={handleOrderPickupClick}
+              className={`${theme} ${styles.styledTypography}`}
+            >
+              ORDER PICKUP
             </Typography>
             <Modal
               aria-labelledby="unstyled-modal-title"

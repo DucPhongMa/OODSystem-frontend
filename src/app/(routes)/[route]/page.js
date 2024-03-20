@@ -109,8 +109,8 @@ export default function RestaurantHomepage() {
     (order) => order.orderStatus === "completed"
   );*/
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   console.log("All Reviews: ", reviewData);
 
@@ -274,12 +274,12 @@ export default function RestaurantHomepage() {
                           </Typography>
                           <Typography
                             variant="body2"
-                            component="p"
+                            component="div"
                             className={`${theme} ${styles.reviewText}`}
                           >
-                            <p>{review.reviewCusName}</p>
-                            <p>Rating: {review.reviewRating}</p>
-                            <p>{review.reviewContent}</p>
+                            <div>{review.reviewCusName}</div>
+                            <div>Rating: {review.reviewRating}</div>
+                            <div>{review.reviewContent}</div>
                           </Typography>
                         </Box>
                       </Link>
