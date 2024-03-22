@@ -136,7 +136,7 @@ export default function Checkout() {
 
   useEffect(() => {
     // Load cart data from localStorage on component mount
-    const storedCart = localStorage.getItem('cart');
+    const storedCart = localStorage.getItem("cart");
     if (storedCart) {
       setCart(JSON.parse(storedCart));
     }
@@ -163,8 +163,8 @@ export default function Checkout() {
         formData.phoneNum,
         formData.userId
       );
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('cart');
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("cart");
       }
       setOpenDialog(false); // Close the dialog after submission
       setCart([]);
@@ -303,13 +303,15 @@ export default function Checkout() {
       )}
     </>
   ) : (
-   <>
-    {restaurantData && (
-      <>
-        <RestaurantAppBar restaurantInfo={restaurantData} />
-        <p>There are no items in cart. Please come back and add to cart first!!</p>
-      </>
-    )}
-   </>
-  ) ;
+    <>
+      {restaurantData && (
+        <>
+          <RestaurantAppBar restaurantInfo={restaurantData} />
+          <p>
+            There are no items in cart. Please come back and add to cart first!!
+          </p>
+        </>
+      )}
+    </>
+  );
 }
