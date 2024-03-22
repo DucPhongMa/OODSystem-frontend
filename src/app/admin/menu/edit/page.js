@@ -87,6 +87,10 @@ export default function EditMenuPage() {
 
   // TODO: save new category to the restaurant
   const handleSaveCategory = () => {
+    if (newCateName == "") {
+      alert("Category name cannot be empty");
+      return;
+    }
     if (newCateName) {
       setMenuCats([...menuCats, { name: newCateName, items: [] }]);
       setCatAdd([...catAdd, newCateName]);
@@ -119,7 +123,7 @@ export default function EditMenuPage() {
     const trimmedItemPrice = newItem.price.trim();
 
     if (!trimmedItemName || !trimmedItemPrice) {
-      alert("Item name and price cannot be empty.");
+      alert("Item information cannot be empty.");
       return;
     }
 
@@ -182,6 +186,15 @@ export default function EditMenuPage() {
   };
 
   const saveMenuChange = async () => {
+    if (
+      catDeleteList.length == 0 &&
+      catAdd.length == 0 &&
+      itemDeleteList.length == 0 &&
+      dishAdd.length == 0
+    ) {
+      alert("Nothing to be updated!");
+      return;
+    }
     await updateRestaurantMenu(
       restaurantMenuID,
       catDeleteList,
