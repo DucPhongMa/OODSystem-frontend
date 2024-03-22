@@ -24,19 +24,19 @@ export default function ItemDialog({
   const [cart, setCart] = useAtom(cartAtom);
   const handleAddToCart = () => {
     setCart((prevCart) => {
-      const existingItem = prevCart.find(
-        (cartItem) => cartItem.itemID === item.id
-      );
+      const existingItem = prevCart.find((cartItem) => cartItem.itemID === item.id);
+      let updatedCart;
+  
       if (existingItem) {
         // If item already exists in the cart, increase its quantity
-        return prevCart.map((cartItem) =>
+        updatedCart = prevCart.map((cartItem) =>
           cartItem.itemID === item.id
             ? { ...cartItem, quantity: cartItem.quantity + itemCount }
             : cartItem
         );
       } else {
         // If item doesn't exist in the cart, add it
-        return [
+        updatedCart = [
           ...prevCart,
           {
             itemID: item.id,
@@ -47,8 +47,15 @@ export default function ItemDialog({
           },
         ];
       }
+      if (typeof window !== "undefined") {
+        // Save updated cart to localStorage
+        localStorage.setItem('cart', JSON.stringify(updatedCart));
+      }
+      
+  
+      return updatedCart;
     });
-
+  
     handleCloseDialog();
   };
 

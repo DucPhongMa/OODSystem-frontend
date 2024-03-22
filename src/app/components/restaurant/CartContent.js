@@ -35,6 +35,9 @@ const CartContent = ({ handleClose }) => {
   };
 
   const clearCart = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('cart');
+    }
     setCart([]);
   };
 
