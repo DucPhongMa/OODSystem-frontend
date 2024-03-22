@@ -21,13 +21,32 @@ export default function ManagementLoginPage() {
   const { register, handleSubmit } = useForm();
   const router = useRouter();
 
+  function validateEmail(email) {
+    const re =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+
   const handleFormSubmit = async (formData) => {
-    const error = await loginUser(formData.email, formData.password);
-    if (error) {
-      console.log(error);
-      setError(error);
+    setError(null);
+
+    if (
+      !formData.email ||
+      !formData.password ||
+      formData.email == "" ||
+      formData.password == ""
+    ) {
+      setError("Please fill in email address/password");
+    } else if (!validateEmail(formData.email)) {
+      setError("Email is not valid");
     } else {
-      router.push("/admin/dashboard");
+      const error = await loginUser(formData.email, formData.password);
+      if (error) {
+        console.log(error);
+        setError(error);
+      } else {
+        router.push("/admin/dashboard");
+      }
     }
   };
 
@@ -53,11 +72,7 @@ export default function ManagementLoginPage() {
             noValidate
             sx={{ mt: 5 }}
           >
-            {error && (
-              <h3 style={{ color: "red" }}>
-                "Email or password is incorrect! Please check"
-              </h3>
-            )}
+            {error && <h3 style={{ color: "red" }}>{error}</h3>}
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField

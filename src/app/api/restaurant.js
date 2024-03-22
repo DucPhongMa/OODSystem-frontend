@@ -207,22 +207,28 @@ export const updatePromotionByDish = async (dishID, discount) => {
 };
 
 export const updateThemeID = async (username, newThemeObj) => {
-  await fetch(
-    `${API_BACKEND}api/restaurants/?filters[restaurant_owner][$eq]=${username}`,
-    {
-      method: "PUT",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      },
-
-      body: JSON.stringify({
-        data: {
-          theme: newThemeObj,
-        },
-      }),
-    }
+  const restaurant = await fetch(
+    `${API_BACKEND}api/restaurants/?filters[restaurant_owner][$eq]=${username}`
   )
+    .then((res) => res.json())
+    .then((jsonData) => {
+      return jsonData.data;
+    });
+
+  const restaurantID = restaurant[0].id;
+  await fetch(`${API_BACKEND}api/restaurants/${restaurantID}`, {
+    method: "PUT",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-type": "application/json",
+    },
+
+    body: JSON.stringify({
+      data: {
+        theme: newThemeObj,
+      },
+    }),
+  })
     .then((res) => res.json())
     .then((jsonData) => {
       return jsonData.data;
