@@ -78,10 +78,13 @@ export default function MainNavbar({ isLoggedin }) {
               {isLoggedin ? (
                 <>
                   <ListItem button>
+                    <Link href="/admin/promotion/edit">Edit Promotions</Link>
+                  </ListItem>
+                  <ListItem button>
                     <Link href="/admin/menu/edit">Edit Menu</Link>
                   </ListItem>
                   <ListItem button>
-                    <Link href="/">Edit Theme</Link>
+                    <Link href="/admin/theme/edit">Edit Theme</Link>
                   </ListItem>
                   <ListItem button>
                     <Link href="/">Edit Info</Link>
@@ -127,10 +130,13 @@ export default function MainNavbar({ isLoggedin }) {
             {isLoggedin ? (
               <>
                 <Typography style={{ marginRight: "40px" }}>
+                  <Link href="/admin/promotion/edit">Edit Promotions</Link>
+                </Typography>
+                <Typography style={{ marginRight: "40px" }}>
                   <Link href="/admin/menu/edit">Edit Menu</Link>
                 </Typography>
                 <Typography style={{ marginRight: "30px" }}>
-                  <Link href="/">Edit Theme</Link>
+                  <Link href="/admin/theme/edit">Edit Theme</Link>
                 </Typography>
                 <Typography style={{ marginRight: "30px" }}>
                   <Link href="/">Edit Info</Link>

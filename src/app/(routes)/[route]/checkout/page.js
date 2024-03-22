@@ -38,13 +38,34 @@ export default function Checkout() {
   const params = useParams();
   const restaurantRoute = params.route;
   const [openDialog, setOpenDialog] = useState(false);
+  const [errorName, setErrorName] = useState(false);
+  const [errorPhone, setErrorPhone] = useState(false);
 
   const [unregisteredCustomerName, setUnregisteredCustomerName] =
     useAtom(getCustomerNameAtom);
 
   const handleOpenDialog = () => {
+    event.preventDefault();
+    if (!formData.customerName.trim()) {
+      setErrorName(true);
+      return;
+    }
+    if (!formData.phoneNum) {
+      setErrorPhone(true);
+      return;
+    }
+    if (!isValidPhoneNumber(formData.phoneNum)) {
+      setErrorPhone(true);
+      return;
+    }
+    console.log(cart);
+    if (cart.length == 0) {
+      alert("Cart is empty");
+      return;
+    }
     setOpenDialog(true);
   };
+
   const [formData, setFormData] = useState({
     phoneNum: "",
     customerName: "",
@@ -104,6 +125,7 @@ export default function Checkout() {
               categoryID: item.attributes.menu_category.data?.id,
               id: item.id,
               description: item.attributes.description,
+              discount: item.attributes.discount,
             };
           }
         );
@@ -125,7 +147,7 @@ export default function Checkout() {
 
   useEffect(() => {
     const sTotal = cart
-      .reduce((total, item) => total + item.price * item.quantity, 0)
+      .reduce((total, item) => total + item.price*(1-item.discount*0.01) * item.quantity, 0)
       .toFixed(2);
     setSubTotal(sTotal);
   }, [cart]);
@@ -135,7 +157,6 @@ export default function Checkout() {
   };
 
   const submitOrder = async () => {
-    // Assuming validation has already been done before opening the dialog
     try {
       const orderItems = cart.map((item) => ({
         itemID: item.itemID,
@@ -161,6 +182,18 @@ export default function Checkout() {
     } catch (error) {
       console.error("Failed to submit order:", error);
       // Handle submission error
+    }
+  };
+
+  const handleChangeName = (event) => {
+    const value = event.target.value;
+    setFormData({ ...formData, customerName: value });
+
+    // Check if the value is empty or consists only of spaces
+    if (!value.trim()) {
+      setErrorName(true);
+    } else {
+      setErrorName(false);
     }
   };
 
@@ -190,11 +223,10 @@ export default function Checkout() {
               <TextField
                 label="Customer Name"
                 value={formData.customerName}
-                onChange={(event) =>
-                  setFormData({
-                    ...formData,
-                    customerName: event.target.value,
-                  })
+                onChange={handleChangeName}
+                error={errorName}
+                helperText={
+                  errorName ? "Customer name cannot be empty or spaces." : ""
                 }
                 fullWidth
                 margin="normal"
@@ -203,25 +235,26 @@ export default function Checkout() {
               <TextField
                 label="Phone Number"
                 value={formData.phoneNum}
-                onChange={(event) =>
+                onChange={(event) => {
+                  const value = event.target.value.trim();
+                  const isValid = isValidPhoneNumber(value);
+
                   setFormData({
                     ...formData,
-                    phoneNum: event.target.value.trim(),
-                  })
-                }
+                    phoneNum: value,
+                  });
+
+                  setErrorPhone(!isValid);
+                }}
                 fullWidth
                 margin="normal"
                 inputProps={{
                   pattern: "d{10}",
                   title: "Phone number format: (123) 456-7890",
                 }}
-                error={
-                  formData.phoneNum && !isValidPhoneNumber(formData.phoneNum)
-                } // Assuming you have a validation function
+                error={errorPhone}
                 helperText={
-                  formData.phoneNum &&
-                  !isValidPhoneNumber(formData.phoneNum) &&
-                  "Invalid phone number format: 1112223333"
+                  errorPhone ? "Invalid phone number format: 1112223333" : ""
                 }
               />
             </Paper>
