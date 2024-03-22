@@ -98,6 +98,7 @@ export const addRestaurant = async (
       restaurant_owner: inputBusinessName,
       bannerURL: inputBannerImage,
       logoURL: inputLogoImage,
+      status: "close",
     },
   };
   await fetch(`${API_BACKEND}api/restaurants`, {
@@ -226,6 +227,64 @@ export const updateThemeID = async (username, newThemeObj) => {
     body: JSON.stringify({
       data: {
         theme: newThemeObj,
+      },
+    }),
+  })
+    .then((res) => res.json())
+    .then((jsonData) => {
+      return jsonData.data;
+    });
+};
+
+export const closeRestaurant = async (username) => {
+  const restaurant = await fetch(
+    `${API_BACKEND}api/restaurants/?filters[restaurant_owner][$eq]=${username}`
+  )
+    .then((res) => res.json())
+    .then((jsonData) => {
+      return jsonData.data;
+    });
+
+  const restaurantID = restaurant[0].id;
+  await fetch(`${API_BACKEND}api/restaurants/${restaurantID}`, {
+    method: "PUT",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-type": "application/json",
+    },
+
+    body: JSON.stringify({
+      data: {
+        status: "close",
+      },
+    }),
+  })
+    .then((res) => res.json())
+    .then((jsonData) => {
+      return jsonData.data;
+    });
+};
+
+export const openRestaurant = async (username) => {
+  const restaurant = await fetch(
+    `${API_BACKEND}api/restaurants/?filters[restaurant_owner][$eq]=${username}`
+  )
+    .then((res) => res.json())
+    .then((jsonData) => {
+      return jsonData.data;
+    });
+
+  const restaurantID = restaurant[0].id;
+  await fetch(`${API_BACKEND}api/restaurants/${restaurantID}`, {
+    method: "PUT",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-type": "application/json",
+    },
+
+    body: JSON.stringify({
+      data: {
+        status: "open",
       },
     }),
   })
