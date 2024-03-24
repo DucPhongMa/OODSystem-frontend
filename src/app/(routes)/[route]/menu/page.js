@@ -130,7 +130,6 @@ export default function RestaurantMenu() {
   };
 
   const handleOpenDialog = async (item) => {
-    await fetchRestaurantData(); // Refetch data before opening the dialog
     setSelectedItem(item);
     setOpenDialog(true);
   };

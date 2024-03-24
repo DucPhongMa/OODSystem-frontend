@@ -7,7 +7,6 @@ import {
   Box,
   CardMedia,
   Button,
-  Tooltip,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
