@@ -152,8 +152,7 @@ export default function ItemDialog({
 
           <Button
             variant="contained"
-            sx={{mt: 2
-            }}
+            sx={{ mt: 2 }}
             onClick={handleAddToCart}
             className={`${theme} ${styles.dialogButton}`}
             disabled={!isOpen} // Disable the button if restaurant is closed
