@@ -10,6 +10,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Rating
 } from "@mui/material";
 import { getRestaurantByRoute } from "../../../api/restaurant";
 import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
@@ -79,6 +80,19 @@ export default function OrderHistory() {
 
   console.log("All Reviews: ", reviewData);
 
+  const formatDate = (dateString) => {
+    const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return new Date(dateString)
+      .toLocaleString("default", options)
+      .replace(",", "");
+  };
+
   return (
     <div>
       <RestaurantAppBar data={restaurantData} />
@@ -86,15 +100,44 @@ export default function OrderHistory() {
         <Typography variant="h2" align="center" style={{ margin: "40px 0" }}>
           Reviews
         </Typography>
-        {reviewData.map((review, index) => (
-          <div key={index}>
-            <p>customer Name: {review.attributes.customerName}</p>
-            <p>Rating: {review.attributes.rating}</p>
-            <p>Content: {review.attributes.reviewContent}</p>
-            <p>Date: {review.attributes.createdAt}</p>
-            <br />
-          </div>
-        ))}
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell align="center" width="200em">
+                  Customer Name
+                </TableCell>
+                <TableCell align="center" width="200em">
+                  Rating
+                </TableCell>
+                <TableCell align="center" width="200em">
+                  Review
+                </TableCell>
+                <TableCell align="center" width="200em">
+                  Date
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {reviewData.map((review, index) => (
+                <TableRow key={review.attributes.customerName}>
+                  <TableCell align="center">
+                    {review.attributes.customerName}
+                  </TableCell>
+                  <TableCell align="center">
+                    <Rating value={review.attributes.rating} readOnly></Rating>
+                  </TableCell>
+                  <TableCell align="center">
+                    {review.attributes.reviewContent}
+                  </TableCell>
+                  <TableCell align="center">
+                    {formatDate(review.attributes.createdAt)}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Container>
     </div>
   );
