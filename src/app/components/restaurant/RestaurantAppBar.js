@@ -100,7 +100,7 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
             theme === styles.theme2
               ? "#101010"
               : theme === styles.theme3
-                ? "#f24e23"
+                ? "#eb582c"
                 : "#1565c0",
         }}
       >
@@ -291,8 +291,33 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
             onClose={handleClose}
             slots={{ backdrop: StyledBackdrop }}
           >
-            <ModalContent sx={{ width: 400 }}>
-              <CartContent handleClose={handleClose}></CartContent>
+            <ModalContent
+              sx={{
+                width: 400,
+                backgroundColor:
+                  theme === styles.theme2
+                    ? "#3c3c3c"
+                    : theme === styles.theme3
+                      ? "#fbfbf7"
+                      : "#ffffff",
+                color:
+                  theme === styles.theme2
+                    ? "#ffffff"
+                    : theme === styles.theme3
+                      ? "#4d4d4d"
+                      : "#000000",
+                border:
+                  theme === styles.theme2
+                    ? "1px solid #3c3c3c"
+                    : theme === styles.theme3
+                      ? "1px solid #fbfbf7"
+                      : "1px solid #dae2ed",
+              }}
+            >
+              <CartContent
+                handleClose={handleClose}
+                theme={theme}
+              ></CartContent>
             </ModalContent>
           </Modal>
         </Toolbar>

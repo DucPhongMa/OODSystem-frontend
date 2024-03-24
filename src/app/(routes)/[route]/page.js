@@ -9,7 +9,6 @@ import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
 import Link from "next/link";
 import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
 import styles from "../../styles/RestaurantHomepage.module.scss";
-import { useAtom } from "jotai";
 import { getAllReviews } from "../../api/review";
 
 export default function RestaurantHomepage() {

@@ -1,0 +1,351 @@
+// Classic theme
+.theme1 {
+  .openAlert {
+    justify-content: center !important;
+    background-color: #bbe1bb;
+
+    .MuiAlert-icon {
+      display: none;
+    }
+
+    .MuiAlert-message {
+      flex: 1;
+      text-align: center;
+    }
+  }
+
+  .closedAlert {
+    justify-content: center !important;
+    background-color: #ecbdbd;
+
+    .MuiAlert-icon {
+      display: none;
+    }
+
+    .MuiAlert-message {
+      flex: 1;
+      text-align: center;
+    }
+  }
+
+  .pageBackground {
+    background: linear-gradient(to bottom, #ffffff, #f7fafc);
+    min-height: 100vh;
+    background-attachment: fixed;
+  }
+
+  .appBar {
+    position: sticky;
+    color: default;
+    box-shadow: none;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #f5f5f5;
+    z-index: 1;
+  }
+
+  .toolbarButton {
+    margin: 0 8px;
+    background-color: #e0e0e0;
+    color: #424242;
+    font-weight: bold;
+    border: 1px solid #bdbdbd;
+    box-shadow: none;
+    border-radius: 0;
+    &:hover {
+      background-color: #bbdefb;
+      box-shadow: none;
+    }
+  }
+
+  .categoryTypography,
+  .itemTypography {
+    color: #4f4f4f;
+    font-weight: bold;
+  }
+
+  .itemCard {
+    background-color: #fefefe;
+    color: #000000;
+  }
+
+  .itemDescription {
+    color: #666666;
+  }
+
+  .itemPrice {
+    color: #000000;
+  }
+
+  :global {
+    .MuiDialog-paper {
+      background-color: #ffffff !important;
+    }
+  }
+
+  .dialogClose {
+    color: #4d4d4d;
+  }
+
+  .dialogChangeQuantity {
+    color: #4d4d4d;
+  }
+
+  .dialogItemName {
+    font-weight: bold;
+    color: #4d4d4d;
+  }
+
+  .dialogItemDescription {
+    color: #8b8b8b;
+  }
+
+  .dialogButton {
+    background-color: #1976d2;
+    color: #ffffff;
+    font-weight: normal;
+
+    &:hover {
+      background-color: #1565c0;
+      color: #ffffff;
+    }
+  }
+}
+
+// Dark theme
+.theme2 {
+  .openAlert {
+    justify-content: center !important;
+    background-color: #485b35;
+    color: #ffffff;
+
+    .MuiAlert-icon {
+      display: none;
+    }
+
+    .MuiAlert-message {
+      flex: 1;
+      text-align: center;
+    }
+  }
+
+  .closedAlert {
+    justify-content: center !important;
+    background-color: #712222;
+    color: #ffffff;
+
+    .MuiAlert-icon {
+      display: none;
+    }
+
+    .MuiAlert-message {
+      flex: 1;
+      text-align: center;
+    }
+  }
+
+  .pageBackground {
+    background: linear-gradient(to bottom, #121212, #1c1c1c);
+    min-height: 100vh;
+    background-attachment: fixed;
+  }
+
+  .appBar {
+    position: sticky;
+    color: default;
+    box-shadow: none;
+    border-bottom: 1px solid #101010;
+    background-color: #282828;
+    z-index: 1;
+  }
+
+  .toolbarButton {
+    margin: 0 8px;
+    background-color: #696969;
+    color: #080808;
+    font-weight: bold;
+    border: 1px solid #303030;
+    box-shadow: none;
+    border-radius: 0;
+    &:hover {
+      color: #d8d8d8;
+      background-color: #181818;
+      box-shadow: none;
+    }
+  }
+
+  .categoryTypography {
+    color: #9e9e9e;
+    font-weight: bold;
+  }
+
+  .itemCard {
+    background-color: #080808;
+    color: #ffffff;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+    filter: brightness(92%);
+
+    &:hover {
+      background-color: #282828;
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.8);
+      filter: brightness(105%);
+    }
+  }
+
+  .itemDescription {
+    color: #9e9e9e;
+  }
+
+  .itemPrice {
+    color: #ffffff;
+  }
+
+  :global {
+    .MuiDialog-paper {
+      background-color: #3c3c3c !important;
+      box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.8);
+    }
+  }
+
+  .dialogClose {
+    color: #ffffff;
+  }
+
+  .dialogChangeQuantity {
+    color: #ffffff;
+  }
+
+  .dialogItemName {
+    font-weight: bold;
+    color: #ffffff;
+  }
+
+  .dialogItemDescription {
+    color: #d0d0d0;
+  }
+
+  .dialogButton {
+    background-color: #181818;
+    color: #ffffff;
+    font-weight: normal;
+
+    &:hover {
+      background-color: #666666;
+      color: #ffffff;
+    }
+  }
+}
+
+// Modern theme
+.theme3 {
+  .openAlert {
+    justify-content: center !important;
+    background-color: #bbe1bb;
+
+    .MuiAlert-icon {
+      display: none;
+    }
+
+    .MuiAlert-message {
+      flex: 1;
+      text-align: center;
+    }
+  }
+
+  .closedAlert {
+    justify-content: center !important;
+    background-color: #ecbdbd;
+
+    .MuiAlert-icon {
+      display: none;
+    }
+
+    .MuiAlert-message {
+      flex: 1;
+      text-align: center;
+    }
+  }
+
+  .pageBackground {
+    background: #f2eae3;
+    min-height: 100vh;
+    background-attachment: fixed;
+  }
+
+  .appBar {
+    position: sticky;
+    color: default;
+    box-shadow: none;
+    border-bottom: 1px solid #737b59;
+    background-color: #fefae7;
+    z-index: 1;
+  }
+
+  .toolbarButton {
+    margin: 0 8px;
+    background-color: #42613d;
+    color: #ffffff;
+    font-weight: bold;
+    border: 1px solid #737b59;
+    box-shadow: none;
+    border-radius: 0;
+    &:hover {
+      background-color: #737b59;
+      border: 1px solid #42613d;
+      color: #fefdf8;
+      box-shadow: none;
+    }
+  }
+
+  .categoryTypography,
+  .itemTypography {
+    color: #4f4f4f;
+    font-weight: bold;
+  }
+
+  .itemCard {
+    background-color: #fbfbf7;
+    color: #000000;
+  }
+
+  .itemDescription {
+    color: #666666;
+  }
+
+  .itemPrice {
+    color: #000000;
+  }
+
+  :global {
+    .MuiDialog-paper {
+      background-color: #fbfbf7 !important;
+    }
+  }
+
+  .dialogClose {
+    color: #4d4d4d;
+  }
+
+  .dialogChangeQuantity {
+    color: #4d4d4d;
+  }
+
+  .dialogItemName {
+    font-weight: bold;
+    color: #4d4d4d;
+  }
+
+  .dialogItemDescription {
+    color: #666666;
+  }
+
+  .dialogButton {
+    background-color: #42613d;
+    color: #ffffff;
+    font-weight: normal;
+
+    &:hover {
+      background-color: #385234;
+      color: #ffffff;
+    }
+  }
+}

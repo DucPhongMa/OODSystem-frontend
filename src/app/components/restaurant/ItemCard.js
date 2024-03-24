@@ -6,11 +6,16 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
+import styles from "../../styles/RestaurantMenu.module.scss";
 
-export default function ItemCard({ item, handleOpenDialog }) {
+export default function ItemCard({ item, handleOpenDialog, theme }) {
   return (
-    <Card sx={{ display: "flex", mb: 2, height: 140 }}>
+    <Card
+      sx={{ display: "flex", mb: 2, height: 140 }}
+      className={`${theme} ${styles.itemCard}`}
+    >
       <CardActionArea
+        disableRipple
         sx={{
           display: "flex",
           flexDirection: "row",
@@ -24,7 +29,6 @@ export default function ItemCard({ item, handleOpenDialog }) {
           </Typography>
           <Typography
             variant="body2"
-            color="text.secondary"
             component="div"
             sx={{
               display: "-webkit-box",
@@ -33,14 +37,15 @@ export default function ItemCard({ item, handleOpenDialog }) {
               overflow: "hidden",
               textOverflow: "ellipsis",
             }}
+            className={`${theme} ${styles.itemDescription}`}
           >
             {item.description}
           </Typography>
           <Typography
             variant="body1"
-            color="text.primary"
             component="div"
             sx={{ marginTop: 1 }}
+            className={`${theme} ${styles.itemPrice}`}
           >
             ${parseFloat(item.price).toFixed(2)}
           </Typography>
