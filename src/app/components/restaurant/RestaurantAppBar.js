@@ -21,8 +21,9 @@ import { checkCustomerLogin, logoutCustomer } from "@/app/api/auth";
 import { useRouter } from "next/navigation";
 import styles from "../../styles/RestaurantNavbar.module.scss";
 
-const RestaurantAppBar = ({ restaurantInfo }) => {
+const RestaurantAppBar = ({ data }) => {
   const [theme, setTheme] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
   const currentDate = new Date();
   const dayOfWeek = currentDate
     .toLocaleDateString("en-US", { weekday: "long" })
@@ -41,7 +42,7 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
   const handleOrderPickupClick = () => {
     // Direct navigation if the user is logged in or on subsequent clicks after the first one
     if (customerLoggedIn || pickupClicked >= 1) {
-      router.push(`/${restaurantInfo.route}/menu`);
+      router.push(`/${data.route}/menu`);
     } else {
       // Only show the login modal on the first click if not logged in
       setLoginModalOpen(true);
@@ -50,7 +51,15 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
   };
 
   useEffect(() => {
-    const themeID = restaurantInfo.theme?.id || 1;
+    // Get open/closed status
+    const status = data.status;
+    if (status === "open") {
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+
+    const themeID = data.theme?.id || 1;
     switch (themeID) {
       case 1:
         setTheme(styles.theme1);
@@ -71,25 +80,24 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
     };
 
     checkLoginStatus();
-  }, [restaurantInfo.theme?.id]);
+  }, [data.status, data.theme?.id]);
 
   const logOutCustomerHandler = () => {
     logoutCustomer();
     setCustomerLoggedIn(false);
-    router.push(`/${restaurantInfo.route}`);
+    router.push(`/${data.route}`);
   };
 
   const [cart, setCart] = useAtom(cartAtom);
 
-  const hoursOpen = restaurantInfo.hours?.[dayOfWeek]?.open || "Not Available";
-  const hoursClose =
-    restaurantInfo.hours?.[dayOfWeek]?.close || "Not Available";
+  const hoursOpen = data.hours?.[dayOfWeek]?.open || "Not Available";
+  const hoursClose = data.hours?.[dayOfWeek]?.close || "Not Available";
   const restaurantAddress =
-    restaurantInfo.restaurant_contact?.address +
+    data.restaurant_contact?.address +
     " " +
-    restaurantInfo.restaurant_contact?.city +
+    data.restaurant_contact?.city +
     ", " +
-    restaurantInfo.restaurant_contact?.provinceOrState;
+    data.restaurant_contact?.provinceOrState;
 
   return (
     <Box className={theme} sx={{ flexGrow: 1 }}>
@@ -124,9 +132,9 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
         </Box>
         <Toolbar>
           <div style={{ position: "relative", width: 240 }}>
-            <Link href={`/${restaurantInfo.route}/`}>
+            <Link href={`/${data.route}/`}>
               <Image
-                src={restaurantInfo.logoURL}
+                src={data.logoURL}
                 alt="logo"
                 width={100}
                 height={100}
@@ -232,7 +240,7 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
               sx={{ flexGrow: 1 }}
               className={`${theme} ${styles.styledTypography}`}
             >
-              <Link href={`/${restaurantInfo.route}/about`}>ABOUT</Link>
+              <Link href={`/${data.route}/about`}>ABOUT</Link>
             </Typography>
             <Typography
               variant="h6"
@@ -240,7 +248,7 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
               sx={{ flexGrow: 1 }}
               className={`${theme} ${styles.styledTypography}`}
             >
-              <Link href={`/${restaurantInfo.route}/reviews`}>REVIEWS</Link>
+              <Link href={`/${data.route}/reviews`}>REVIEWS</Link>
             </Typography>
             {customerLoggedIn && (
               <Typography
@@ -272,13 +280,19 @@ const RestaurantAppBar = ({ restaurantInfo }) => {
               variant="outlined"
               aria-label="add to shopping cart"
               onClick={handleOpen}
+              disabled={!isOpen} // disable cart icon if restaurant closed
+              className={`${theme} ${styles.cartIcon}`}
             >
               <Badge
                 badgeContent={cart.reduce(
                   (total, item) => total + item.quantity,
                   0
                 )}
-                color="error"
+                sx={{
+                  "& .MuiBadge-badge": {
+                    backgroundColor: isOpen ? "error.main" : "grey.500",
+                  },
+                }}
               >
                 <AddShoppingCartIcon />
               </Badge>

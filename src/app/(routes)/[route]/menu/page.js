@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import {
   Box,
@@ -58,64 +58,68 @@ export default function RestaurantMenu() {
     };
   }, []);
 
-  useEffect(() => {
-    async function fetchMyAPI() {
-      const data = await getRestaurantByRoute(restaurantRoute);
+  const fetchRestaurantData = useCallback(async () => {
+    const data = await getRestaurantByRoute(restaurantRoute);
+    console.log(data);
 
-      // Get open/closed status
-      const status = data.attributes.status;
-      if (status === "open") {
-        setIsOpen(true);
-      } else {
-        setIsOpen(false);
-      }
-
-      const themeID = data.attributes.theme.id;
-
-      // For testing only
-      // const themeID = 3;
-      // data.attributes.theme.id = 3;
-
-      // Set the page theme based on the themeID
-      switch (themeID) {
-        case 1:
-          setTheme(styles.theme1);
-          break;
-        case 2:
-          setTheme(styles.theme2);
-          break;
-        case 3:
-          setTheme(styles.theme3);
-          break;
-        default:
-          setTheme(styles.theme1); // Default theme
-      }
-
-      const menuItems =
-        data.attributes.menu.data.attributes.menu_items.data.map((item) => {
-          return {
-            name: item.attributes.name,
-            price: item.attributes.price,
-            imageURL: item.attributes.imageURL,
-            categoryID: item.attributes.menu_category.data?.id,
-            id: item.id,
-            description: item.attributes.description,
-            counter: item.attributes.counter,
-          };
-        });
-      const menuCate =
-        data.attributes.menu.data.attributes.menu_categories.data.map((cat) => {
-          return {
-            name: cat.attributes.nameCate,
-            id: cat.id,
-            items: menuItems.filter((item) => item.categoryID == cat.id),
-          };
-        });
-      setRestaurantData({ ...data.attributes, menuCate });
+    // Get open/closed status
+    const status = data.attributes.status;
+    if (status === "open") {
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
     }
 
-    fetchMyAPI();
+    const themeID = data.attributes.theme.id;
+
+    // For testing only
+    // const themeID = 2;
+    // data.attributes.theme.id = 2;
+
+    // Set the page theme based on the themeID
+    switch (themeID) {
+      case 1:
+        setTheme(styles.theme1);
+        break;
+      case 2:
+        setTheme(styles.theme2);
+        break;
+      case 3:
+        setTheme(styles.theme3);
+        break;
+      default:
+        setTheme(styles.theme1); // Default theme
+    }
+
+    const menuItems = data.attributes.menu.data.attributes.menu_items.data.map(
+      (item) => {
+        return {
+          name: item.attributes.name,
+          price: item.attributes.price,
+          imageURL: item.attributes.imageURL,
+          categoryID: item.attributes.menu_category.data?.id,
+          id: item.id,
+          description: item.attributes.description,
+          counter: item.attributes.counter,
+        };
+      }
+    );
+
+    const menuCate =
+      data.attributes.menu.data.attributes.menu_categories.data.map((cat) => {
+        return {
+          name: cat.attributes.nameCate,
+          id: cat.id,
+          items: menuItems.filter((item) => item.categoryID == cat.id),
+        };
+      });
+
+    setRestaurantData({ ...data.attributes, menuCate });
   }, [restaurantRoute]);
+
+  useEffect(() => {
+    fetchRestaurantData();
+  }, [fetchRestaurantData]);
 
   const handleCategoryClick = (categoryName) => {
     if (categoryName === restaurantData.menuCate[0].name) {
@@ -125,7 +129,8 @@ export default function RestaurantMenu() {
     }
   };
 
-  const handleOpenDialog = (item) => {
+  const handleOpenDialog = async (item) => {
+    await fetchRestaurantData(); // Refetch data before opening the dialog
     setSelectedItem(item);
     setOpenDialog(true);
   };
@@ -146,7 +151,7 @@ export default function RestaurantMenu() {
   return (
     <div className={theme}>
       <Box className={`${theme} ${styles.pageBackground}`}>
-        <RestaurantAppBar restaurantInfo={restaurantData} />
+        <RestaurantAppBar data={restaurantData} />
 
         {isOpen ? (
           <Alert severity="success" className={`${theme} ${styles.openAlert}`}>
@@ -223,6 +228,7 @@ export default function RestaurantMenu() {
           openDialog={openDialog}
           handleCloseDialog={handleCloseDialog}
           theme={theme}
+          isOpen={isOpen}
         />
       </Box>
     </div>

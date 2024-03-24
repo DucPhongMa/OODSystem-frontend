@@ -108,6 +108,10 @@
       background-color: #1565c0;
       color: #ffffff;
     }
+
+    &:disabled {
+      color: #989898;
+    }
   }
 }
 
@@ -232,6 +236,10 @@
       background-color: #666666;
       color: #ffffff;
     }
+
+    &:disabled {
+      color: #808080;
+    }
   }
 }
 
@@ -346,6 +354,10 @@
     &:hover {
       background-color: #385234;
       color: #ffffff;
+    }
+
+    &:disabled {
+      color: #989898;
     }
   }
 }

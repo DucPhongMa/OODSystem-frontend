@@ -211,7 +211,7 @@ export default function Order() {
 
       {restaurantData && orderData && (
         <>
-          <RestaurantAppBar restaurantInfo={restaurantData} />
+          <RestaurantAppBar data={restaurantData} />
           {/* order status */}
           <Paper sx={{ marginBottom: 2, padding: 2 }}>
             <Typography

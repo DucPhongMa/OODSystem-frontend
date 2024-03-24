@@ -7,6 +7,7 @@ import {
   Box,
   CardMedia,
   Button,
+  Tooltip,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
@@ -22,6 +23,7 @@ export default function ItemDialog({
   openDialog,
   handleCloseDialog,
   theme,
+  isOpen,
 }) {
   const [cart, setCart] = useAtom(cartAtom);
   const handleAddToCart = () => {
@@ -112,7 +114,10 @@ export default function ItemDialog({
           >
             {item?.name}
           </Typography>
-          <Typography variant="body1" className={`${theme} ${styles.dialogItemDescription}`}>
+          <Typography
+            variant="body1"
+            className={`${theme} ${styles.dialogItemDescription}`}
+          >
             {item?.description}
           </Typography>
 
@@ -123,25 +128,40 @@ export default function ItemDialog({
               justifyContent: "center",
               mt: 2,
             }}
-            
           >
-            <IconButton onClick={() => handleItemCountChange(-1)} className={`${theme} ${styles.dialogChangeQuantity}`}>
+            <IconButton
+              onClick={() => handleItemCountChange(-1)}
+              className={`${theme} ${styles.dialogChangeQuantity}`}
+            >
               <RemoveIcon />
             </IconButton>
-            <Typography variant="h6" component="span" sx={{ mx: 2 }} className={`${theme} ${styles.dialogChangeQuantity}`}>
+            <Typography
+              variant="h6"
+              component="span"
+              sx={{ mx: 2 }}
+              className={`${theme} ${styles.dialogChangeQuantity}`}
+            >
               {itemCount}
             </Typography>
-            <IconButton onClick={() => handleItemCountChange(1)} className={`${theme} ${styles.dialogChangeQuantity}`}>
+            <IconButton
+              onClick={() => handleItemCountChange(1)}
+              className={`${theme} ${styles.dialogChangeQuantity}`}
+            >
               <AddIcon />
             </IconButton>
           </Box>
+
           <Button
             variant="contained"
-            sx={{ mt: 2 }}
+            sx={{mt: 2
+            }}
             onClick={handleAddToCart}
             className={`${theme} ${styles.dialogButton}`}
+            disabled={!isOpen} // Disable the button if restaurant is closed
           >
-            Add to Cart ${(item?.price * itemCount).toFixed(2)}
+            {isOpen
+              ? `Add to Cart $${(item?.price * itemCount).toFixed(2)}`
+              : `Restaurant is Closed $${(item?.price * itemCount).toFixed(2)}`}
           </Button>
         </Box>
       </DialogContent>

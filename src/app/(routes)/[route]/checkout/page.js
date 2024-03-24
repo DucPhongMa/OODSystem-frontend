@@ -188,7 +188,7 @@ export default function Checkout() {
 
       {restaurantData && (
         <>
-          <RestaurantAppBar restaurantInfo={restaurantData} />
+          <RestaurantAppBar data={restaurantData} />
           <Box sx={{ padding: 2 }}>
             {/* Address map */}
             {/* <PickupLocation
@@ -306,7 +306,7 @@ export default function Checkout() {
     <>
       {restaurantData && (
         <>
-          <RestaurantAppBar restaurantInfo={restaurantData} />
+          <RestaurantAppBar data={restaurantData} />
           <p>
             There are no items in cart. Please come back and add to cart first!!
           </p>

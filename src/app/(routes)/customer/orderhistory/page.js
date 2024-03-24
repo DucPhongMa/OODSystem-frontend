@@ -122,7 +122,7 @@ export default function OrderHistory() {
 
   return (
     <div className={theme}>
-      <RestaurantAppBar restaurantInfo={restaurantData} />
+      <RestaurantAppBar data={restaurantData} />
       <Container maxWidth="xl">
         <Typography variant="h2" align="center" style={{ margin: "40px 0" }}>
           Order History

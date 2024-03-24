@@ -116,12 +116,12 @@ export default function OrderHistoryDetails() {
 
   return !checkEmail() ? (
     <div>
-      <RestaurantAppBar restaurantInfo={restaurantData} />
+      <RestaurantAppBar data={restaurantData} />
       <p>You are not allowed to go to this page</p>
     </div>
   ) : (
     <div>
-      <RestaurantAppBar restaurantInfo={restaurantData} />
+      <RestaurantAppBar data={restaurantData} />
       <Container maxWidth="xl">
         <Typography
           variant="h2"

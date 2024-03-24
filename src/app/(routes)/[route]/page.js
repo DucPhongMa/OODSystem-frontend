@@ -126,7 +126,7 @@ export default function RestaurantHomepage() {
         )}
         {restaurantData && (
           <>
-            <RestaurantAppBar restaurantInfo={restaurantData} />
+            <RestaurantAppBar data={restaurantData} />
             <Box
               className={`${theme} ${styles.bannerBox}`}
               style={{ backgroundImage: `url(${restaurantData.bannerURL})` }}

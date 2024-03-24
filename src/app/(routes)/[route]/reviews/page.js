@@ -81,7 +81,7 @@ export default function OrderHistory() {
 
   return (
     <div>
-      <RestaurantAppBar restaurantInfo={restaurantData} />
+      <RestaurantAppBar data={restaurantData} />
       <Container maxWidth="xl">
         <Typography variant="h2" align="center" style={{ margin: "40px 0" }}>
           Reviews

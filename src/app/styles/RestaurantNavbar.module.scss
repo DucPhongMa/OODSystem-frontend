@@ -60,6 +60,14 @@
   .viewCartTitle {
     color: #ffffff;
   }
+
+  .cartIcon {
+
+    &:disabled {
+      color: #808080;
+    }
+  }
+
 }
 
 .theme3 {

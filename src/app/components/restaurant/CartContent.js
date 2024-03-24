@@ -5,12 +5,21 @@ import CloseIcon from "@mui/icons-material/Close";
 import CartItem from "./CartItem";
 import { useRouter, useParams } from "next/navigation";
 import styles from "../../styles/RestaurantNavbar.module.scss";
+import { getRestaurantByRoute } from "../../api/restaurant";
+import CustomDialog from "./CustomDialog";
+import { useEffect, useState } from "react";
 
 const CartContent = ({ handleClose, theme }) => {
+  const [dialogOpen, setDialogOpen] = useState(false);
   const router = useRouter();
   const params = useParams();
   const restaurantRoute = params.route;
   const [cart, setCart] = useAtom(cartAtom);
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+    window.location.reload();
+  };
 
   const addToItemQuantity = (itemID) => {
     setCart((prevCart) => {
@@ -42,10 +51,21 @@ const CartContent = ({ handleClose, theme }) => {
     setCart([]);
   };
 
-  const handleCheckout = () => {
-    // link to checkout
-    console.log(cart);
-    router.push(`/${restaurantRoute}/checkout`, { scroll: false });
+  const handleCheckout = async () => {
+    const data = await getRestaurantByRoute(restaurantRoute);
+    console.log(data);
+
+    // Get open/closed status
+    const status = data.attributes.status;
+
+    if (status === "open") {
+      // Proceed to checkout if restaurant is open
+      console.log(cart);
+      router.push(`/${restaurantRoute}/checkout`, { scroll: false });
+    } else {
+      // Show an error dialog if restaurant is closed
+      setDialogOpen(true);
+    }
   };
 
   return (
@@ -169,6 +189,12 @@ const CartContent = ({ handleClose, theme }) => {
           </Box>
         </Box>
       )}
+      <CustomDialog
+        open={dialogOpen}
+        handleClose={handleDialogClose}
+        text="The restaurant is now closed. Please try again later."
+        title="Restaurant Closed"
+      />
     </>
   );
 };
