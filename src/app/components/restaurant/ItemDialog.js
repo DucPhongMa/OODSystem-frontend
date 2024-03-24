@@ -112,7 +112,10 @@ export default function ItemDialog({
           >
             {item?.name}
           </Typography>
-          <Typography variant="body1" className={`${theme} ${styles.dialogItemDescription}`}>
+          <Typography
+            variant="body1"
+            className={`${theme} ${styles.dialogItemDescription}`}
+          >
             {item?.description}
           </Typography>
 
@@ -123,15 +126,25 @@ export default function ItemDialog({
               justifyContent: "center",
               mt: 2,
             }}
-            
           >
-            <IconButton onClick={() => handleItemCountChange(-1)} className={`${theme} ${styles.dialogChangeQuantity}`}>
+            <IconButton
+              onClick={() => handleItemCountChange(-1)}
+              className={`${theme} ${styles.dialogChangeQuantity}`}
+            >
               <RemoveIcon />
             </IconButton>
-            <Typography variant="h6" component="span" sx={{ mx: 2 }} className={`${theme} ${styles.dialogChangeQuantity}`}>
+            <Typography
+              variant="h6"
+              component="span"
+              sx={{ mx: 2 }}
+              className={`${theme} ${styles.dialogChangeQuantity}`}
+            >
               {itemCount}
             </Typography>
-            <IconButton onClick={() => handleItemCountChange(1)} className={`${theme} ${styles.dialogChangeQuantity}`}>
+            <IconButton
+              onClick={() => handleItemCountChange(1)}
+              className={`${theme} ${styles.dialogChangeQuantity}`}
+            >
               <AddIcon />
             </IconButton>
           </Box>
