@@ -23,7 +23,7 @@ export default function OrderHistoryDetails() {
   const [orderHistoryID, setorderHistoryID] = useState("");
 
   const params = useParams();
-  const [restaurantData, setRestaurantData] = useState("");
+  const [restaurantData, setRestaurantData] = useState(null);
   const [theme, setTheme] = useState("");
 
   //const [route, setRoute] = useAtom(getRouteAtom);

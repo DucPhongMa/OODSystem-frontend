@@ -22,7 +22,7 @@ export default function OrderHistory() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [restaurantData, setRestaurantData] = useState("");
+  const [restaurantData, setRestaurantData] = useState(null);
   const [theme, setTheme] = useState("");
 
   if (typeof window !== "undefined") {

@@ -12,7 +12,7 @@ import styles from "../../styles/RestaurantHomepage.module.scss";
 import { getAllReviews } from "../../api/review";
 
 export default function RestaurantHomepage() {
-  const [restaurantData, setRestaurantData] = useState("");
+  const [restaurantData, setRestaurantData] = useState(null);
   const [reviewData, setReviewData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
