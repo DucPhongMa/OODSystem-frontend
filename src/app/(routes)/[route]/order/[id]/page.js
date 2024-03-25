@@ -122,6 +122,7 @@ export default function Order() {
         console.log(`Fetching order at ${new Date().toLocaleTimeString()}`); //
         const order = await getOrderByUUID(orderUUID);
         setOrderData(order);
+        console.log(order);
         const transformedOrderDetails = order.attributes.order_details.data.map(
           (detail) => {
             // Assuming 'detail' represents each item in the 'order_details.data' array
@@ -132,6 +133,7 @@ export default function Order() {
               name: menuItem.name,
               price: menuItem.price,
               quantity: detail.attributes.quantity,
+              discount:menuItem.discount,
             };
           }
         );
@@ -174,6 +176,7 @@ export default function Order() {
               categoryID: item.attributes.menu_category.data?.id,
               id: item.id,
               description: item.attributes.description,
+              discount: item.attributes.discount
             };
           }
         );
