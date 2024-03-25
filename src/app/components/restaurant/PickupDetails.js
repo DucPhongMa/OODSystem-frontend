@@ -28,6 +28,14 @@ const ItemLine = ({ name, value }) => {
 };
 
 const PickupDetails = ({ cart, subTotal }) => {
+  const totalDiscount = cart.reduce((acc, item) => {
+    if (item.discount) {
+      const discountAmount = item.price * item.discount * 0.01 * item.quantity;
+      return acc + discountAmount;
+    }
+    return acc;
+  }, 0);
+  const adjustedSubTotal = subTotal - totalDiscount;
   return (
     <Paper sx={{ marginBottom: 2, padding: 2 }}>
       <Typography variant="h6">PICKUP ORDER DETAILS</Typography>
@@ -36,17 +44,25 @@ const PickupDetails = ({ cart, subTotal }) => {
           <ItemLine
             key={item.name}
             name={item.name}
-            value={
-              item.discount
-                ? `$${item.price} * ${item.quantity} [Discount: ${item.discount}%: - $${(item.price * item.discount * 0.01).toFixed(2)} * ${item.quantity}]`
-                : `$${item.price} * ${item.quantity}`
-            }
+            value={`$${item.price} * ${item.quantity}`}
           />
         ))}
         <ItemLine name="Subtotal" value={`$${subTotal}`} />
-        <ItemLine name="Tax" value={`$${(subTotal * 0.13).toFixed(2)}`} />
+        {totalDiscount > 0 && (
+          <ItemLine
+            name="Total Discount"
+            value={`-$${totalDiscount.toFixed(2)}`}
+          />
+        )}
+        <ItemLine
+          name="Tax"
+          value={`$${(adjustedSubTotal * 0.13).toFixed(2)}`}
+        />
         <Divider />
-        <ItemLine name="Total" value={`$${(subTotal * 1.13).toFixed(2)}`} />
+        <ItemLine
+          name="Total"
+          value={`$${(adjustedSubTotal * 1.13).toFixed(2)}`}
+        />
       </List>
     </Paper>
   );

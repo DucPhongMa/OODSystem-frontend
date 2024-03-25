@@ -45,7 +45,7 @@ export default function Checkout() {
   const [unregisteredCustomerName, setUnregisteredCustomerName] =
     useAtom(getCustomerNameAtom);
 
-  const handleOpenDialog = () => {
+  const handleOpenDialog = async () => {
     event.preventDefault();
     if (!formData.customerName.trim()) {
       setErrorName(true);
@@ -64,8 +64,9 @@ export default function Checkout() {
       alert("Cart is empty");
       return;
     }
-
-    if (restaurantStatus != "open") {
+    const status = await fetchStatus();
+    console.log("status:", status);
+    if (status != "open") {
       alert("The restaurant is not open for pickup now. ");
       return;
     }
@@ -117,6 +118,12 @@ export default function Checkout() {
     }
   }, []);
 
+  async function fetchStatus() {
+    const restaurantData = await getRestaurantByRoute(restaurantRoute);
+    setRestaurantStatus(restaurantData.attributes.status);
+    return restaurantData.attributes.status;
+  }
+
   useEffect(() => {
     async function fetchMyAPI() {
       const restaurantData = await getRestaurantByRoute(restaurantRoute);
@@ -148,17 +155,12 @@ export default function Checkout() {
       setRestaurantData({ ...restaurantData.attributes, menuCate });
       setRestaurantStatus(restaurantData.attributes.status);
     }
-
     fetchMyAPI();
   }, [restaurantRoute]);
 
   useEffect(() => {
     const sTotal = cart
-      .reduce(
-        (total, item) =>
-          total + item.price * (1 - item.discount * 0.01) * item.quantity,
-        0
-      )
+      .reduce((total, item) => total + item.price * item.quantity, 0)
       .toFixed(2);
     setSubTotal(sTotal);
   }, [cart]);
@@ -183,6 +185,7 @@ export default function Checkout() {
         unit_price: item.price,
         menu_item: item.itemID,
         counter: item.counter,
+        discount: item.discount,
       }));
       const uuid = uuidv4();
       setUnregisteredCustomerName(formData.customerName);
