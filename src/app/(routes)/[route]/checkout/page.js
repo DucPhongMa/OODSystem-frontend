@@ -40,6 +40,7 @@ export default function Checkout() {
   const [openDialog, setOpenDialog] = useState(false);
   const [errorName, setErrorName] = useState(false);
   const [errorPhone, setErrorPhone] = useState(false);
+  const [restaurantStatus, setRestaurantStatus] = useState('open');
 
   const [unregisteredCustomerName, setUnregisteredCustomerName] =
     useAtom(getCustomerNameAtom);
@@ -61,6 +62,11 @@ export default function Checkout() {
     console.log(cart);
     if (cart.length == 0) {
       alert("Cart is empty");
+      return;
+    }
+    
+    if (restaurantStatus!="open") {
+      alert("The restaurant is not open for pickup now. ");
       return;
     }
     setOpenDialog(true);
@@ -140,6 +146,7 @@ export default function Checkout() {
           }
         );
       setRestaurantData({ ...restaurantData.attributes, menuCate });
+      setRestaurantStatus(restaurantData.attributes.status);
     }
 
     fetchMyAPI();
