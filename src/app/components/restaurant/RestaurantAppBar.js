@@ -194,35 +194,42 @@ const RestaurantAppBar = ({ data }) => {
                     padding: 20,
                   }}
                 >
+                  <Link href="/customer/register" passHref>
+                    <Button
+                      style={{
+                        borderColor: "white",
+                        backgroundColor: "blue",
+                        color: "white",
+                        height: 100,
+                        width: 120,
+                      }}
+                    >
+                      Register
+                    </Button>
+                  </Link>
+                  <Link href="/customer/login" passHref>
+                    <Button
+                      style={{
+                        borderColor: "white",
+                        backgroundColor: "blue",
+                        color: "white",
+                        height: 100,
+                        width: 120,
+                      }}
+                    >
+                      Sign In
+                    </Button>
+                  </Link>
                   <Button
                     style={{
-                      borderColor: "white",
-                      backgroundColor: "blue",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      padding: 20,
+                      cursor: "pointer", // Change cursor to indicate the box is clickable
+                      backgroundColor: "blue", // Move styling here
                       color: "white",
-                      height: 100,
-                      width: 120,
-                    }}
-                  >
-                    <Link href={`/customer/register`}>Register</Link>
-                  </Button>
-                  <Button
-                    style={{
-                      borderColor: "white",
-                      backgroundColor: "blue",
-                      color: "white",
-                      height: 100,
-                      width: 120,
-                    }}
-                  >
-                    <Link href={`/customer/login`}>Sign In</Link>
-                  </Button>
-                  <Button
-                    style={{
-                      borderColor: "white",
-                      backgroundColor: "blue",
-                      color: "white",
-                      height: 100,
-                      width: 120,
+                      height: 100, // Adjust height as needed
+                      width: 120, // Adjust width as needed
                     }}
                     onClick={() => {
                       // setCustomerID(0);

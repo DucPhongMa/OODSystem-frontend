@@ -36,7 +36,11 @@ const PickupDetails = ({ cart, subTotal }) => {
           <ItemLine
             key={item.name}
             name={item.name}
-            value={`$${item.price} * ${item.quantity}`}
+            value={
+              item.discount
+                ? `$${item.price} * ${item.quantity} [Discount: ${item.discount}%: - $${(item.price * item.discount*0.01).toFixed(2)} * ${item.quantity}]`
+                : `$${item.price} * ${item.quantity}`
+            }
           />
         ))}
         <ItemLine name="Subtotal" value={`$${subTotal}`} />
