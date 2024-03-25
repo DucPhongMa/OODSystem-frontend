@@ -8,7 +8,6 @@ import {
   Typography,
   AppBar,
   Toolbar,
-  Checkbox,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
@@ -114,13 +113,6 @@ export default function CustomerRegisterPage() {
       {/* Navbar */}
       <AppBar position="static">
         <Toolbar>
-          <Typography style={{ marginRight: "40px" }}>
-            <Link href="/about">About</Link>
-          </Typography>
-          <Typography>
-            <Link href="/contact">Contact</Link>
-          </Typography>
-
           <div style={{ flexGrow: 1 }}></div>
 
           <Typography style={{ marginRight: "40px" }}>
@@ -208,15 +200,6 @@ export default function CustomerRegisterPage() {
                   label="Phone Number"
                   {...register("phoneNum")}
                 />
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="body1">
-                  Do you agree to the{" "}
-                  <Link href="">
-                    <u>Terms and Conditions</u>
-                  </Link>
-                  <Checkbox required></Checkbox>
-                </Typography>
               </Grid>
             </Grid>
             <Button

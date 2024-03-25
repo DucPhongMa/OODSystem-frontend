@@ -44,13 +44,6 @@ export default function CustomerLoginPage() {
       {/* Navbar */}
       <AppBar position="static">
         <Toolbar>
-          <Typography style={{ marginRight: "40px" }}>
-            <Link href="/about">About</Link>
-          </Typography>
-          <Typography>
-            <Link href="/contact">Contact</Link>
-          </Typography>
-
           <div style={{ flexGrow: 1 }}></div>
 
           <Typography style={{ marginRight: "40px" }}>
