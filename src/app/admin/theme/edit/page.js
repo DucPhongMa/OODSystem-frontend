@@ -24,7 +24,6 @@ export default function EditThemePage() {
   const [storedUsername, setStoredUsername] = useState("");
   const [restaurantData, setRestaurantData] = useState(null);
   const [restaurantRoute, setRestaurantRoute] = useState("");
-  const [username, setUsername] = useState("");
 
   const handleThemeChange = (event) => {
     setSelectedTheme(parseInt(event.target.value, 10));
@@ -48,13 +47,16 @@ export default function EditThemePage() {
     }
     const newThemeObj = { id: selectedTheme, name: themeName };
     console.log(newThemeObj);
+    console.log("storedUsername");
     console.log(storedUsername);
     try {
       await updateThemeID(storedUsername, newThemeObj);
       console.log("Change theme successfully");
+      alert("Theme changed successfully");
     } catch (error) {
       console.error("Change theme failed: ", error);
       setIsLoading(false);
+      alert("Failed to update theme. Please try again.");
       return;
     }
   };
@@ -67,7 +69,7 @@ export default function EditThemePage() {
     // Get username from localStorage
     const storedUsername = localStorage.getItem("business-username");
     if (storedUsername) {
-      setUsername(storedUsername);
+      setStoredUsername(storedUsername);
 
       async function fetchMyAPI() {
         await getRestaurantByBusinessName(storedUsername).then((route) => {
