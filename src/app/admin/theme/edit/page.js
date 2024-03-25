@@ -1,8 +1,8 @@
 "use client";
 import { checkBusinessLogin } from "@/app/api/auth";
 import {
-  getRestaurantMenuData,
-  updateRestaurantMenu,
+  getRestaurantByBusinessName,
+  getRestaurantByRoute,
   updateThemeID,
 } from "@/app/api/restaurant";
 import { useEffect, useState } from "react";
@@ -11,29 +11,20 @@ import {
   Button,
   Box,
   Grid,
-  TextField,
-  List,
-  ListItem,
-  ListItemText,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  IconButton,
-  Input,
   FormControl,
   RadioGroup,
   FormControlLabel,
   Radio,
 } from "@mui/material";
-import RemoveIcon from "@mui/icons-material/Remove";
 
 export default function EditThemePage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [restaurantMenuID, setRestaurantMenuID] = useState();
-  const [selectedTheme, setSelectedTheme] = useState(1);
+  const [selectedTheme, setSelectedTheme] = useState(0);
   const [storedUsername, setStoredUsername] = useState("");
+  const [restaurantData, setRestaurantData] = useState(null);
+  const [restaurantRoute, setRestaurantRoute] = useState("");
+  const [username, setUsername] = useState("");
 
   const handleThemeChange = (event) => {
     setSelectedTheme(parseInt(event.target.value, 10));
@@ -69,28 +60,49 @@ export default function EditThemePage() {
   };
 
   useEffect(() => {
-    // check user auth
     const checkLoggedIn = checkBusinessLogin();
     setIsLoggedIn(checkLoggedIn);
+    console.log("is logged in: " + checkLoggedIn);
+
     // Get username from localStorage
     const storedUsername = localStorage.getItem("business-username");
-    setStoredUsername(storedUsername);
-    setIsLoading(true);
-    if (storedUsername && checkLoggedIn) {
+    if (storedUsername) {
+      setUsername(storedUsername);
+
       async function fetchMyAPI() {
-        const restaurantMenu = await getRestaurantMenuData(storedUsername);
-        console.log(restaurantMenu);
-        setRestaurantMenuID(restaurantMenu.data.id);
-        setSelectedTheme(
-          restaurantMenu.data.attributes.theme
-            ? restaurantMenu.data.attributes.theme.id
-            : 1
-        );
+        await getRestaurantByBusinessName(storedUsername).then((route) => {
+          setRestaurantRoute(route);
+          console.log("route: " + route);
+        });
       }
       fetchMyAPI();
     }
-    setIsLoading(false);
-  }, []);
+  }, [restaurantRoute]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    const fetchData = async () => {
+      const data = await getRestaurantByRoute(restaurantRoute);
+      setRestaurantData(data);
+      console.log(data);
+      console.log("theme: " + data.attributes.theme.name);
+
+      setSelectedTheme(data.attributes.theme.id);
+    };
+
+    if (restaurantRoute) {
+      fetchData();
+    }
+    // setIsLoading(false);
+  }, [restaurantRoute]);
+
+  useEffect(() => {
+    if(selectedTheme==0){
+        setIsLoading(true);
+    }else{
+        setIsLoading(false);
+    }
+  }, [selectedTheme]);
 
   return isLoading ? (
     "Page is loading"
