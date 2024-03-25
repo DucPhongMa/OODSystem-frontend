@@ -97,10 +97,10 @@ export default function EditThemePage() {
   }, [restaurantRoute]);
 
   useEffect(() => {
-    if(selectedTheme==0){
-        setIsLoading(true);
-    }else{
-        setIsLoading(false);
+    if (selectedTheme == 0) {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
     }
   }, [selectedTheme]);
 

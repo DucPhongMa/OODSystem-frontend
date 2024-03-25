@@ -220,26 +220,25 @@ const RestaurantAppBar = ({ data }) => {
                       Sign In
                     </Button>
                   </Link>
-                    <Button
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        padding: 20,
-                        cursor: "pointer", 
-                        backgroundColor: "blue", 
-                        color: "white",
-                        height: 100, 
-                        width: 120, 
-                      }}
-                      onClick={() => {
-                        // setCustomerID(0);
-                        handleLoginModalClose();
-                        router.push(`/${data.route}/menu`);
-                      }}
-                    >
-                      Proceed without an account
-                    </Button>
-
+                  <Button
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      padding: 20,
+                      cursor: "pointer",
+                      backgroundColor: "blue",
+                      color: "white",
+                      height: 100,
+                      width: 120,
+                    }}
+                    onClick={() => {
+                      // setCustomerID(0);
+                      handleLoginModalClose();
+                      router.push(`/${data.route}/menu`);
+                    }}
+                  >
+                    Proceed without an account
+                  </Button>
                 </Box>
               </ModalContent>
             </Modal>
