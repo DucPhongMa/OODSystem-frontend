@@ -101,7 +101,7 @@ export default function RestaurantMenu() {
           id: item.id,
           description: item.attributes.description,
           counter: item.attributes.counter,
-          discount: item.attributes.counter
+          discount: item.attributes.counter,
         };
       }
     );
