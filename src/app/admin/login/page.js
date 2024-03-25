@@ -40,11 +40,16 @@ export default function ManagementLoginPage() {
     } else if (!validateEmail(formData.email)) {
       setError("Email is not valid");
     } else {
-      const error = await loginUser(formData.email, formData.password);
+      const error = await loginUser(
+        formData.email,
+        formData.password,
+        "Business"
+      );
       if (error) {
         console.log(error);
         setError(error);
       } else {
+        setError(null);
         router.push("/admin/dashboard");
       }
     }

@@ -27,7 +27,7 @@ export const registerBusiness = async (email, password) => {
   }
 };
 
-export const loginUser = async (identifier, password) => {
+export const loginUser = async (identifier, password, role) => {
   try {
     const response = await fetch(`${API_BACKEND}api/auth/local`, {
       method: "POST",
@@ -56,9 +56,15 @@ export const loginUser = async (identifier, password) => {
         phoneNum: userInfoData.phonenumber,
       };
       if (userInfoData.role.name == "Business") {
+        if (role == "Customer") {
+          return "Business owner cannot login as customer. Use customer account";
+        }
         localStorage.setItem("business-authorization", JSON.stringify(item));
         localStorage.setItem("business-username", identifier);
       } else {
+        if (role == "Business") {
+          return "Customer cannot login as business owner. Use business account";
+        }
         localStorage.setItem("customer-authorization", JSON.stringify(item));
         localStorage.setItem("customer-username", identifier);
       }
