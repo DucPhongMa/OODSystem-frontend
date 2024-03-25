@@ -261,8 +261,14 @@ const RestaurantAppBar = ({ data }) => {
               </Typography>
             )}
             {!customerLoggedIn && (
-              <Button color="inherit" variant="outlined">
-                <Link href={`/customer/login`}>Log In</Link>
+              <Button
+                color="inherit"
+                variant="outlined"
+                component={Link}
+                href="/customer/login"
+                style={{ textDecoration: "none" }}
+              >
+                Log In
               </Button>
             )}
             {customerLoggedIn && (
