@@ -305,7 +305,7 @@ const RestaurantAppBar = ({ data }) => {
                   "& .MuiBadge-badge": {
                     width: 24,
                     height: 24,
-                    fontSize: '1rem',
+                    fontSize: "1rem",
                     backgroundColor: !isOpen
                       ? "grey.500"
                       : theme === styles.theme2
