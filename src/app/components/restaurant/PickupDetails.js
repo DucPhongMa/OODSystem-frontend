@@ -38,7 +38,7 @@ const PickupDetails = ({ cart, subTotal }) => {
             name={item.name}
             value={
               item.discount
-                ? `$${item.price} * ${item.quantity} [Discount: ${item.discount}%: - $${(item.price * item.discount*0.01).toFixed(2)} * ${item.quantity}]`
+                ? `$${item.price} * ${item.quantity} [Discount: ${item.discount}%: - $${(item.price * item.discount * 0.01).toFixed(2)} * ${item.quantity}]`
                 : `$${item.price} * ${item.quantity}`
             }
           />

@@ -40,7 +40,7 @@ export default function Checkout() {
   const [openDialog, setOpenDialog] = useState(false);
   const [errorName, setErrorName] = useState(false);
   const [errorPhone, setErrorPhone] = useState(false);
-  const [restaurantStatus, setRestaurantStatus] = useState('open');
+  const [restaurantStatus, setRestaurantStatus] = useState("open");
 
   const [unregisteredCustomerName, setUnregisteredCustomerName] =
     useAtom(getCustomerNameAtom);
@@ -64,8 +64,8 @@ export default function Checkout() {
       alert("Cart is empty");
       return;
     }
-    
-    if (restaurantStatus!="open") {
+
+    if (restaurantStatus != "open") {
       alert("The restaurant is not open for pickup now. ");
       return;
     }
@@ -154,7 +154,11 @@ export default function Checkout() {
 
   useEffect(() => {
     const sTotal = cart
-      .reduce((total, item) => total + item.price*(1-item.discount*0.01) * item.quantity, 0)
+      .reduce(
+        (total, item) =>
+          total + item.price * (1 - item.discount * 0.01) * item.quantity,
+        0
+      )
       .toFixed(2);
     setSubTotal(sTotal);
   }, [cart]);
