@@ -133,7 +133,7 @@ export default function Order() {
               name: menuItem.name,
               price: menuItem.price,
               quantity: detail.attributes.quantity,
-              discount:menuItem.discount,
+              discount: menuItem.discount,
             };
           }
         );
@@ -176,7 +176,7 @@ export default function Order() {
               categoryID: item.attributes.menu_category.data?.id,
               id: item.id,
               description: item.attributes.description,
-              discount: item.attributes.discount
+              discount: item.attributes.discount,
             };
           }
         );
