@@ -303,11 +303,20 @@ const RestaurantAppBar = ({ data }) => {
                 )}
                 sx={{
                   "& .MuiBadge-badge": {
-                    backgroundColor: isOpen ? "error.main" : "grey.500",
+                    width: 24,
+                    height: 24,
+                    fontSize: '1rem',
+                    backgroundColor: !isOpen
+                      ? "grey.500"
+                      : theme === styles.theme2
+                        ? "error.main"
+                        : theme === styles.theme3
+                          ? "success.main"
+                          : "error.main",
                   },
                 }}
               >
-                <AddShoppingCartIcon />
+                <AddShoppingCartIcon fontSize="large" />
               </Badge>
             </IconButton>
           </Box>
