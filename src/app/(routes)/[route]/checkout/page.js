@@ -156,6 +156,14 @@ export default function Checkout() {
     return /^\d{10}$/.test(phone);
   };
 
+  useEffect(() => {
+    // Load cart data from localStorage on component mount
+    const storedCart = localStorage.getItem("cart");
+    if (storedCart) {
+      setCart(JSON.parse(storedCart));
+    }
+  }, []);
+
   const submitOrder = async () => {
     try {
       const orderItems = cart.map((item) => ({
@@ -176,6 +184,9 @@ export default function Checkout() {
         formData.phoneNum,
         formData.userId
       );
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("cart");
+      }
       setOpenDialog(false); // Close the dialog after submission
       setCart([]);
       router.push(`/${restaurantRoute}/order/${uuid}`, { scroll: false });
@@ -197,7 +208,7 @@ export default function Checkout() {
     }
   };
 
-  return (
+  return cart && cart.length > 0 ? (
     <>
       {!restaurantData && (
         <Backdrop
@@ -210,7 +221,7 @@ export default function Checkout() {
 
       {restaurantData && (
         <>
-          <RestaurantAppBar restaurantInfo={restaurantData} />
+          <RestaurantAppBar data={restaurantData} />
           <Box sx={{ padding: 2 }}>
             {/* Address map */}
             {/* <PickupLocation
@@ -321,6 +332,17 @@ export default function Checkout() {
               </Button>
             </DialogActions>
           </Dialog>
+        </>
+      )}
+    </>
+  ) : (
+    <>
+      {restaurantData && (
+        <>
+          <RestaurantAppBar data={restaurantData} />
+          <p>
+            There are no items in cart. Please come back and add to cart first!!
+          </p>
         </>
       )}
     </>

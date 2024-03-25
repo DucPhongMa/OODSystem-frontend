@@ -22,7 +22,7 @@ export default function OrderHistory() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [restaurantData, setRestaurantData] = useState("");
+  const [restaurantData, setRestaurantData] = useState(null);
   const [theme, setTheme] = useState("");
 
   if (typeof window !== "undefined") {
@@ -122,7 +122,7 @@ export default function OrderHistory() {
 
   return (
     <div className={theme}>
-      <RestaurantAppBar restaurantInfo={restaurantData} />
+      <RestaurantAppBar data={restaurantData} />
       <Container maxWidth="xl">
         <Typography variant="h2" align="center" style={{ margin: "40px 0" }}>
           Order History

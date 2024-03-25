@@ -9,11 +9,10 @@ import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
 import Link from "next/link";
 import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
 import styles from "../../styles/RestaurantHomepage.module.scss";
-import { useAtom } from "jotai";
 import { getAllReviews } from "../../api/review";
 
 export default function RestaurantHomepage() {
-  const [restaurantData, setRestaurantData] = useState("");
+  const [restaurantData, setRestaurantData] = useState(null);
   const [reviewData, setReviewData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -127,7 +126,7 @@ export default function RestaurantHomepage() {
         )}
         {restaurantData && (
           <>
-            <RestaurantAppBar restaurantInfo={restaurantData} />
+            <RestaurantAppBar data={restaurantData} />
             <Box
               className={`${theme} ${styles.bannerBox}`}
               style={{ backgroundImage: `url(${restaurantData.bannerURL})` }}

@@ -74,7 +74,7 @@ export default function AboutPage() {
     <>
       {restaurantData ? (
         <>
-          <RestaurantAppBar restaurantInfo={restaurantData} />
+          <RestaurantAppBar data={restaurantData} />
 
           <Container maxWidth="lg" sx={{ mt: 8, mb: 8 }}>
             {/* Image and Intro Section */}

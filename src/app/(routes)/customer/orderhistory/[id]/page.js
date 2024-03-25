@@ -23,7 +23,7 @@ export default function OrderHistoryDetails() {
   const [orderHistoryID, setorderHistoryID] = useState("");
 
   const params = useParams();
-  const [restaurantData, setRestaurantData] = useState("");
+  const [restaurantData, setRestaurantData] = useState(null);
   const [theme, setTheme] = useState("");
 
   //const [route, setRoute] = useAtom(getRouteAtom);
@@ -116,12 +116,12 @@ export default function OrderHistoryDetails() {
 
   return !checkEmail() ? (
     <div>
-      <RestaurantAppBar restaurantInfo={restaurantData} />
+      <RestaurantAppBar data={restaurantData} />
       <p>You are not allowed to go to this page</p>
     </div>
   ) : (
     <div>
-      <RestaurantAppBar restaurantInfo={restaurantData} />
+      <RestaurantAppBar data={restaurantData} />
       <Container maxWidth="xl">
         <Typography
           variant="h2"

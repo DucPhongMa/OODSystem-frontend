@@ -54,7 +54,17 @@
   }
   .loginButton {
     color: inherit;
-    border: 1px solid; // Assuming you want a default border style that might be adjusted per theme
+    border: 1px solid;
+  }
+
+  .viewCartTitle {
+    color: #ffffff;
+  }
+
+  .cartIcon {
+    &:disabled {
+      color: #808080;
+    }
   }
 }
 
@@ -84,6 +94,6 @@
   }
   .loginButton {
     color: inherit;
-    border: 1px solid; // Assuming you want a default border style that might be adjusted per theme
+    border: 1px solid;
   }
 }

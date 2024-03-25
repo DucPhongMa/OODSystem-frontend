@@ -24,7 +24,7 @@ export default function OrderHistory() {
   const [error, setError] = useState(null);
   const restaurantRoute = params.route;
 
-  const [restaurantData, setRestaurantData] = useState("");
+  const [restaurantData, setRestaurantData] = useState(null);
   const [reviewData, setReviewData] = useState(null);
   const [theme, setTheme] = useState("");
 
@@ -81,7 +81,7 @@ export default function OrderHistory() {
 
   return (
     <div>
-      <RestaurantAppBar restaurantInfo={restaurantData} />
+      <RestaurantAppBar data={restaurantData} />
       <Container maxWidth="xl">
         <Typography variant="h2" align="center" style={{ margin: "40px 0" }}>
           Reviews
