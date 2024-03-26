@@ -11,11 +11,14 @@ import {
   TableHead,
   TableRow,
   Rating,
+  Box,
+  Paper,
 } from "@mui/material";
 import { getRestaurantByRoute } from "../../../api/restaurant";
 import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
+import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
 import Link from "next/link";
-import styles from "../../../styles/RestaurantHomepage.module.scss";
+import styles from "../../../styles/RestaurantReviews.module.scss";
 import { getAllReviews } from "../../../api/review";
 
 export default function OrderHistory() {
@@ -30,10 +33,26 @@ export default function OrderHistory() {
   const [theme, setTheme] = useState("");
 
   useEffect(() => {
-    setTheme(styles.theme1); // Set page theme
-
     async function fetchMyAPI() {
       const restaurantData = await getRestaurantByRoute(restaurantRoute);
+
+      const themeID = restaurantData.attributes.theme.id;
+
+      // Set the page theme based on the themeID
+      switch (themeID) {
+        case 1:
+          setTheme(styles.theme1);
+          break;
+        case 2:
+          setTheme(styles.theme2);
+          break;
+        case 3:
+          setTheme(styles.theme3);
+          break;
+        default:
+          setTheme(styles.theme1);
+      }
+
       try {
         const ReviewData = await getAllReviews(restaurantRoute);
 
@@ -97,53 +116,58 @@ export default function OrderHistory() {
   };
 
   return (
-    <div>
-      <RestaurantAppBar data={restaurantData} />
-      <Container maxWidth="xl">
-        <Typography variant="h2" align="center" style={{ margin: "40px 0" }}>
-          Reviews
-        </Typography>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell align="center" width="200em">
-                  Customer Name
-                </TableCell>
-                <TableCell align="center" width="200em">
-                  Rating
-                </TableCell>
-                <TableCell align="center" width="200em">
-                  Review
-                </TableCell>
-                <TableCell align="center" width="200em">
-                  Date
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {reviewData.map((review, index) => (
-                <TableRow key={review.id}>
-                  <TableCell align="center">
-                    {review.attributes.customerName != "" &&
-                      review.attributes.customerName}{" "}
-                    {review.attributes.customerName == "" && "Guest"}
-                  </TableCell>
-                  <TableCell align="center">
-                    <Rating value={review.attributes.rating} readOnly></Rating>
-                  </TableCell>
-                  <TableCell align="center">
-                    {review.attributes.reviewContent}
-                  </TableCell>
-                  <TableCell align="center">
-                    {formatDate(review.attributes.createdAt)}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Container>
+    <div className={theme}>
+      <Box className={`${theme} ${styles.pageBackground}`}>
+        <RestaurantAppBar data={restaurantData} />
+        <Container maxWidth="xl" sx={{ marginBottom: 12 }}>
+          <Typography variant="h2" align="center" style={{ margin: "40px 0" }}>
+            Reviews
+          </Typography>
+          <Paper
+            sx={{ marginBottom: 2, padding: 2 }}
+            className={`${theme} ${styles.section}`}
+          >
+            <Table>
+              <TableBody>
+                {reviewData.map((review, index) => (
+                  <TableRow key={review.id}>
+                    <TableCell
+                      align="center"
+                      className={`${theme} ${styles.tableText}`}
+                    >
+                      {review.attributes.customerName != "" &&
+                        review.attributes.customerName}{" "}
+                      {review.attributes.customerName == "" && "Guest"}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      className={`${theme} ${styles.tableText}`}
+                    >
+                      <Rating
+                        value={review.attributes.rating}
+                        readOnly
+                      ></Rating>
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      className={`${theme} ${styles.tableText}`}
+                    >
+                      {review.attributes.reviewContent}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      className={`${theme} ${styles.tableText}`}
+                    >
+                      {formatDate(review.attributes.createdAt)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Paper>
+        </Container>
+        <RestaurantFooter restaurantData={restaurantData} />
+      </Box>
     </div>
   );
 }
