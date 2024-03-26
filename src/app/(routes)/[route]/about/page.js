@@ -68,10 +68,13 @@ export default function AboutPage() {
   }, [fetchRestaurantData]);
 
   return (
-    <>
+    <div className={theme}>
       {restaurantData ? (
-        <div className={theme}>
-          <Box className={`${theme} ${styles.pageBackground}`}>
+        <Box
+          sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+          className={`${theme} ${styles.pageBackground}`}
+        >
+          <Box sx={{ flexGrow: 1 }}>
             <RestaurantAppBar data={restaurantData} />
 
             <Container maxWidth="lg" sx={{ mt: 8, mb: 8 }}>
@@ -97,12 +100,12 @@ export default function AboutPage() {
                 </Grid>
               </Grid>
             </Container>
-            <RestaurantFooter restaurantData={restaurantData} />
           </Box>
-        </div>
+          <RestaurantFooter restaurantData={restaurantData} />
+        </Box>
       ) : (
         "Is loading"
       )}
-    </>
+    </div>
   );
 }

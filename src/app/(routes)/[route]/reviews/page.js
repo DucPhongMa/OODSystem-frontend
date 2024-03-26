@@ -117,55 +117,70 @@ export default function OrderHistory() {
 
   return (
     <div className={theme}>
-      <Box className={`${theme} ${styles.pageBackground}`}>
-        <RestaurantAppBar data={restaurantData} />
-        <Container maxWidth="xl" sx={{ marginBottom: 12 }}>
-          <Typography variant="h2" align="center" style={{ margin: "40px 0" }}>
-            Reviews
-          </Typography>
-          <Paper
-            sx={{ marginBottom: 2, padding: 2 }}
-            className={`${theme} ${styles.section}`}
-          >
-            <Table>
-              <TableBody>
-                {reviewData.map((review, index) => (
-                  <TableRow key={review.id}>
-                    <TableCell
-                      align="center"
-                      className={`${theme} ${styles.tableText}`}
-                    >
-                      {review.attributes.customerName != "" &&
-                        review.attributes.customerName}{" "}
-                      {review.attributes.customerName == "" && "Guest"}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      className={`${theme} ${styles.tableText}`}
-                    >
-                      <Rating
-                        value={review.attributes.rating}
-                        readOnly
-                      ></Rating>
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      className={`${theme} ${styles.tableText}`}
-                    >
-                      {review.attributes.reviewContent}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      className={`${theme} ${styles.tableText}`}
-                    >
-                      {formatDate(review.attributes.createdAt)}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Paper>
-        </Container>
+      <Box
+        sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+        className={`${theme} ${styles.pageBackground}`}
+      >
+        <Box sx={{ flexGrow: 1 }}>
+          <RestaurantAppBar data={restaurantData} />
+          <Container maxWidth="xl" sx={{ marginBottom: 12 }}>
+            <Typography
+              variant="h2"
+              align="center"
+              style={{ margin: "40px 0" }}
+            >
+              Reviews
+            </Typography>
+            {reviewData.length > 0 ? (
+              <Paper
+                sx={{ marginBottom: 2, padding: 2 }}
+                className={`${theme} ${styles.section}`}
+              >
+                <Table>
+                  <TableBody>
+                    {reviewData.map((review, index) => (
+                      <TableRow key={review.id}>
+                        <TableCell
+                          align="center"
+                          className={`${theme} ${styles.tableText}`}
+                        >
+                          {review.attributes.customerName != "" &&
+                            review.attributes.customerName}{" "}
+                          {review.attributes.customerName == "" && "Guest"}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          className={`${theme} ${styles.tableText}`}
+                        >
+                          <Rating
+                            value={review.attributes.rating}
+                            readOnly
+                          ></Rating>
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          className={`${theme} ${styles.tableText}`}
+                        >
+                          {review.attributes.reviewContent}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          className={`${theme} ${styles.tableText}`}
+                        >
+                          {formatDate(review.attributes.createdAt)}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </Paper>
+            ) : (
+              <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
+                <Typography>There are no reviews.</Typography>
+              </Box>
+            )}
+          </Container>
+        </Box>
         <RestaurantFooter restaurantData={restaurantData} />
       </Box>
     </div>

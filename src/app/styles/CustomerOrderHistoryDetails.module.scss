@@ -2,7 +2,7 @@
 .theme1 {
   .pageBackground {
     background: linear-gradient(to bottom, #ffffff, #f7fafc);
-    min-height: 100vh;
+
     background-attachment: fixed;
     color: #000000;
   }
@@ -15,6 +15,17 @@
 
   .tableText {
     color: #000000;
+    border-color: #bebebe;
+  }
+
+  .button {
+    background-color: #1976d2;
+    color: #ffffff;
+
+    &:hover {
+      background-color: #1565c0;
+      color: #ffffff;
+    }
   }
 }
 
@@ -22,7 +33,7 @@
 .theme2 {
   .pageBackground {
     background: linear-gradient(to bottom, #2e2e2e, #383838);
-    min-height: 100vh;
+
     background-attachment: fixed;
     color: #e0e0e0;
   }
@@ -35,6 +46,21 @@
 
   .tableText {
     color: #e0e0e0;
+    border-color: #909090;
+  }
+
+  .button {
+    background-color: #666666;
+    color: #f0f0f0;
+
+    &:hover {
+      background-color: #404040;
+      color: #ffffff;
+    }
+
+    &:disabled {
+      color: #787878;
+    }
   }
 }
 
@@ -42,7 +68,7 @@
 .theme3 {
   .pageBackground {
     background-color: #f2eae3;
-    min-height: 100vh;
+
     background-attachment: fixed;
     color: #383838;
   }
@@ -54,5 +80,16 @@
 
   .tableText {
     color: #383838;
+    border-color: #909090;
+  }
+
+  .button {
+    background-color: #42613d;
+    color: #ffffff;
+
+    &:hover {
+      background-color: #385234;
+      color: #ffffff;
+    }
   }
 }
