@@ -37,7 +37,7 @@ export default function OrderHistory() {
       try {
         const ReviewData = await getAllReviews(restaurantRoute);
 
-        const sortedReviewData = ReviewData.slice().sort((a, b) => a.id - b.id);
+        const sortedReviewData = ReviewData.slice().sort((a, b) => b.id - a.id);
 
         setReviewData(sortedReviewData);
         setLoading(false);
