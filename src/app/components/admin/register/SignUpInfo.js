@@ -18,7 +18,7 @@ function SignUpInfo({ formData, setFormData }) {
                 setFormData({ ...formData, email: event.target.value.trim() }) // Trim spaces here
             }
             inputProps={{
-              maxLength: 320
+              maxLength: 320,
             }}
           />
         </Grid>
@@ -35,7 +35,7 @@ function SignUpInfo({ formData, setFormData }) {
               setFormData({ ...formData, password: event.target.value })
             }
             inputProps={{
-              maxLength: 128
+              maxLength: 128,
             }}
           />
         </Grid>
@@ -52,7 +52,7 @@ function SignUpInfo({ formData, setFormData }) {
               setFormData({ ...formData, confirmPassword: event.target.value })
             }
             inputProps={{
-              maxLength: 128
+              maxLength: 128,
             }}
           />
         </Grid>

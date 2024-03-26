@@ -40,7 +40,7 @@ function RestaurantInfo({ formData, setFormData }) {
               setFormData({ ...formData, name: e.target.value.trim() })
             }
             inputProps={{
-              maxLength: 30
+              maxLength: 30,
             }}
           />
         </Grid>
@@ -56,7 +56,7 @@ function RestaurantInfo({ formData, setFormData }) {
               setFormData({ ...formData, route: e.target.value.trim() });
             }}
             inputProps={{
-              maxLength: 30
+              maxLength: 30,
             }}
           />
         </Grid>
@@ -87,7 +87,7 @@ function RestaurantInfo({ formData, setFormData }) {
               })
             }
             inputProps={{
-              maxLength: 5000
+              maxLength: 5000,
             }}
           />
         </Grid>
@@ -118,7 +118,7 @@ function RestaurantInfo({ formData, setFormData }) {
               })
             }
             inputProps={{
-              maxLength: 30
+              maxLength: 30,
             }}
           />
         </Grid>
@@ -149,7 +149,7 @@ function RestaurantInfo({ formData, setFormData }) {
               })
             }
             inputProps={{
-              maxLength: 30
+              maxLength: 30,
             }}
           />
         </Grid>
@@ -180,7 +180,7 @@ function RestaurantInfo({ formData, setFormData }) {
               })
             }
             inputProps={{
-              maxLength: 30
+              maxLength: 30,
             }}
           />
         </Grid>
@@ -211,7 +211,7 @@ function RestaurantInfo({ formData, setFormData }) {
               })
             }
             inputProps={{
-              maxLength: 30
+              maxLength: 30,
             }}
           />
         </Grid>
@@ -242,7 +242,7 @@ function RestaurantInfo({ formData, setFormData }) {
               })
             }
             inputProps={{
-              maxLength: 30
+              maxLength: 30,
             }}
           />
         </Grid>
