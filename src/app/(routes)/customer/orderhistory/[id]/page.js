@@ -237,9 +237,7 @@ export default function OrderHistoryDetails() {
                             align="right"
                             sx={{ fontSize: "1rem" }}
                             className={`${theme} ${styles.tableText}`}
-                          >
-
-                          </TableCell>
+                          ></TableCell>
                           <TableCell
                             align="left"
                             sx={{ fontSize: "1rem" }}
