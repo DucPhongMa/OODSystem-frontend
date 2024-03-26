@@ -1,14 +1,24 @@
 /* animations.css */
 @keyframes blink {
-    0%, 100% { opacity: 0; }
-    50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0;
   }
-  
-  .blink {
-    animation: blink 1.5s infinite;
+  50% {
+    opacity: 1;
   }
-  
-  .blink-1 { animation-delay: 0s; }
-  .blink-2 { animation-delay: 0.5s; }
-  .blink-3 { animation-delay: 1s; }
-  
+}
+
+.blink {
+  animation: blink 1.5s infinite;
+}
+
+.blink-1 {
+  animation-delay: 0s;
+}
+.blink-2 {
+  animation-delay: 0.5s;
+}
+.blink-3 {
+  animation-delay: 1s;
+}
