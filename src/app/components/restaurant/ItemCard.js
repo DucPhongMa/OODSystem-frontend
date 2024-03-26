@@ -9,6 +9,13 @@ import {
 import styles from "../../styles/RestaurantMenu.module.scss";
 
 export default function ItemCard({ item, handleOpenDialog, theme }) {
+  const originalPrice = parseFloat(item.price).toFixed(2);
+  const discountPercentage = parseFloat(item.discount);
+  const discountedPrice = (
+    originalPrice -
+    originalPrice * (discountPercentage / 100)
+  ).toFixed(2);
+
   return (
     <Card
       sx={{ display: "flex", mb: 2, height: 140 }}
@@ -47,7 +54,21 @@ export default function ItemCard({ item, handleOpenDialog, theme }) {
             sx={{ marginTop: 1 }}
             className={`${theme} ${styles.itemPrice}`}
           >
-            ${parseFloat(item.price).toFixed(2)}
+            {discountPercentage > 0 ? (
+              <>
+                <span
+                  style={{ textDecoration: "line-through", marginRight: "8px" }}
+                >
+                  ${originalPrice}
+                </span>
+                <span className={`${theme} ${styles.discountPrice}`}>
+                  {" "}
+                  ${discountedPrice}
+                </span>
+              </>
+            ) : (
+              `$${originalPrice}`
+            )}
           </Typography>
         </CardContent>
         <Box
