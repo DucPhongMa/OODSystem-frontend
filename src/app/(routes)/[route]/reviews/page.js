@@ -36,7 +36,10 @@ export default function OrderHistory() {
       const restaurantData = await getRestaurantByRoute(restaurantRoute);
       try {
         const ReviewData = await getAllReviews(restaurantRoute);
-        setReviewData(ReviewData);
+
+        const sortedReviewData = ReviewData.slice().sort((a, b) => a.id - b.id);
+        
+        setReviewData(sortedReviewData);
         setLoading(false);
       } catch (error) {
         setError("Fail to call the Order!!!");
@@ -120,7 +123,7 @@ export default function OrderHistory() {
             </TableHead>
             <TableBody>
               {reviewData.map((review, index) => (
-                <TableRow key={review.attributes.customerName}>
+                <TableRow key={review.id}>
                   <TableCell align="center">
                     {review.attributes.customerName}
                   </TableCell>
