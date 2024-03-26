@@ -216,10 +216,7 @@ export default function RestaurantMenu() {
             ))}
           </Box>
         </Container>
-        <div style={{ marginTop: "auto", width: "100%" }}>
-          <RestaurantFooter restaurantData={restaurantData} />
-        </div>
-
+        <RestaurantFooter restaurantData={restaurantData} />
         <ItemDialog
           item={selectedItem}
           handleItemCountChange={handleItemCountChange}
