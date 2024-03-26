@@ -120,10 +120,25 @@ export default function RestaurantMenu() {
   }, [fetchRestaurantData]);
 
   const handleCategoryClick = (categoryName) => {
-    if (categoryName === restaurantData.menuCate[0].name) {
+    const currentHash = window.location.hash.replace("#", "");
+    let newHash = categoryName.replace(/\s/g, "_");
+
+    // If hash is first category just go to top of page
+    if (newHash === restaurantData.menuCate[0].name) {
+      window.location.hash = "";
       window.scrollTo(0, 0);
+      return;
+    }
+
+    if (newHash !== currentHash) {
+      // Hash is different; just update it to scroll to the new category
+      window.location.hash = newHash;
     } else {
-      window.location.hash = categoryName.replace(/\s/g, "_");
+      // Hash is the same as the current; manually scroll to the element
+      const element = document.getElementById(newHash);
+      if (element) {
+        element.scrollIntoView();
+      }
     }
   };
 
