@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import CircularProgress from "@mui/material/CircularProgress";
 import Image from "next/image";
-import { Typography, Box, Container, Grid, Backdrop } from "@mui/material";
+import { Typography, Box, Container, Grid, Backdrop, Rating } from "@mui/material";
 import { getRestaurantByRoute } from "../../api/restaurant";
 import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
 import Link from "next/link";
@@ -98,10 +98,10 @@ export default function RestaurantHomepage() {
 
   const reviewList = reviewData
     ? reviewData.map((review) => ({
-        reviewCusName: review.attributes.customerName,
-        reviewRating: review.attributes.rating,
-        reviewContent: review.attributes.reviewContent,
-      }))
+      reviewCusName: review.attributes.customerName,
+      reviewRating: review.attributes.rating,
+      reviewContent: review.attributes.reviewContent,
+    }))
     : [];
 
   /*const completedOrders = orderHistoryList.filter(
@@ -154,9 +154,8 @@ export default function RestaurantHomepage() {
                       className={`${theme} ${styles.categoryBox}`}
                     >
                       <Link
-                        href={`/${restaurantRoute}/menu#${
-                          index === 0 ? "top" : item.name.replace(/\s/g, "_")
-                        }`}
+                        href={`/${restaurantRoute}/menu#${index === 0 ? "top" : item.name.replace(/\s/g, "_")
+                          }`}
                         passHref
                       >
                         <Box className={`${theme} ${styles.innerCategoryBox}`}>
@@ -263,21 +262,26 @@ export default function RestaurantHomepage() {
                       className={`${theme} ${styles.reviewItem}`}
                     >
                       <Link href={`/${restaurantRoute}/reviews`}>
-                        <Box className={`${theme} ${styles.reviewBox}`}>
+                        <Box className={`${theme} ${styles.reviewBox}`}  display="flex" flexDirection="column" justifyContent="center" alignItems="center" p={2}>
+                          <Box
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                          >
+                            <Rating value={review.reviewRating} readOnly />
+                          </Box>
                           <Typography
                             variant="subtitle1"
                             component="div"
                             className={`${theme} ${styles.reviewSubtitle}`}
                           >
-                            Review {index + 1}
+                            <b>{review.reviewCusName != "" && review.reviewCusName} {review.reviewCusName == "" && "Guest"}</b>
                           </Typography>
                           <Typography
                             variant="body2"
                             component="div"
                             className={`${theme} ${styles.reviewText}`}
                           >
-                            <div>{review.reviewCusName}</div>
-                            <div>Rating: {review.reviewRating}</div>
                             <div>{review.reviewContent}</div>
                           </Typography>
                         </Box>
