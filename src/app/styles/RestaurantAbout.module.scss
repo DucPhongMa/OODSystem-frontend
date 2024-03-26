@@ -1,0 +1,22 @@
+// Classic theme
+.theme1 {
+  .pageBackground {
+    background: linear-gradient(to bottom, #ffffff, #f7fafc);
+  }
+}
+
+// Dark theme
+.theme2 {
+  .pageBackground {
+    background: linear-gradient(to bottom, #2e2e2e, #383838);
+
+    color: #f0f0f0;
+  }
+}
+
+// Modern theme
+.theme3 {
+  .pageBackground {
+    background: #f2eae3;
+  }
+}
