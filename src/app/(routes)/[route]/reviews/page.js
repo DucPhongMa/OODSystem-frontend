@@ -125,7 +125,7 @@ export default function OrderHistory() {
               {reviewData.map((review, index) => (
                 <TableRow key={review.id}>
                   <TableCell align="center">
-                    {review.attributes.customerName}
+                  {review.attributes.customerName != "" && review.attributes.customerName} {review.attributes.customerName == "" && "Guest"}
                   </TableCell>
                   <TableCell align="center">
                     <Rating value={review.attributes.rating} readOnly></Rating>
