@@ -304,9 +304,11 @@ export default function OrderHistoryDetails() {
                         {order.totalDiscount > 0 && (
                           <TableRow>
                             <TableCell
+                              align="right"
                               colSpan={2}
                               width="150em"
                               sx={{ fontSize: "1rem" }}
+                              className={`${theme} ${styles.tableText}`}
                             >
                               Total Discount
                             </TableCell>
