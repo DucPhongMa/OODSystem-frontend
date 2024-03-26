@@ -17,8 +17,8 @@ import {
   Grid,
   Rating,
   Container,
+  Alert,
 } from "@mui/material";
-
 import { getOrderByUUID, updateOrder } from "@/app/api/order";
 import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
 import { useParams } from "next/navigation";
@@ -26,17 +26,19 @@ import { getRestaurantByRoute } from "@/app/api/restaurant";
 import PickupLocation from "@/app/components/restaurant/PickupLocation";
 import PickupDetails from "@/app/components/restaurant/PickupDetails";
 import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
+import WaitingText from "@/app/components/restaurant/WaitingText";
 import { checkCustomerLogin } from "@/app/api/auth";
-
 import { getCustomerNameAtom } from "../../../../../../store";
 import { useAtom } from "jotai";
 import { addReviews } from "@/app/api/review";
+import styles from "../../../../styles/RestaurantCheckout.module.scss";
 
 export default function Order() {
   const params = useParams();
   const restaurantRoute = params.route;
   const orderUUID = params.id;
 
+  const [theme, setTheme] = useState("");
   const [restaurantData, setRestaurantData] = useState(null);
   const [restaurantId, setRestaurantId] = useState(null);
 
@@ -65,9 +67,9 @@ export default function Order() {
   };
 
   const handleConfirmCancellation = async () => {
-    await cancelOrder(); // Assuming this function updates the order status to 'cancelled'
+    await cancelOrder();
     setOpenDialog(false);
-    window.location.reload(); // Refresh the page
+    window.location.reload();
   };
 
   const handleSubmitReview = async () => {
@@ -165,6 +167,25 @@ export default function Order() {
   useEffect(() => {
     async function fetchMyAPI() {
       const restaurantData = await getRestaurantByRoute(restaurantRoute);
+      console.log(restaurantData);
+
+      const themeID = restaurantData.attributes.theme.id;
+
+      // Set the page theme based on the themeID
+      switch (themeID) {
+        case 1:
+          setTheme(styles.theme1);
+          break;
+        case 2:
+          setTheme(styles.theme2);
+          break;
+        case 3:
+          setTheme(styles.theme3);
+          break;
+        default:
+          setTheme(styles.theme1);
+      }
+
       setRestaurantId(restaurantData.id);
       const menuItems =
         restaurantData.attributes.menu.data.attributes.menu_items.data.map(
@@ -202,7 +223,7 @@ export default function Order() {
   };
 
   return (
-    <>
+    <div className={theme}>
       {(!restaurantData || !orderData) && (
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -213,192 +234,265 @@ export default function Order() {
       )}
 
       {restaurantData && orderData && (
-        <>
+        <Box className={`${theme} ${styles.pageBackground}`}>
           <RestaurantAppBar data={restaurantData} />
-          {/* order status */}
-          <Paper sx={{ marginBottom: 2, padding: 2 }}>
-            <Typography
-              variant="h6"
-              align="center"
-              sx={{ backgroundColor: "grey" }}
-            >
-              ORDER PLACED!
-            </Typography>
-            <Typography variant="h5" sx={{ marginTop: "20px" }}>
-              ORDER STATUS
-            </Typography>
-            {orderData.attributes.status == "pending" && (
-              <>
-                <Typography variant="h6" sx={{ marginTop: "30px" }}>
+          {orderData.attributes.status == "pending" && (
+            <>
+              <Alert
+                severity="success"
+                className={`${theme} ${styles.placedAlert}`}
+              >
+                ORDER PLACED!
+              </Alert>
+              <Box sx={{ marginLeft: 4 }}>
+                <Typography
+                  sx={{ marginTop: 4, marginBottom: 2 }}
+                  className={`${theme} ${styles.orderStatusText}`}
+                >
+                  ORDER STATUS
+                </Typography>
+                <Typography variant="h5" sx={{ marginTop: 3, marginBottom: 2 }}>
                   Pending
                 </Typography>
-                <Typography variant="h8" sx={{ paddingTop: "50px" }}>
-                  Waiting for the restaurant to accept your order...
-                </Typography>
-                <Box
-                  sx={{
-                    marginBottom: 2,
-                    marginTop: 2,
-                  }}
-                >
+                <WaitingText />
+                <Box sx={{ marginTop: 3, marginBottom: 2 }}>
                   <Button
-                    variant="outlined"
-                    color="primary"
-                    // onClick={cancelOrder}
                     onClick={handleCancelClick}
+                    className={`${theme} ${styles.trackingPageButton}`}
                   >
                     CANCEL ORDER
                   </Button>
                 </Box>
-              </>
-            )}
-            {orderData.attributes.status == "in progress" && (
-              <>
-                <Typography variant="h6" sx={{ marginTop: "30px" }}>
-                  In Progress
-                </Typography>
-                <Typography variant="h6" sx={{ marginTop: "30px" }}>
-                  Your Order Number: {orderData.id}
-                </Typography>
-                <Typography variant="h8" sx={{ paddingTop: "50px" }}>
-                  Your order is being prepared.
-                  <br />
-                  Estimated pick up time:{" "}
-                  {formatDate(orderData.attributes?.time_estimated)}
-                  .
-                  <br />
-                  Your order cannot be changed at this time. Please call{" "}
-                  {restaurantData.restaurant_contact?.phone} for inquiries.
-                </Typography>
-              </>
-            )}
-            {orderData.attributes.status == "ready for pickup" && (
-              <>
-                <Typography variant="h6" sx={{ marginTop: "30px" }}>
-                  Ready for Pick Up. Address:{" "}
-                  {restaurantData.restaurant_contact?.address}
-                </Typography>
-                <Typography variant="h6" sx={{ marginTop: "30px" }}>
-                  Your Order Number: {orderData.id}
-                </Typography>
-                <Typography variant="h8" sx={{ paddingTop: "50px" }}>
-                  Your order is ready for pick up.
-                  <br />
-                  Your order cannot be changed at this time. Please call{" "}
-                  {restaurantData.restaurant_contact?.phone} for inquiries.
-                </Typography>
-              </>
-            )}
-            {orderData.attributes.status == "completed" && (
-              <>
-                <Typography variant="h6" sx={{ marginTop: "30px" }}>
-                  Completed
-                </Typography>
-                <Typography variant="h6" sx={{ marginTop: "30px" }}>
-                  Your Order Number: {orderData.id}
-                </Typography>
-                <Typography variant="h8" sx={{ paddingTop: "50px" }}>
-                  Your order is completed.
-                  <br />
-                  Your order cannot be changed at this time. Please call{" "}
-                  {restaurantData.restaurant_contact?.phone} for inquiries.
-                </Typography>
-                <Box
-                  sx={{
-                    marginBottom: 2,
-                    marginTop: 2,
+              </Box>
+            </>
+          )}
+          {orderData.attributes.status == "in progress" && (
+            <Box sx={{ marginLeft: 4 }}>
+              <Typography
+                sx={{ marginTop: 4, marginBottom: 2 }}
+                className={`${theme} ${styles.orderStatusText}`}
+              >
+                ORDER STATUS
+              </Typography>
+              <Typography variant="h5" sx={{ marginTop: 3, marginBottom: 2 }}>
+                In Progress
+              </Typography>
+              <Typography variant="h6" sx={{ marginTop: 3, marginBottom: 2 }}>
+                Order #{orderData.id}&nbsp; for&nbsp;{" "}
+                {orderData.attributes.username}
+              </Typography>
+              <Typography
+                variant="h8"
+                sx={{ marginTop: 3, marginBottom: 2, display: "block" }}
+              >
+                Your order is being prepared.
+              </Typography>
+              <Typography
+                variant="h8"
+                sx={{ marginTop: 2, marginBottom: 2, display: "block" }}
+              >
+                Estimated pick up time:{" "}
+                {formatDate(orderData.attributes?.time_estimated)}.
+              </Typography>
+              <Typography
+                variant="h8"
+                sx={{ marginTop: 1, marginBottom: 3, display: "block" }}
+              >
+                Your order cannot be changed at this time. Please call{" "}
+                {restaurantData.restaurant_contact?.phone} for inquiries.
+              </Typography>
+            </Box>
+          )}
+          {orderData.attributes.status == "ready for pickup" && (
+            <Box sx={{ marginLeft: 4 }}>
+              <Typography
+                sx={{ marginTop: 4, marginBottom: 2 }}
+                className={`${theme} ${styles.orderStatusText}`}
+              >
+                ORDER STATUS
+              </Typography>
+              <Typography variant="h5" sx={{ marginTop: 3, marginBottom: 2 }}>
+                Ready for Pick Up
+              </Typography>
+              <Typography variant="h6" sx={{ marginTop: 3, marginBottom: 2 }}>
+                Order #{orderData.id}&nbsp; for&nbsp;{" "}
+                {orderData.attributes.username}
+              </Typography>
+              <Typography
+                variant="h8"
+                sx={{ marginTop: 1, marginBottom: 2, display: "block" }}
+              >
+                Your order is ready for pick up at:
+              </Typography>
+              <Typography variant="h8" sx={{ marginTop: 1, display: "block" }}>
+                {restaurantData.name}
+              </Typography>
+              <Typography variant="h8" sx={{ display: "block" }}>
+                {restaurantData.restaurant_contact?.address}
+              </Typography>
+              <Typography variant="h8" sx={{ display: "block" }}>
+                {restaurantData.restaurant_contact?.city},{" "}
+                {restaurantData.restaurant_contact?.provinceOrState}
+              </Typography>
+              <Typography
+                variant="h8"
+                sx={{ marginBottom: 1, display: "block" }}
+              >
+                {restaurantData.restaurant_contact?.postalCode}
+              </Typography>
+              <Typography
+                variant="h8"
+                sx={{ marginTop: 2, marginBottom: 3, display: "block" }}
+              >
+                Your order cannot be changed at this time. Please call{" "}
+                {restaurantData.restaurant_contact?.phone} for inquiries.
+              </Typography>
+            </Box>
+          )}
+          {orderData.attributes.status == "completed" && (
+            <Box sx={{ marginLeft: 4 }}>
+              <Typography
+                sx={{ marginTop: 4, marginBottom: 2 }}
+                className={`${theme} ${styles.orderStatusText}`}
+              >
+                ORDER STATUS
+              </Typography>
+              <Typography variant="h5" sx={{ marginTop: 3, marginBottom: 2 }}>
+                Completed
+              </Typography>
+              <Typography variant="h6" sx={{ marginTop: 3, marginBottom: 2 }}>
+                Order #{orderData.id}&nbsp; for&nbsp;{" "}
+                {orderData.attributes.username}
+              </Typography>
+              <Typography
+                variant="h8"
+                sx={{ marginTop: 3, marginBottom: 2, display: "block" }}
+              >
+                Your order is completed.
+              </Typography>
+              <Typography
+                variant="h8"
+                sx={{ marginTop: 1, marginBottom: 3, display: "block" }}
+              >
+                Please call {restaurantData.restaurant_contact?.phone} for
+                inquiries.
+              </Typography>
+              <Box
+                sx={{
+                  marginBottom: 1,
+                  marginTop: 3,
+                }}
+              >
+                <Button
+                  onClick={handleOpen}
+                  disabled={reviewSubmitted}
+                  className={`${theme} ${styles.trackingPageButton}`}
+                >
+                  {!reviewSubmitted && <>LEAVE REVIEW</>}
+                  {reviewSubmitted && <>REVIEW SUBMITTED</>}
+                </Button>
+                <Modal
+                  aria-labelledby="transition-modal-title"
+                  aria-describedby="transition-modal-description"
+                  open={open}
+                  onClose={handleClose}
+                  closeAfterTransition
+                  slots={{ backdrop: Backdrop }}
+                  slotProps={{
+                    backdrop: {
+                      timeout: 500,
+                    },
                   }}
                 >
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={handleOpen}
-                    disabled={reviewSubmitted}
-                  >
-                    {!reviewSubmitted && <>LEAVE REVIEW</>}
-                    {reviewSubmitted && <>REVIEW SUBMITTED</>}
-                  </Button>
-                  <Modal
-                    aria-labelledby="transition-modal-title"
-                    aria-describedby="transition-modal-description"
-                    open={open}
-                    onClose={handleClose}
-                    closeAfterTransition
-                    slots={{ backdrop: Backdrop }}
-                    slotProps={{
-                      backdrop: {
-                        timeout: 500,
-                      },
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      width: "50em",
+                      bgcolor: "background.paper",
+                      border: "1px solid",
+                      boxShadow: 24,
+                      p: 4,
                     }}
                   >
-                    <Box
-                      sx={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        width: "50em",
-                        bgcolor: "background.paper",
-                        border: "1px solid",
-                        boxShadow: 24,
-                        p: 4,
-                      }}
-                    >
-                      <TextField
-                        id="outlined-multiline-static"
-                        label="Write your thoughts here (max 300 characters)"
-                        multiline
-                        fullWidth
-                        inputProps={{ maxLength: 300 }}
-                        onChange={(event) => setReviewText(event.target.value)}
-                        rows={4}
-                        sx={{ marginBottom: "2em" }}
-                      />
-                      <Container>
-                        <Grid container>
-                          <Grid item xs={6}>
-                            <Rating
-                              defaultValue={rating}
-                              precision={0.5}
-                              onChange={(event, newValue) => {
-                                setRating(newValue);
-                              }}
-                              size="large"
-                            />
-                          </Grid>
-                          <Grid item xs={6} textAlign="right">
-                            <Button
-                              onClick={handleSubmitReview}
-                              variant="outlined"
-                              color="primary"
-                            >
-                              Submit
-                            </Button>
-                          </Grid>
+                    <TextField
+                      id="outlined-multiline-static"
+                      label="Write your thoughts here (max 300 characters)"
+                      multiline
+                      fullWidth
+                      inputProps={{ maxLength: 300 }}
+                      onChange={(event) => setReviewText(event.target.value)}
+                      rows={4}
+                      sx={{ marginBottom: "2em" }}
+                    />
+                    <Container>
+                      <Grid container>
+                        <Grid item xs={6}>
+                          <Rating
+                            defaultValue={rating}
+                            precision={0.5}
+                            onChange={(event, newValue) => {
+                              setRating(newValue);
+                            }}
+                            size="large"
+                          />
                         </Grid>
-                      </Container>
-                    </Box>
-                  </Modal>
-                </Box>
-              </>
-            )}
-            {orderData.attributes.status == "cancelled" && (
-              <>
-                <Typography variant="h6" sx={{ marginTop: "30px" }}>
+                        <Grid item xs={6} textAlign="right">
+                          <Button
+                            onClick={handleSubmitReview}
+                            variant="outlined"
+                            color="primary"
+                          >
+                            Submit
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </Container>
+                  </Box>
+                </Modal>
+              </Box>
+            </Box>
+          )}
+          {orderData.attributes.status == "cancelled" && (
+            <>
+              <Alert
+                severity="warning"
+                className={`${theme} ${styles.cancelledAlert}`}
+              >
+                ORDER CANCELLED
+              </Alert>
+              <Box sx={{ marginLeft: 4 }}>
+                <Typography
+                  sx={{ marginTop: 4, marginBottom: 2 }}
+                  className={`${theme} ${styles.orderStatusText}`}
+                >
+                  ORDER STATUS
+                </Typography>
+                <Typography variant="h5" sx={{ marginTop: 3, marginBottom: 2 }}>
                   Cancelled
                 </Typography>
-                <Typography variant="h6" sx={{ marginTop: "30px" }}>
-                  Your Order Number: {orderData.id}
+                <Typography variant="h6" sx={{ marginTop: 3, marginBottom: 2 }}>
+                  Order #{orderData.id}&nbsp; for&nbsp;{" "}
+                  {orderData.attributes.username}
                 </Typography>
-                <Typography variant="h8" sx={{ paddingTop: "50px" }}>
-                  Your order is cancelled.
-                  <br />
+                <Typography
+                  variant="h8"
+                  sx={{ marginTop: 3, marginBottom: 2, display: "block" }}
+                >
+                  Your order has been cancelled.
+                </Typography>
+                <Typography
+                  variant="h8"
+                  sx={{ marginTop: 1, marginBottom: 3, display: "block" }}
+                >
                   Please call {restaurantData.restaurant_contact?.phone} for
                   inquiries.
                 </Typography>
-              </>
-            )}
-          </Paper>
+              </Box>
+            </>
+          )}
 
           <Box sx={{ padding: 2 }}>
             {/* Address map */}
@@ -409,9 +503,16 @@ export default function Order() {
             )} */}
 
             {/* pickup details */}
-            <PickupDetails cart={orderDetail} subTotal={subTotal} />
+            <PickupDetails
+              cart={orderDetail}
+              subTotal={subTotal}
+              theme={theme}
+            />
 
-            <Typography variant="h6">
+            <Typography
+              variant="h5"
+              sx={{ marginTop: 4, marginLeft: 2, marginBottom: 10 }}
+            >
               Pay in Person ${(subTotal * 1.13).toFixed(2)}
             </Typography>
           </Box>
@@ -426,10 +527,6 @@ export default function Order() {
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
                 Are you sure you want to cancel this order?
-                <br />
-                <br />
-                Please call {restaurantData.restaurant_contact?.phone} for
-                inquiries.
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -439,8 +536,8 @@ export default function Order() {
               </Button>
             </DialogActions>
           </Dialog>
-        </>
+        </Box>
       )}
-    </>
+    </div>
   );
 }
