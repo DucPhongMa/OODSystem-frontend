@@ -11,17 +11,19 @@ import styles from "../../styles/RestaurantCheckout.module.scss";
 
 const ItemLine = ({ name, value }) => {
   return (
-    <ListItem sx={{ justifyContent: 'center', display: 'flex', width: '100%' }}>
+    <ListItem sx={{ justifyContent: "center", display: "flex", width: "100%" }}>
       <ListItemText
         primary={
-          <Box sx={{
-            display: "flex", 
-            justifyContent: "space-between", 
-            alignItems: "center", 
-            width: 450, 
-            maxWidth: '100%',
-            margin: '0 auto',
-          }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: 450,
+              maxWidth: "100%",
+              margin: "0 auto",
+            }}
+          >
             <Box sx={{ width: "50%", textAlign: "left", paddingRight: "5%" }}>
               <Typography>{name}</Typography>
             </Box>
@@ -45,7 +47,10 @@ const PickupDetails = ({ cart, subTotal, theme }) => {
   }, 0);
   const adjustedSubTotal = subTotal - totalDiscount;
   return (
-    <Paper sx={{ marginBottom: 2, padding: 2 }} className={`${theme} ${styles.details}`}>
+    <Paper
+      sx={{ marginBottom: 2, padding: 2 }}
+      className={`${theme} ${styles.details}`}
+    >
       <Typography variant="h6">PICKUP ORDER DETAILS</Typography>
       <List>
         {cart.map((item) => (
