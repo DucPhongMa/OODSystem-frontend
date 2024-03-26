@@ -1,0 +1,147 @@
+// Classic theme
+.theme1 {
+  .pageBackground {
+    background: linear-gradient(to bottom, #ffffff, #f7fafc);
+    min-height: 100vh;
+    background-attachment: fixed;
+    color: #000000;
+  }
+
+  .section {
+    background-color: #fefefe;
+    color: #000000;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .details {
+    background-color: #fefefe;
+    color: #000000;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .button {
+    font-size: 1.25rem;
+    padding: 12px 24px;
+    min-width: 200px;
+    min-height: 50px;
+    border-radius: 8px;
+    background-color: #1976d2;
+    color: #ffffff;
+    font-weight: normal;
+
+    &:hover {
+      background-color: #1565c0;
+      color: #ffffff;
+    }
+  }
+}
+
+// Dark theme
+.theme2 {
+  .pageBackground {
+    background: linear-gradient(to bottom, #121212, #1c1c1c);
+    min-height: 100vh;
+    background-attachment: fixed;
+    color: #ffffff;
+  }
+
+  .section {
+    background-color: #282828;
+    color: #ffffff;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .details {
+    background-color: #282828;
+    color: #ffffff;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .button {
+    font-size: 1.25rem;
+    padding: 12px 24px;
+    min-width: 200px;
+    min-height: 50px;
+    border-radius: 8px;
+    background-color: #313131;
+    color: #f0f0f0;
+    font-weight: normal;
+
+    &:hover {
+      background-color: #666666;
+      color: #ffffff;
+    }
+  }
+
+  :global {
+    .MuiDivider-root {
+      background-color: #666666;
+    }
+
+    .MuiInputBase-input {
+      background-color: #313131;
+      color: #ffffff !important;
+      border-radius: 4px;
+    }
+
+    .MuiInputBase-input::placeholder {
+      color: #ffffff !important;
+    }
+
+    .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+      border-color: #ffffff !important;
+    }
+
+    .MuiInputLabel-outlined.Mui-focused {
+      color: #ffffff !important;
+    }
+
+    .MuiOutlinedInput-notchedOutline {
+      border-color: #666666 !important;
+    }
+
+    .MuiInputLabel-outlined {
+      color: #878787 !important;
+    }
+
+    .MuiFormHelperText-root.Mui-error {
+      color: #faa0a0 !important;
+    }
+  }
+}
+
+// Modern theme
+.theme3 {
+  .pageBackground {
+    background-color: #f2eae3;
+    min-height: 100vh;
+    background-attachment: fixed;
+    color: #383838;
+  }
+
+  .section {
+    background-color: #fbfbf7;
+    color: #383838;
+  }
+
+  .details {
+    background-color: #fbfbf7;
+    color: #383838;
+  }
+
+  .button {
+    font-size: 1.25rem;
+    padding: 12px 24px;
+    min-width: 200px;
+    min-height: 50px;
+    border-radius: 8px;
+    background-color: #42613d;
+    color: #ffffff;
+    font-weight: normal;
+
+    &:hover {
+      background-color: #385234;
+      color: #ffffff;
+    }
+  }
+}

@@ -194,31 +194,38 @@ const RestaurantAppBar = ({ data }) => {
                     padding: 20,
                   }}
                 >
+                  <Link href="/customer/register" passHref>
+                    <Button
+                      style={{
+                        borderColor: "white",
+                        backgroundColor: "blue",
+                        color: "white",
+                        height: 100,
+                        width: 120,
+                      }}
+                    >
+                      Register
+                    </Button>
+                  </Link>
+                  <Link href="/customer/login" passHref>
+                    <Button
+                      style={{
+                        borderColor: "white",
+                        backgroundColor: "blue",
+                        color: "white",
+                        height: 100,
+                        width: 120,
+                      }}
+                    >
+                      Sign In
+                    </Button>
+                  </Link>
                   <Button
                     style={{
-                      borderColor: "white",
-                      backgroundColor: "blue",
-                      color: "white",
-                      height: 100,
-                      width: 120,
-                    }}
-                  >
-                    <Link href={`/customer/register`}>Register</Link>
-                  </Button>
-                  <Button
-                    style={{
-                      borderColor: "white",
-                      backgroundColor: "blue",
-                      color: "white",
-                      height: 100,
-                      width: 120,
-                    }}
-                  >
-                    <Link href={`/customer/login`}>Sign In</Link>
-                  </Button>
-                  <Button
-                    style={{
-                      borderColor: "white",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      padding: 20,
+                      cursor: "pointer",
                       backgroundColor: "blue",
                       color: "white",
                       height: 100,
@@ -227,6 +234,7 @@ const RestaurantAppBar = ({ data }) => {
                     onClick={() => {
                       // setCustomerID(0);
                       handleLoginModalClose();
+                      router.push(`/${data.route}/menu`);
                     }}
                   >
                     Proceed without an account
@@ -261,8 +269,14 @@ const RestaurantAppBar = ({ data }) => {
               </Typography>
             )}
             {!customerLoggedIn && (
-              <Button color="inherit" variant="outlined">
-                <Link href={`/customer/login`}>Log In</Link>
+              <Button
+                color="inherit"
+                variant="outlined"
+                component={Link}
+                href="/customer/login"
+                style={{ textDecoration: "none" }}
+              >
+                Log In
               </Button>
             )}
             {customerLoggedIn && (
@@ -290,11 +304,20 @@ const RestaurantAppBar = ({ data }) => {
                 )}
                 sx={{
                   "& .MuiBadge-badge": {
-                    backgroundColor: isOpen ? "error.main" : "grey.500",
+                    width: 24,
+                    height: 24,
+                    fontSize: "1rem",
+                    backgroundColor: !isOpen
+                      ? "grey.500"
+                      : theme === styles.theme2
+                        ? "error.main"
+                        : theme === styles.theme3
+                          ? "success.main"
+                          : "error.main",
                   },
                 }}
               >
-                <AddShoppingCartIcon />
+                <AddShoppingCartIcon fontSize="large" />
               </Badge>
             </IconButton>
           </Box>

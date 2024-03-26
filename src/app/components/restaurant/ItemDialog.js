@@ -49,6 +49,7 @@ export default function ItemDialog({
             price: item.price,
             quantity: itemCount,
             counter: item.counter,
+            discount: item.discount,
           },
         ];
       }

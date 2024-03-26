@@ -27,6 +27,7 @@ import { getRestaurantByRoute } from "@/app/api/restaurant";
 import PickupLocation from "@/app/components/restaurant/PickupLocation";
 import PickupDetails from "@/app/components/restaurant/PickupDetails";
 import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
+import styles from "../../../styles/RestaurantCheckout.module.scss";
 
 import { getCustomerNameAtom } from "../../../../../store";
 
@@ -38,13 +39,41 @@ export default function Checkout() {
   const params = useParams();
   const restaurantRoute = params.route;
   const [openDialog, setOpenDialog] = useState(false);
-
+  const [errorName, setErrorName] = useState(false);
+  const [errorPhone, setErrorPhone] = useState(false);
+  const [restaurantStatus, setRestaurantStatus] = useState("open");
   const [unregisteredCustomerName, setUnregisteredCustomerName] =
     useAtom(getCustomerNameAtom);
+  const [theme, setTheme] = useState("");
 
-  const handleOpenDialog = () => {
+  const handleOpenDialog = async () => {
+    event.preventDefault();
+    if (!formData.customerName.trim()) {
+      setErrorName(true);
+      return;
+    }
+    if (!formData.phoneNum) {
+      setErrorPhone(true);
+      return;
+    }
+    if (!isValidPhoneNumber(formData.phoneNum)) {
+      setErrorPhone(true);
+      return;
+    }
+    console.log(cart);
+    if (cart.length == 0) {
+      alert("Cart is empty");
+      return;
+    }
+    const status = await fetchStatus();
+    console.log("status:", status);
+    if (status != "open") {
+      alert("The restaurant is not open for pickup now. ");
+      return;
+    }
     setOpenDialog(true);
   };
+
   const [formData, setFormData] = useState({
     phoneNum: "",
     customerName: "",
@@ -90,10 +119,40 @@ export default function Checkout() {
     }
   }, []);
 
+  async function fetchStatus() {
+    const restaurantData = await getRestaurantByRoute(restaurantRoute);
+    setRestaurantStatus(restaurantData.attributes.status);
+    return restaurantData.attributes.status;
+  }
+
   useEffect(() => {
     async function fetchMyAPI() {
       const restaurantData = await getRestaurantByRoute(restaurantRoute);
+      console.log(restaurantData);
+
+      const themeID = restaurantData.attributes.theme.id;
+
+      // For testing only
+      // const themeID = 2;
+      // restaurantData.attributes.theme.id = 2;
+
+      // Set the page theme based on the themeID
+      switch (themeID) {
+        case 1:
+          setTheme(styles.theme1);
+          break;
+        case 2:
+          setTheme(styles.theme2);
+          break;
+        case 3:
+          setTheme(styles.theme3);
+          break;
+        default:
+          setTheme(styles.theme1);
+      }
+
       setRestaurantId(restaurantData.id);
+
       const menuItems =
         restaurantData.attributes.menu.data.attributes.menu_items.data.map(
           (item) => {
@@ -104,6 +163,7 @@ export default function Checkout() {
               categoryID: item.attributes.menu_category.data?.id,
               id: item.id,
               description: item.attributes.description,
+              discount: item.attributes.discount,
             };
           }
         );
@@ -118,8 +178,8 @@ export default function Checkout() {
           }
         );
       setRestaurantData({ ...restaurantData.attributes, menuCate });
+      setRestaurantStatus(restaurantData.attributes.status);
     }
-
     fetchMyAPI();
   }, [restaurantRoute]);
 
@@ -143,7 +203,6 @@ export default function Checkout() {
   }, []);
 
   const submitOrder = async () => {
-    // Assuming validation has already been done before opening the dialog
     try {
       const orderItems = cart.map((item) => ({
         itemID: item.itemID,
@@ -151,6 +210,7 @@ export default function Checkout() {
         unit_price: item.price,
         menu_item: item.itemID,
         counter: item.counter,
+        discount: item.discount,
       }));
       const uuid = uuidv4();
       setUnregisteredCustomerName(formData.customerName);
@@ -175,8 +235,20 @@ export default function Checkout() {
     }
   };
 
+  const handleChangeName = (event) => {
+    const value = event.target.value;
+    setFormData({ ...formData, customerName: value });
+
+    // Check if the value is empty or consists only of spaces
+    if (!value.trim()) {
+      setErrorName(true);
+    } else {
+      setErrorName(false);
+    }
+  };
+
   return cart && cart.length > 0 ? (
-    <>
+    <div className={theme}>
       {!restaurantData && (
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -189,23 +261,28 @@ export default function Checkout() {
       {restaurantData && (
         <>
           <RestaurantAppBar data={restaurantData} />
-          <Box sx={{ padding: 2 }}>
+          <Box
+            sx={{ padding: 2 }}
+            className={`${theme} ${styles.pageBackground}`}
+          >
             {/* Address map */}
             {/* <PickupLocation
               address={restaurantData.restaurant_contact.address}
             /> */}
 
             {/* Name and phone number */}
-            <Paper sx={{ marginBottom: 2, padding: 2 }}>
+            <Paper
+              sx={{ marginBottom: 2, padding: 2 }}
+              className={`${theme} ${styles.section}`}
+            >
               <Typography variant="h6">PICKUP INFO</Typography>
               <TextField
                 label="Customer Name"
                 value={formData.customerName}
-                onChange={(event) =>
-                  setFormData({
-                    ...formData,
-                    customerName: event.target.value,
-                  })
+                onChange={handleChangeName}
+                error={errorName}
+                helperText={
+                  errorName ? "Customer name cannot be empty or spaces." : ""
                 }
                 fullWidth
                 margin="normal"
@@ -214,33 +291,35 @@ export default function Checkout() {
               <TextField
                 label="Phone Number"
                 value={formData.phoneNum}
-                onChange={(event) =>
+                onChange={(event) => {
+                  const value = event.target.value.trim();
+                  const isValid = isValidPhoneNumber(value);
+
                   setFormData({
                     ...formData,
-                    phoneNum: event.target.value.trim(),
-                  })
-                }
+                    phoneNum: value,
+                  });
+
+                  setErrorPhone(!isValid);
+                }}
                 fullWidth
                 margin="normal"
                 inputProps={{
                   pattern: "d{10}",
                   title: "Phone number format: (123) 456-7890",
                 }}
-                error={
-                  formData.phoneNum && !isValidPhoneNumber(formData.phoneNum)
-                } // Assuming you have a validation function
-                helperText={
-                  formData.phoneNum &&
-                  !isValidPhoneNumber(formData.phoneNum) &&
-                  "Invalid phone number format: 1112223333"
-                }
+                error={errorPhone}
+                helperText={errorPhone ? "Phone number must be 10 digits" : ""}
               />
             </Paper>
 
             {/* pickup details */}
-            <PickupDetails cart={cart} subTotal={subTotal} />
+            <PickupDetails cart={cart} subTotal={subTotal} theme={theme} />
 
-            <Paper sx={{ marginBottom: 2, padding: 2 }}>
+            <Paper
+              sx={{ marginBottom: 2, padding: 2 }}
+              className={`${theme} ${styles.section}`}
+            >
               <Typography variant="h6">Additional Notes</Typography>
               <TextField
                 minRows={3}
@@ -253,25 +332,25 @@ export default function Checkout() {
                   })
                 }
                 fullWidth
+                margin="normal"
               />
             </Paper>
-            <Typography variant="h6">
+            <Typography variant="h5" sx={{ marginTop: 4, marginLeft: 2 }}>
               Pay in Person ${(subTotal * 1.13).toFixed(2)}
             </Typography>
             <Box
               sx={{
                 display: "flex",
-                justifyContent: "space-between",
+                justifyContent: "center",
                 alignItems: "center",
-                marginBottom: 2,
-                marginTop: 10,
-                flexDirection: "column",
+                marginBottom: 10,
+                marginTop: 5,
+                width: "100%",
               }}
             >
               <Button
-                variant="outlined"
-                color="primary"
                 onClick={handleOpenDialog}
+                className={`${theme} ${styles.button}`}
               >
                 PLACE PICKUP ORDER
               </Button>
@@ -301,9 +380,9 @@ export default function Checkout() {
           </Dialog>
         </>
       )}
-    </>
+    </div>
   ) : (
-    <>
+    <div className={theme}>
       {restaurantData && (
         <>
           <RestaurantAppBar data={restaurantData} />
@@ -312,6 +391,6 @@ export default function Checkout() {
           </p>
         </>
       )}
-    </>
+    </div>
   );
 }

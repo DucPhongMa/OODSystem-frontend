@@ -25,11 +25,16 @@ export default function CustomerLoginPage() {
       localStorage.getItem("restaurant-data")
     ).route;
     console.log(currentRestaurant);
-    const error = await loginUser(formData.email, formData.password);
+    const error = await loginUser(
+      formData.email,
+      formData.password,
+      "Customer"
+    );
     if (error) {
       console.log(error);
       setError(error);
     } else {
+      setError(null);
       currentRestaurant && router.push(`/${currentRestaurant}`);
     }
   };
@@ -39,13 +44,6 @@ export default function CustomerLoginPage() {
       {/* Navbar */}
       <AppBar position="static">
         <Toolbar>
-          <Typography style={{ marginRight: "40px" }}>
-            <Link href="/about">About</Link>
-          </Typography>
-          <Typography>
-            <Link href="/contact">Contact</Link>
-          </Typography>
-
           <div style={{ flexGrow: 1 }}></div>
 
           <Typography style={{ marginRight: "40px" }}>
@@ -68,11 +66,7 @@ export default function CustomerLoginPage() {
           }}
         >
           <Typography variant="h3">Log In</Typography>
-          {error && (
-            <h3 style={{ color: "red" }}>
-              "Email or password is incorrect! Please check"
-            </h3>
-          )}
+          {error && <h3 style={{ color: "red" }}>{error}</h3>}
           <Box
             component="form"
             onSubmit={handleSubmit(handleFormSubmit)}

@@ -28,7 +28,7 @@ export default function OrderHistoryDetails() {
 
   //const [route, setRoute] = useAtom(getRouteAtom);
   if (typeof window !== "undefined") {
-    var route = localStorage.getItem("restaurant-route");
+    var route = JSON.parse(localStorage.getItem("restaurant-data")).route;
   }
   useEffect(() => {
     setTheme(styles.theme1); // Set page theme
@@ -76,7 +76,6 @@ export default function OrderHistoryDetails() {
     }
 
     fetchMyAPI();
-    localStorage.setItem("restaurant-route", route);
   }, [route]);
 
   if (loading) return <p>Loading...</p>;
