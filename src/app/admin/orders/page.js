@@ -27,6 +27,7 @@ import {
   DialogTitle,
   useTheme,
   TablePagination,
+  Divider,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { visuallyHidden } from "@mui/utils";
@@ -246,10 +247,31 @@ export default function AdminOrders() {
 
       const formattedOrders = allOrderData
         .map((order) => {
-          const taxRate = order.attributes.tax;
-          const subtotal = order.attributes.total_price;
-          const taxAmount = subtotal * taxRate;
-          const totalWithTax = subtotal + taxAmount;
+          const taxRate = parseFloat(order.attributes.tax) || 0;
+          const initialAccumulator = { subtotal: 0, totalDiscount: 0 };
+
+          const { subtotal, totalDiscount } =
+            order.attributes.order_details.data.reduce((acc, detail) => {
+              const itemPrice = parseFloat(detail.attributes.unit_price) || 0;
+              const itemQuantity =
+                parseInt(detail.attributes.quantity, 10) || 0;
+              const itemDiscountPercent =
+                parseFloat(
+                  detail.attributes.menu_item.data.attributes.discount
+                ) / 100 || 0;
+
+              const itemSubtotal = itemPrice * itemQuantity;
+              const itemDiscountAmount = itemSubtotal * itemDiscountPercent;
+
+              acc.subtotal += itemSubtotal;
+              acc.totalDiscount += itemDiscountAmount;
+
+              return acc;
+            }, initialAccumulator);
+
+          const adjustedSubtotal = subtotal - totalDiscount;
+          const taxAmount = adjustedSubtotal * taxRate;
+          const totalWithTax = adjustedSubtotal + taxAmount;
 
           return {
             id: order.id,
@@ -266,6 +288,7 @@ export default function AdminOrders() {
             })),
             status: order.attributes.status,
             subtotal: subtotal,
+            totalDiscount: totalDiscount,
             tax: taxAmount,
             totalPrice: totalWithTax,
             customer: order.attributes.username ?? "N/A",
@@ -702,10 +725,26 @@ export default function AdminOrders() {
                   {`$${selectedOrder.subtotal.toFixed(2)}`}
                 </Typography>
               </div>
+              {selectedOrder.totalDiscount > 0 && (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    marginTop: "8px",
+                    marginBottom: "4px",
+                  }}
+                >
+                  <Typography variant="body2">Total Discount</Typography>
+                  <Typography variant="body2" style={{ textAlign: "right" }}>
+                    {`− $${selectedOrder.totalDiscount.toFixed(2)}`}
+                  </Typography>
+                </div>
+              )}
               <div
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
+                  marginTop: "8px",
                   marginBottom: "4px",
                 }}
               >
@@ -714,11 +753,11 @@ export default function AdminOrders() {
                   {`$${selectedOrder.tax.toFixed(2)}`}
                 </Typography>
               </div>
+              <Divider />
               <div
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
-                  fontWeight: "bold",
                   marginTop: "8px",
                   marginBottom: "4px",
                 }}

@@ -132,10 +132,6 @@ export default function Checkout() {
 
       const themeID = restaurantData.attributes.theme.id;
 
-      // For testing only
-      // const themeID = 2;
-      // restaurantData.attributes.theme.id = 2;
-
       // Set the page theme based on the themeID
       switch (themeID) {
         case 1:
