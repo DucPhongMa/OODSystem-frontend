@@ -27,6 +27,7 @@ import { getRestaurantByRoute } from "@/app/api/restaurant";
 import PickupLocation from "@/app/components/restaurant/PickupLocation";
 import PickupDetails from "@/app/components/restaurant/PickupDetails";
 import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
+import styles from "../../../styles/RestaurantCheckout.module.scss";
 
 import { getCustomerNameAtom } from "../../../../../store";
 
@@ -41,9 +42,9 @@ export default function Checkout() {
   const [errorName, setErrorName] = useState(false);
   const [errorPhone, setErrorPhone] = useState(false);
   const [restaurantStatus, setRestaurantStatus] = useState("open");
-
   const [unregisteredCustomerName, setUnregisteredCustomerName] =
     useAtom(getCustomerNameAtom);
+  const [theme, setTheme] = useState("");
 
   const handleOpenDialog = async () => {
     event.preventDefault();
@@ -127,7 +128,31 @@ export default function Checkout() {
   useEffect(() => {
     async function fetchMyAPI() {
       const restaurantData = await getRestaurantByRoute(restaurantRoute);
+      console.log(restaurantData);
+
+      const themeID = restaurantData.attributes.theme.id;
+
+      // For testing only
+      // const themeID = 2;
+      // restaurantData.attributes.theme.id = 2;
+
+      // Set the page theme based on the themeID
+      switch (themeID) {
+        case 1:
+          setTheme(styles.theme1);
+          break;
+        case 2:
+          setTheme(styles.theme2);
+          break;
+        case 3:
+          setTheme(styles.theme3);
+          break;
+        default:
+          setTheme(styles.theme1);
+      }
+
       setRestaurantId(restaurantData.id);
+
       const menuItems =
         restaurantData.attributes.menu.data.attributes.menu_items.data.map(
           (item) => {
@@ -223,7 +248,7 @@ export default function Checkout() {
   };
 
   return cart && cart.length > 0 ? (
-    <>
+    <div className={theme}>
       {!restaurantData && (
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -236,14 +261,20 @@ export default function Checkout() {
       {restaurantData && (
         <>
           <RestaurantAppBar data={restaurantData} />
-          <Box sx={{ padding: 2 }}>
+          <Box
+            sx={{ padding: 2 }}
+            className={`${theme} ${styles.pageBackground}`}
+          >
             {/* Address map */}
             {/* <PickupLocation
               address={restaurantData.restaurant_contact.address}
             /> */}
 
             {/* Name and phone number */}
-            <Paper sx={{ marginBottom: 2, padding: 2 }}>
+            <Paper
+              sx={{ marginBottom: 2, padding: 2 }}
+              className={`${theme} ${styles.section}`}
+            >
               <Typography variant="h6">PICKUP INFO</Typography>
               <TextField
                 label="Customer Name"
@@ -278,16 +309,17 @@ export default function Checkout() {
                   title: "Phone number format: (123) 456-7890",
                 }}
                 error={errorPhone}
-                helperText={
-                  errorPhone ? "Invalid phone number format: 1112223333" : ""
-                }
+                helperText={errorPhone ? "Phone number must be 10 digits" : ""}
               />
             </Paper>
 
             {/* pickup details */}
-            <PickupDetails cart={cart} subTotal={subTotal} />
+            <PickupDetails cart={cart} subTotal={subTotal} theme={theme} />
 
-            <Paper sx={{ marginBottom: 2, padding: 2 }}>
+            <Paper
+              sx={{ marginBottom: 2, padding: 2 }}
+              className={`${theme} ${styles.section}`}
+            >
               <Typography variant="h6">Additional Notes</Typography>
               <TextField
                 minRows={3}
@@ -300,25 +332,25 @@ export default function Checkout() {
                   })
                 }
                 fullWidth
+                margin="normal"
               />
             </Paper>
-            <Typography variant="h6">
+            <Typography variant="h5" sx={{ marginTop: 4, marginLeft: 2 }}>
               Pay in Person ${(subTotal * 1.13).toFixed(2)}
             </Typography>
             <Box
               sx={{
                 display: "flex",
-                justifyContent: "space-between",
+                justifyContent: "center",
                 alignItems: "center",
-                marginBottom: 2,
-                marginTop: 10,
-                flexDirection: "column",
+                marginBottom: 10,
+                marginTop: 5,
+                width: "100%",
               }}
             >
               <Button
-                variant="outlined"
-                color="primary"
                 onClick={handleOpenDialog}
+                className={`${theme} ${styles.button}`}
               >
                 PLACE PICKUP ORDER
               </Button>
@@ -348,9 +380,9 @@ export default function Checkout() {
           </Dialog>
         </>
       )}
-    </>
+    </div>
   ) : (
-    <>
+    <div className={theme}>
       {restaurantData && (
         <>
           <RestaurantAppBar data={restaurantData} />
@@ -359,6 +391,6 @@ export default function Checkout() {
           </p>
         </>
       )}
-    </>
+    </div>
   );
 }
