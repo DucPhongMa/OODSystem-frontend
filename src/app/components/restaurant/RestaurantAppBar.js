@@ -134,7 +134,11 @@ const RestaurantAppBar = ({ data }) => {
           <div style={{ position: "relative", width: 240 }}>
             <Link href={`/${data.route}/`}>
               <Image
-                src={data.logoURL}
+                src={
+                  data.logoURL.length > 0
+                    ? data.logoURL
+                    : "/logo_placeholder.webp"
+                }
                 alt="logo"
                 width={100}
                 height={100}

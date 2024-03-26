@@ -532,21 +532,18 @@
     width: 100%;
     position: relative;
     color: #fff;
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
     z-index: 2;
     line-height: 1;
     font-family: "Roboto Slab", serif;
-    font-weight: normal;
-    font-size: 6rem;
+    font-weight: 900;
+    font-size: 7.5rem;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.05em;
+
     span {
       margin-right: 0.4em;
       &:last-child {
         margin-right: 0;
-      }
-      &::first-letter {
-        font-size: 120%;
       }
     }
   }
@@ -712,4 +709,25 @@
   .reviewText {
     text-align: center;
   }
+}
+
+.wrapTwoLines {
+  display: block; // Ensure it's block level for width control
+  width: 100%; // Adjust width as necessary
+  white-space: normal; // Override any parent styles that prevent wrapping
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-height: 1.2em; // Adjust based on font size for exact two-line height
+  height: 2.4em; // Double the line-height to ensure only two lines are shown
+}
+
+.truncatedTitle {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 }

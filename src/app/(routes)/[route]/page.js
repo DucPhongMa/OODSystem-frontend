@@ -29,6 +29,13 @@ export default function RestaurantHomepage() {
 
   const restaurantRoute = params.route;
 
+  function formatItemText(title) {
+    if (title.length > 15) {
+      return `${title.substring(0, 13)}...`;
+    }
+    return title;
+  }
+
   useEffect(() => {
     async function fetchMyAPI() {
       const restaurantData = await getRestaurantByRoute(restaurantRoute);
@@ -132,7 +139,12 @@ export default function RestaurantHomepage() {
             <RestaurantAppBar data={restaurantData} />
             <Box
               className={`${theme} ${styles.bannerBox}`}
-              style={{ backgroundImage: `url(${restaurantData.bannerURL})` }}
+              style={{
+                backgroundImage:
+                  restaurantData.bannerURL.length > 0
+                    ? `url(${restaurantData.bannerURL})`
+                    : `url("/banner_placeholder.jpg")`,
+              }}
             >
               <Typography
                 variant="h1"
@@ -180,7 +192,7 @@ export default function RestaurantHomepage() {
                         component="h3"
                         className={`${theme} ${styles.categoryName}`}
                       >
-                        {item.name.toUpperCase()}
+                        {formatItemText(item.name.toUpperCase())}
                       </Typography>
                     </Grid>
                   ))}
@@ -234,7 +246,7 @@ export default function RestaurantHomepage() {
                             component="h3"
                             className={`${theme} ${styles.topPickItemTitle}`}
                           >
-                            {item.attributes.name.toUpperCase()}
+                            {formatItemText(item.attributes.name.toUpperCase())}
                           </Typography>
                         </Link>
                       </Grid>
