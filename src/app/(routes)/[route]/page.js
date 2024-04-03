@@ -3,7 +3,14 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import CircularProgress from "@mui/material/CircularProgress";
 import Image from "next/image";
-import { Typography, Box, Container, Grid, Backdrop } from "@mui/material";
+import {
+  Typography,
+  Box,
+  Container,
+  Grid,
+  Backdrop,
+  Rating,
+} from "@mui/material";
 import { getRestaurantByRoute } from "../../api/restaurant";
 import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
 import Link from "next/link";
@@ -22,16 +29,19 @@ export default function RestaurantHomepage() {
 
   const restaurantRoute = params.route;
 
+  function formatItemText(title) {
+    if (title.length > 15) {
+      return `${title.substring(0, 13)}...`;
+    }
+    return title;
+  }
+
   useEffect(() => {
     async function fetchMyAPI() {
       const restaurantData = await getRestaurantByRoute(restaurantRoute);
       console.log(restaurantData);
 
       const themeID = restaurantData.attributes.theme.id;
-
-      // For testing only
-      // const themeID = 3;
-      // restaurantData.attributes.theme.id = 3;
 
       // Set the page theme based on the themeID
       switch (themeID) {
@@ -45,7 +55,7 @@ export default function RestaurantHomepage() {
           setTheme(styles.theme3);
           break;
         default:
-          setTheme(styles.theme1); // Default theme
+          setTheme(styles.theme1);
       }
 
       // Set top-pick items
@@ -129,7 +139,12 @@ export default function RestaurantHomepage() {
             <RestaurantAppBar data={restaurantData} />
             <Box
               className={`${theme} ${styles.bannerBox}`}
-              style={{ backgroundImage: `url(${restaurantData.bannerURL})` }}
+              style={{
+                backgroundImage:
+                  restaurantData.bannerURL.length > 0
+                    ? `url(${restaurantData.bannerURL})`
+                    : `url("/banner_placeholder.jpg")`,
+              }}
             >
               <Typography
                 variant="h1"
@@ -177,7 +192,7 @@ export default function RestaurantHomepage() {
                         component="h3"
                         className={`${theme} ${styles.categoryName}`}
                       >
-                        {item.name.toUpperCase()}
+                        {formatItemText(item.name.toUpperCase())}
                       </Typography>
                     </Grid>
                   ))}
@@ -231,7 +246,7 @@ export default function RestaurantHomepage() {
                             component="h3"
                             className={`${theme} ${styles.topPickItemTitle}`}
                           >
-                            {item.attributes.name.toUpperCase()}
+                            {formatItemText(item.attributes.name.toUpperCase())}
                           </Typography>
                         </Link>
                       </Grid>
@@ -263,21 +278,37 @@ export default function RestaurantHomepage() {
                       className={`${theme} ${styles.reviewItem}`}
                     >
                       <Link href={`/${restaurantRoute}/reviews`}>
-                        <Box className={`${theme} ${styles.reviewBox}`}>
+                        <Box
+                          className={`${theme} ${styles.reviewBox}`}
+                          display="flex"
+                          flexDirection="column"
+                          justifyContent="center"
+                          alignItems="center"
+                          p={2}
+                        >
+                          <Box
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                          >
+                            <Rating value={review.reviewRating} readOnly />
+                          </Box>
                           <Typography
                             variant="subtitle1"
                             component="div"
                             className={`${theme} ${styles.reviewSubtitle}`}
                           >
-                            Review {index + 1}
+                            <b>
+                              {review.reviewCusName != "" &&
+                                review.reviewCusName}{" "}
+                              {review.reviewCusName == "" && "Guest"}
+                            </b>
                           </Typography>
                           <Typography
                             variant="body2"
                             component="div"
                             className={`${theme} ${styles.reviewText}`}
                           >
-                            <div>{review.reviewCusName}</div>
-                            <div>Rating: {review.reviewRating}</div>
                             <div>{review.reviewContent}</div>
                           </Typography>
                         </Box>

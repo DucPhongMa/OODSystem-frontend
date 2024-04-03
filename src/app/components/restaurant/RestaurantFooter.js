@@ -29,7 +29,7 @@ export default function RestaurantFooter({ restaurantData }) {
   }, [themeID]);
 
   return (
-    <Box className={`${theme} ${styles.sectionInfo}`}>
+    <Box className={theme}>
       <Grid container spacing={0} sx={{ maxWidth: 1200, margin: "0 auto" }}>
         {" "}
         {/* CONTACT */}

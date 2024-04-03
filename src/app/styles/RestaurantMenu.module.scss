@@ -1,5 +1,9 @@
 // Classic theme
 .theme1 {
+  .discountPrice {
+    color: red;
+  }
+
   .openAlert {
     justify-content: center !important;
     background-color: #bbe1bb;
@@ -117,6 +121,10 @@
 
 // Dark theme
 .theme2 {
+  .discountPrice {
+    color: #faa0a0;
+  }
+
   .openAlert {
     justify-content: center !important;
     background-color: #485b35;
@@ -245,6 +253,10 @@
 
 // Modern theme
 .theme3 {
+  .discountPrice {
+    color: red;
+  }
+
   .openAlert {
     justify-content: center !important;
     background-color: #bbe1bb;

@@ -72,10 +72,6 @@ export default function RestaurantMenu() {
 
     const themeID = data.attributes.theme.id;
 
-    // For testing only
-    // const themeID = 2;
-    // data.attributes.theme.id = 2;
-
     // Set the page theme based on the themeID
     switch (themeID) {
       case 1:
@@ -88,7 +84,7 @@ export default function RestaurantMenu() {
         setTheme(styles.theme3);
         break;
       default:
-        setTheme(styles.theme1); // Default theme
+        setTheme(styles.theme1);
     }
 
     const menuItems = data.attributes.menu.data.attributes.menu_items.data.map(
@@ -100,6 +96,7 @@ export default function RestaurantMenu() {
           categoryID: item.attributes.menu_category.data?.id,
           id: item.id,
           description: item.attributes.description,
+          discount: item.attributes.discount,
           counter: item.attributes.counter,
           discount: item.attributes.discount,
         };
@@ -123,10 +120,25 @@ export default function RestaurantMenu() {
   }, [fetchRestaurantData]);
 
   const handleCategoryClick = (categoryName) => {
-    if (categoryName === restaurantData.menuCate[0].name) {
+    const currentHash = window.location.hash.replace("#", "");
+    let newHash = categoryName.replace(/\s/g, "_");
+
+    // If hash is first category just go to top of page
+    if (newHash === restaurantData.menuCate[0].name) {
+      window.location.hash = "";
       window.scrollTo(0, 0);
+      return;
+    }
+
+    if (newHash !== currentHash) {
+      // Hash is different; just update it to scroll to the new category
+      window.location.hash = newHash;
     } else {
-      window.location.hash = categoryName.replace(/\s/g, "_");
+      // Hash is the same as the current; manually scroll to the element
+      const element = document.getElementById(newHash);
+      if (element) {
+        element.scrollIntoView();
+      }
     }
   };
 
@@ -220,7 +232,6 @@ export default function RestaurantMenu() {
           </Box>
         </Container>
         <RestaurantFooter restaurantData={restaurantData} />
-
         <ItemDialog
           item={selectedItem}
           handleItemCountChange={handleItemCountChange}

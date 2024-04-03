@@ -39,6 +39,9 @@ function RestaurantInfo({ formData, setFormData }) {
             onBlur={(e) =>
               setFormData({ ...formData, name: e.target.value.trim() })
             }
+            inputProps={{
+              maxLength: 30,
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -52,10 +55,14 @@ function RestaurantInfo({ formData, setFormData }) {
             onChange={(e) => {
               setFormData({ ...formData, route: e.target.value.trim() });
             }}
+            inputProps={{
+              maxLength: 30,
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            required
             autoComplete="about-description"
             fullWidth
             id="aboutDescription"
@@ -79,10 +86,14 @@ function RestaurantInfo({ formData, setFormData }) {
                 },
               })
             }
+            inputProps={{
+              maxLength: 5000,
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            required
             autoComplete="address"
             fullWidth
             id="address"
@@ -106,10 +117,14 @@ function RestaurantInfo({ formData, setFormData }) {
                 },
               })
             }
+            inputProps={{
+              maxLength: 30,
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            required
             autoComplete="city"
             fullWidth
             id="city"
@@ -133,10 +148,14 @@ function RestaurantInfo({ formData, setFormData }) {
                 },
               })
             }
+            inputProps={{
+              maxLength: 30,
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            required
             autoComplete="province-or-state"
             fullWidth
             id="provinceOrState"
@@ -160,10 +179,14 @@ function RestaurantInfo({ formData, setFormData }) {
                 },
               })
             }
+            inputProps={{
+              maxLength: 30,
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            required
             autoComplete="postal-code"
             fullWidth
             id="postalCode"
@@ -187,10 +210,14 @@ function RestaurantInfo({ formData, setFormData }) {
                 },
               })
             }
+            inputProps={{
+              maxLength: 30,
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            required
             autoComplete="phone-number"
             fullWidth
             id="phone"
@@ -214,6 +241,9 @@ function RestaurantInfo({ formData, setFormData }) {
                 },
               })
             }
+            inputProps={{
+              maxLength: 30,
+            }}
           />
         </Grid>
         <Grid item xs={12}>

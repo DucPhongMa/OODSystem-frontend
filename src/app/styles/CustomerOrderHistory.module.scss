@@ -1,0 +1,92 @@
+// Classic theme
+.theme1 {
+  .pageBackground {
+    background: linear-gradient(to bottom, #ffffff, #f7fafc);
+
+    background-attachment: fixed;
+    color: #000000;
+  }
+
+  .section {
+    background-color: #fefefe;
+    color: #000000;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .tableText {
+    color: #000000;
+  }
+
+  .button {
+    background-color: #1976d2;
+    color: #ffffff;
+
+    &:hover {
+      background-color: #1565c0;
+      color: #ffffff;
+    }
+  }
+}
+
+// Dark theme
+.theme2 {
+  .pageBackground {
+    background: linear-gradient(to bottom, #2e2e2e, #383838);
+
+    background-attachment: fixed;
+    color: #e0e0e0;
+  }
+
+  .section {
+    background-color: #282828;
+    color: #e0e0e0;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .tableText {
+    color: #e0e0e0;
+  }
+
+  .button {
+    background-color: #313131;
+    color: #f0f0f0;
+
+    &:hover {
+      background-color: #666666;
+      color: #ffffff;
+    }
+
+    &:disabled {
+      color: #787878;
+    }
+  }
+}
+
+// Modern theme
+.theme3 {
+  .pageBackground {
+    background-color: #f2eae3;
+
+    background-attachment: fixed;
+    color: #383838;
+  }
+
+  .section {
+    background-color: #fbfbf7;
+    color: #383838;
+  }
+
+  .tableText {
+    color: #383838;
+  }
+
+  .button {
+    background-color: #42613d;
+    color: #ffffff;
+
+    &:hover {
+      background-color: #385234;
+      color: #ffffff;
+    }
+  }
+}

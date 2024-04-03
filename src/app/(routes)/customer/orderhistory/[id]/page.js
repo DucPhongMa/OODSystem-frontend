@@ -1,9 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import { getOrderById } from "../../../../api/order";
-import styles from "../../../../styles/RestaurantHomepage.module.scss";
+import styles from "../../../../styles/CustomerOrderHistoryDetails.module.scss";
 import { getRestaurantByRoute } from "../../../../api/restaurant";
 import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
+import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
 import { useParams } from "next/navigation";
 import { Button, Container, Grid, Typography } from "@mui/material";
 import Link from "next/link";
@@ -12,16 +13,16 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableFooter,
   TableHead,
   TableRow,
+  Box,
 } from "@mui/material";
 
 export default function OrderHistoryDetails() {
-  const [orderHistoryDetails, setOrderHistoryDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [orderHistoryID, setorderHistoryID] = useState("");
-
+  const [order, setOrder] = useState("");
   const params = useParams();
   const [restaurantData, setRestaurantData] = useState(null);
   const [theme, setTheme] = useState("");
@@ -30,17 +31,86 @@ export default function OrderHistoryDetails() {
   if (typeof window !== "undefined") {
     var route = JSON.parse(localStorage.getItem("restaurant-data")).route;
   }
-  useEffect(() => {
-    setTheme(styles.theme1); // Set page theme
 
+  useEffect(() => {
     async function fetchMyAPI() {
       const restaurantData = await getRestaurantByRoute(route);
+
+      const themeID = restaurantData.attributes.theme.id;
+
+      // Set the page theme based on the themeID
+      switch (themeID) {
+        case 1:
+          setTheme(styles.theme1);
+          break;
+        case 2:
+          setTheme(styles.theme2);
+          break;
+        case 3:
+          setTheme(styles.theme3);
+          break;
+        default:
+          setTheme(styles.theme1);
+      }
+
       try {
         const pathname = window.location.pathname;
         const id = pathname.split("/").pop();
-        const orderHistoryDetailsData = await getOrderById(id);
-        setOrderHistoryDetails(orderHistoryDetailsData);
-        setorderHistoryID(id);
+        const order = await getOrderById(id);
+
+        const taxRate = parseFloat(order.tax) || 0;
+        const initialAccumulator = { subtotal: 0, totalDiscount: 0 };
+
+        const { subtotal, totalDiscount } = order.order_details.data.reduce(
+          (acc, detail) => {
+            const itemPrice = parseFloat(detail.attributes.unit_price) || 0;
+            const itemQuantity = parseInt(detail.attributes.quantity, 10) || 0;
+            const itemDiscountPercent =
+              parseFloat(detail.attributes.menu_item.data.attributes.discount) /
+                100 || 0;
+
+            const itemSubtotal = itemPrice * itemQuantity;
+            const itemDiscountAmount = itemSubtotal * itemDiscountPercent;
+
+            acc.subtotal += itemSubtotal;
+            acc.totalDiscount += itemDiscountAmount;
+
+            return acc;
+          },
+          initialAccumulator
+        );
+
+        const adjustedSubtotal = subtotal - totalDiscount;
+        const taxAmount = adjustedSubtotal * taxRate;
+        const totalWithTax = adjustedSubtotal + taxAmount;
+
+        const formattedOrder = {
+          id: id,
+          email: order.users_permissions_user.data.attributes.email,
+          createdAt: order.createdAt,
+          dateTime: order.time_placed,
+          note: order.note,
+          details: order.order_details.data.map((detail) => ({
+            id: detail.id,
+            name:
+              detail.attributes.menu_item.data?.attributes.name ??
+              "Unknown Item",
+            quantity: detail.attributes.quantity,
+            unitPrice: detail.attributes.unit_price,
+          })),
+          status: order.status,
+          subtotal: subtotal,
+          totalDiscount: totalDiscount,
+          tax: taxAmount,
+          totalPrice: totalWithTax,
+          customer: order.username ?? "N/A",
+          phoneNumber: order.phone_number,
+          timeCompleted: order.time_completed,
+        };
+
+        setOrder(formattedOrder);
+        console.log("parsed order: ", formattedOrder);
+
         setLoading(false);
       } catch (error) {
         setError("Fail to call the Order Detail. Please Login!!!");
@@ -68,7 +138,7 @@ export default function OrderHistoryDetails() {
               name: cat.attributes.nameCate,
               id: cat.id,
               items,
-              image: items[0]?.imageURL, // use the first item's image
+              image: items[0]?.imageURL,
             };
           }
         );
@@ -81,15 +151,10 @@ export default function OrderHistoryDetails() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
-  console.log("order Detail History", orderHistoryDetails);
-
   const storedUsername = localStorage.getItem("customer-username");
 
   function checkEmail() {
-    if (
-      storedUsername !=
-      orderHistoryDetails.users_permissions_user.data.attributes.email
-    ) {
+    if (storedUsername != order.email) {
       return false;
     }
     return true;
@@ -113,142 +178,195 @@ export default function OrderHistoryDetails() {
       .replace(",", "");
   };
 
-  return !checkEmail() ? (
-    <div>
-      <RestaurantAppBar data={restaurantData} />
-      <p>You are not allowed to go to this page</p>
-    </div>
-  ) : (
-    <div>
-      <RestaurantAppBar data={restaurantData} />
-      <Container maxWidth="xl">
-        <Typography
-          variant="h2"
-          mb="15px"
-          style={{ margin: "40px 0" }}
-          align="center"
+  return (
+    <div className={theme}>
+      <Box
+        sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+      >
+        <Box
+          sx={{ flexGrow: 1 }}
+          className={`${theme} ${styles.pageBackground}`}
         >
-          Order History Detail
-        </Typography>
-        <Link href={`/customer/orderhistory`} passHref>
-          <Button
-            variant="contained"
-            sx={{
-              mr: "2em",
-              width: "15em",
-              height: "3em",
-              backgroundColor: (theme) =>
-                `${theme.palette.primary.main} !important`,
-              "&:hover": {
-                backgroundColor: (theme) =>
-                  `${theme.palette.primary.dark} !important`,
-              },
-            }}
-          >
-            Back to Order List
-          </Button>
-        </Link>
-        <Typography mt="15px">Order Number: {orderHistoryID}</Typography>
-        <Typography>
-          Order Date: {formatDate(orderHistoryDetails.time_placed)}
-        </Typography>
-        <Typography variant="h3" mb="15px">
-          Information
-        </Typography>
-        <Typography>
-          Name:{" "}
-          {orderHistoryDetails.users_permissions_user.data.attributes.fullname}
-        </Typography>
-        <Typography>
-          Email:{" "}
-          {orderHistoryDetails.users_permissions_user.data.attributes.email}
-        </Typography>
-        <Typography>
-          Phone Number:{" "}
-          {
-            orderHistoryDetails.users_permissions_user.data.attributes
-              .phonenumber
-          }
-        </Typography>
-        <Typography mb="15px">Notes: {orderHistoryDetails.note}</Typography>
-        <Container maxWidth="md">
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell align="center">Quantity</TableCell>
-                  <TableCell align="center">Item Name</TableCell>
-                  <TableCell align="center">Description</TableCell>
-                  <TableCell align="center">Price</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {orderHistoryDetails.order_details.data.map(
-                  (orderDetail, index) => (
-                    <TableRow
-                      key={
-                        orderDetail.attributes.menu_item.data?.attributes
-                          .name ?? "Unknown Item"
-                      }
-                    >
-                      <TableCell align="center">
-                        {orderDetail.attributes.quantity}
-                      </TableCell>
-                      <TableCell align="center">
-                        {orderDetail.attributes.menu_item.data?.attributes
-                          .name ?? "Unknown Item"}
-                      </TableCell>
-                      <TableCell align="center">
-                        {
-                          orderDetail.attributes.menu_item.data.attributes
-                            .description
-                        }
-                      </TableCell>
-                      <TableCell align="center">
-                        {formatPrice(
-                          orderDetail.attributes.menu_item.data.attributes.price
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  )
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          {!checkEmail() ? (
+            <Typography
+              variant="h5"
+              sx={{ marginTop: "20px", textAlign: "center" }}
+            >
+              You are not allowed to go to this page
+            </Typography>
+          ) : (
+            <>
+              <RestaurantAppBar data={restaurantData} />
+              <Container maxWidth="xl">
+                <Link href={`/customer/orderhistory`} passHref>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      mr: "2em",
+                      width: "15em",
+                      height: "3em",
+                      marginTop: 3,
+                      marginBottom: 4,
+                    }}
+                    className={`${theme} ${styles.button}`}
+                  >
+                    Back to Orders
+                  </Button>
+                </Link>
+                <Typography
+                  variant="h5"
+                  align="left"
+                  sx={{
+                    mb: 3,
+                  }}
+                >
+                  Order #{order.id}&nbsp; for&nbsp; {order.customer} (
+                  {order.phoneNumber})
+                </Typography>
+                <Typography mb="15px">
+                  Order Date: {formatDate(order.dateTime)}
+                </Typography>
 
-          <TableContainer align="right">
-            <TableRow>
-              <TableCell colSpan={2} width="150em">
-                Subtotal
-              </TableCell>
-              <TableCell align="right">
-                {formatPrice(orderHistoryDetails.total_price)}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell colSpan={2} width="150em">
-                Tax
-              </TableCell>
-              <TableCell align="right">
-                {formatPrice(
-                  orderHistoryDetails.total_price * orderHistoryDetails.tax
-                )}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell colSpan={2} width="150em">
-                Total
-              </TableCell>
-              <TableCell align="right">
-                {formatPrice(
-                  orderHistoryDetails.total_price +
-                    orderHistoryDetails.total_price * orderHistoryDetails.tax
-                )}
-              </TableCell>
-            </TableRow>
-          </TableContainer>
-        </Container>
-      </Container>
+                <Typography mb="15px">Notes: {order.note}</Typography>
+                <Container maxWidth="md">
+                  <TableContainer>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell
+                            align="right"
+                            sx={{ fontSize: "1rem" }}
+                            className={`${theme} ${styles.tableText}`}
+                          ></TableCell>
+                          <TableCell
+                            align="left"
+                            sx={{ fontSize: "1rem" }}
+                            className={`${theme} ${styles.tableText}`}
+                          >
+                            Item
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            sx={{ fontSize: "1rem" }}
+                            className={`${theme} ${styles.tableText}`}
+                          >
+                            Price
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {order.details.map((item, index) => (
+                          <TableRow key={item.name}>
+                            <TableCell
+                              align="right"
+                              sx={{ fontSize: "1rem" }}
+                              className={`${theme} ${styles.tableText}`}
+                            >
+                              {item.quantity} x
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                              sx={{ fontSize: "1rem" }}
+                              className={`${theme} ${styles.tableText}`}
+                            >
+                              {item.name}
+                            </TableCell>
+                            <TableCell
+                              align="right"
+                              sx={{ fontSize: "1rem" }}
+                              className={`${theme} ${styles.tableText}`}
+                            >
+                              {formatPrice(item.unitPrice)}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+
+                      <TableFooter>
+                        <TableRow>
+                          <TableCell
+                            colSpan={2}
+                            width="150em"
+                            sx={{ fontSize: "1rem" }}
+                            align="right"
+                            className={`${theme} ${styles.tableText}`}
+                          >
+                            Subtotal
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            sx={{ fontSize: "1rem" }}
+                            className={`${theme} ${styles.tableText}`}
+                          >
+                            {formatPrice(order.subtotal)}
+                          </TableCell>
+                        </TableRow>
+                        {order.totalDiscount > 0 && (
+                          <TableRow>
+                            <TableCell
+                              align="right"
+                              colSpan={2}
+                              width="150em"
+                              sx={{ fontSize: "1rem" }}
+                              className={`${theme} ${styles.tableText}`}
+                            >
+                              Total Discount
+                            </TableCell>
+                            <TableCell
+                              align="right"
+                              sx={{ fontSize: "1rem" }}
+                              className={`${theme} ${styles.tableText}`}
+                            >
+                              − {formatPrice(order.totalDiscount)}
+                            </TableCell>
+                          </TableRow>
+                        )}
+                        <TableRow>
+                          <TableCell
+                            align="right"
+                            colSpan={2}
+                            width="150em"
+                            sx={{ fontSize: "1rem" }}
+                            className={`${theme} ${styles.tableText}`}
+                          >
+                            Tax
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            sx={{ fontSize: "1rem" }}
+                            className={`${theme} ${styles.tableText}`}
+                          >
+                            {formatPrice(order.tax)}
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell
+                            align="right"
+                            colSpan={2}
+                            width="150em"
+                            sx={{ fontSize: "1rem" }}
+                            className={`${theme} ${styles.tableText}`}
+                          >
+                            Total
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            sx={{ fontSize: "1rem" }}
+                            className={`${theme} ${styles.tableText}`}
+                          >
+                            {formatPrice(order.totalPrice)}
+                          </TableCell>
+                        </TableRow>
+                      </TableFooter>
+                    </Table>
+                  </TableContainer>
+                </Container>
+              </Container>
+            </>
+          )}
+        </Box>
+        <RestaurantFooter restaurantData={restaurantData} />
+      </Box>
     </div>
   );
 }

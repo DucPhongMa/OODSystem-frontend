@@ -10,18 +10,20 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Paper,
+  Box,
 } from "@mui/material";
 import { getRestaurantByRoute } from "../../../api/restaurant";
 import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
+import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
 import Link from "next/link";
-import styles from "../../../styles/RestaurantHomepage.module.scss";
+import styles from "../../../styles/CustomerOrderHistory.module.scss";
 
 export default function OrderHistory() {
   const [orderHistory, setOrderHistory] = useState(null);
   const params = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const [restaurantData, setRestaurantData] = useState(null);
   const [theme, setTheme] = useState("");
 
@@ -30,23 +32,26 @@ export default function OrderHistory() {
   }
 
   useEffect(() => {
-    const themeID = JSON.parse(localStorage.getItem("restaurant-data")).themeID;
-    switch (themeID) {
-      case 1:
-        setTheme(styles.theme1); // Set theme1 theme
-        break;
-      case 2:
-        setTheme(styles.theme2); // Set theme2 theme
-        break;
-      case 3:
-        setTheme(styles.theme3); // Set theme3 theme
-        break;
-      default:
-        setTheme(styles.theme1); // Default theme
-    }
-
     async function fetchMyAPI() {
       const restaurantData = await getRestaurantByRoute(route);
+
+      const themeID = restaurantData.attributes.theme.id;
+
+      // Set the page theme based on the themeID
+      switch (themeID) {
+        case 1:
+          setTheme(styles.theme1);
+          break;
+        case 2:
+          setTheme(styles.theme2);
+          break;
+        case 3:
+          setTheme(styles.theme3);
+          break;
+        default:
+          setTheme(styles.theme1);
+      }
+
       try {
         const orderHistoryData = await getOrderByCustomer();
         setOrderHistory(orderHistoryData);
@@ -77,7 +82,7 @@ export default function OrderHistory() {
               name: cat.attributes.nameCate,
               id: cat.id,
               items,
-              image: items[0]?.imageURL, // use the first item's image
+              image: items[0]?.imageURL,
             };
           }
         );
@@ -87,25 +92,54 @@ export default function OrderHistory() {
     fetchMyAPI();
   }, [route]);
 
-  console.log("order History", orderHistory);
   const orderHistoryList = orderHistory
-    ? orderHistory.map((order) => ({
-        orderId: order.id,
-        orderStatus: order.status,
-        orderDate: order.time_placed,
-        orderTotalPrice: order.total_price,
-        restaurantName: order.restaurant.name,
-      }))
+    ? orderHistory.map((order) => {
+        const taxRate = parseFloat(order.tax) || 0;
+        const initialAccumulator = { subtotal: 0, totalDiscount: 0 };
+
+        const { subtotal, totalDiscount } = order.order_details.reduce(
+          (acc, detail) => {
+            const itemPrice = parseFloat(detail.unit_price) || 0;
+            const itemQuantity = parseInt(detail.quantity, 10) || 0;
+            const itemDiscountPercent =
+              parseFloat(detail.menu_item.discount) / 100 || 0;
+
+            const itemSubtotal = itemPrice * itemQuantity;
+            const itemDiscountAmount = itemSubtotal * itemDiscountPercent;
+
+            acc.subtotal += itemSubtotal;
+            acc.totalDiscount += itemDiscountAmount;
+
+            return acc;
+          },
+          initialAccumulator
+        );
+
+        const adjustedSubtotal = subtotal - totalDiscount;
+        const taxAmount = adjustedSubtotal * taxRate;
+        const totalWithTax = adjustedSubtotal + taxAmount;
+
+        return {
+          orderId: order.id,
+          orderStatus: order.status,
+          orderDate: order.time_placed,
+          orderTotalPrice: totalWithTax.toFixed(2),
+          restaurantName: order.restaurant.name,
+        };
+      })
     : [];
 
-  const completedOrders = orderHistoryList.filter(
-    (order) => order.orderStatus === "completed"
-  );
+  const completedOrders = orderHistoryList
+    .filter(
+      (order) =>
+        order.orderStatus === "completed" || order.orderStatus === "cancelled"
+    )
+    .sort((a, b) => b.orderId - a.orderId);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
-  console.log("Order Data", completedOrders);
+  console.log("completed orders: ", completedOrders);
 
   const formatDate = (dateString) => {
     const options = {
@@ -122,80 +156,132 @@ export default function OrderHistory() {
 
   return (
     <div className={theme}>
-      <RestaurantAppBar data={restaurantData} />
-      <Container maxWidth="xl">
-        <Typography variant="h2" align="center" style={{ margin: "40px 0" }}>
-          Order History
-        </Typography>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell align="center" width="200em">
-                  Order #
-                </TableCell>
-                <TableCell align="center" width="400em">
-                  Date
-                </TableCell>
-                <TableCell align="center" width="200em">
-                  Status
-                </TableCell>
-                <TableCell align="center" width="150em">
-                  Restaurant
-                </TableCell>
-                <TableCell align="center" width="150em">
-                  Total Price
-                </TableCell>
-                <TableCell align="center" width="250em"></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {completedOrders.map((order, index) => (
-                <TableRow key={order.orderId}>
-                  <TableCell align="center">{order.orderId}</TableCell>
-                  <TableCell align="center">
-                    {formatDate(order.orderDate)}
-                  </TableCell>
-                  <TableCell align="center">{order.orderStatus}</TableCell>
-                  <TableCell align="center">{order.restaurantName}</TableCell>
-                  <TableCell align="center">{order.orderTotalPrice}</TableCell>
-                  <TableCell align="center">
-                    <Link href={`orderhistory/${order.orderId}`} passHref>
-                      <Button
-                        variant="contained"
-                        sx={{
-                          backgroundColor: (theme) =>
-                            `${theme.palette.primary.main} !important`,
-                          "&:hover": {
-                            backgroundColor: (theme) =>
-                              `${theme.palette.primary.dark} !important`,
-                          },
-                        }}
+      <Box
+        sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+      >
+        <Box
+          sx={{ flexGrow: 1 }}
+          className={`${theme} ${styles.pageBackground}`}
+        >
+          <RestaurantAppBar data={restaurantData} />
+          <Container maxWidth="xl">
+            <Typography
+              variant="h2"
+              align="center"
+              style={{ margin: "40px 0" }}
+            >
+              Order History
+            </Typography>
+            {completedOrders.length > 0 ? (
+              <Paper
+                sx={{ mb: 2, padding: 2 }}
+                className={`${theme} ${styles.section}`}
+              >
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell
+                        align="center"
+                        width="200em"
+                        className={`${theme} ${styles.tableText}`}
                       >
-                        View
-                      </Button>
-                    </Link>
-                    {/*<Button
-                      variant="contained"
-                      sx={{
-                        ml: "2em",
-                        backgroundColor: (theme) =>
-                          `${theme.palette.primary.main} !important`,
-                        "&:hover": {
-                          backgroundColor: (theme) =>
-                            `${theme.palette.primary.dark} !important`,
-                        },
-                      }}
-                    >
-                      Reorder
-                    </Button>*/}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Container>
+                        Order #
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        width="400em"
+                        className={`${theme} ${styles.tableText}`}
+                      >
+                        Date
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        width="200em"
+                        className={`${theme} ${styles.tableText}`}
+                      >
+                        Status
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        width="150em"
+                        className={`${theme} ${styles.tableText}`}
+                      >
+                        Restaurant
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        width="150em"
+                        className={`${theme} ${styles.tableText}`}
+                      >
+                        Total
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        width="250em"
+                        className={`${theme} ${styles.tableText}`}
+                      ></TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {completedOrders.map((order, index) => (
+                      <TableRow key={order.orderId}>
+                        <TableCell
+                          align="center"
+                          className={`${theme} ${styles.tableText}`}
+                        >
+                          {order.orderId}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          className={`${theme} ${styles.tableText}`}
+                        >
+                          {formatDate(order.orderDate)}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          className={`${theme} ${styles.tableText}`}
+                        >
+                          {order.orderStatus}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          className={`${theme} ${styles.tableText}`}
+                        >
+                          {order.restaurantName}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          className={`${theme} ${styles.tableText}`}
+                        >
+                          ${order.orderTotalPrice}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          className={`${theme} ${styles.tableText}`}
+                        >
+                          <Link href={`orderhistory/${order.orderId}`} passHref>
+                            <Button
+                              variant="contained"
+                              className={`${theme} ${styles.button}`}
+                            >
+                              DETAILS
+                            </Button>
+                          </Link>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </Paper>
+            ) : (
+              <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
+                <Typography>There are no completed orders.</Typography>
+              </Box>
+            )}
+          </Container>
+        </Box>
+        <RestaurantFooter restaurantData={restaurantData} />
+      </Box>
     </div>
   );
 }

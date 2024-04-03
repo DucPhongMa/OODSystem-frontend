@@ -10,11 +10,15 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Rating,
+  Box,
+  Paper,
 } from "@mui/material";
 import { getRestaurantByRoute } from "../../../api/restaurant";
 import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
+import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
 import Link from "next/link";
-import styles from "../../../styles/RestaurantHomepage.module.scss";
+import styles from "../../../styles/RestaurantReviews.module.scss";
 import { getAllReviews } from "../../../api/review";
 
 export default function OrderHistory() {
@@ -29,13 +33,32 @@ export default function OrderHistory() {
   const [theme, setTheme] = useState("");
 
   useEffect(() => {
-    setTheme(styles.theme1); // Set page theme
-
     async function fetchMyAPI() {
       const restaurantData = await getRestaurantByRoute(restaurantRoute);
+
+      const themeID = restaurantData.attributes.theme.id;
+
+      // Set the page theme based on the themeID
+      switch (themeID) {
+        case 1:
+          setTheme(styles.theme1);
+          break;
+        case 2:
+          setTheme(styles.theme2);
+          break;
+        case 3:
+          setTheme(styles.theme3);
+          break;
+        default:
+          setTheme(styles.theme1);
+      }
+
       try {
         const ReviewData = await getAllReviews(restaurantRoute);
-        setReviewData(ReviewData);
+
+        const sortedReviewData = ReviewData.slice().sort((a, b) => b.id - a.id);
+
+        setReviewData(sortedReviewData);
         setLoading(false);
       } catch (error) {
         setError("Fail to call the Order!!!");
@@ -79,23 +102,87 @@ export default function OrderHistory() {
 
   console.log("All Reviews: ", reviewData);
 
+  const formatDate = (dateString) => {
+    const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return new Date(dateString)
+      .toLocaleString("default", options)
+      .replace(",", "");
+  };
+
   return (
-    <div>
-      <RestaurantAppBar data={restaurantData} />
-      <Container maxWidth="xl">
-        <Typography variant="h2" align="center" style={{ margin: "40px 0" }}>
-          Reviews
-        </Typography>
-        {reviewData.map((review, index) => (
-          <div key={index}>
-            <p>customer Name: {review.attributes.customerName}</p>
-            <p>Rating: {review.attributes.rating}</p>
-            <p>Content: {review.attributes.reviewContent}</p>
-            <p>Date: {review.attributes.createdAt}</p>
-            <br />
-          </div>
-        ))}
-      </Container>
+    <div className={theme}>
+      <Box
+        sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+        className={`${theme} ${styles.pageBackground}`}
+      >
+        <Box sx={{ flexGrow: 1 }}>
+          <RestaurantAppBar data={restaurantData} />
+          <Container maxWidth="xl" sx={{ marginBottom: 12 }}>
+            <Typography
+              variant="h2"
+              align="center"
+              style={{ margin: "40px 0" }}
+            >
+              Reviews
+            </Typography>
+            {reviewData.length > 0 ? (
+              <Paper
+                sx={{ marginBottom: 2, padding: 2 }}
+                className={`${theme} ${styles.section}`}
+              >
+                <Table>
+                  <TableBody>
+                    {reviewData.map((review, index) => (
+                      <TableRow key={review.id}>
+                        <TableCell
+                          align="center"
+                          className={`${theme} ${styles.tableText}`}
+                        >
+                          {review.attributes.customerName != "" &&
+                            review.attributes.customerName}{" "}
+                          {review.attributes.customerName == "" && "Guest"}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          className={`${theme} ${styles.tableText}`}
+                        >
+                          <Rating
+                            value={review.attributes.rating}
+                            readOnly
+                          ></Rating>
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          className={`${theme} ${styles.tableText}`}
+                        >
+                          {review.attributes.reviewContent}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          className={`${theme} ${styles.tableText}`}
+                        >
+                          {formatDate(review.attributes.createdAt)}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </Paper>
+            ) : (
+              <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
+                <Typography>There are no reviews.</Typography>
+              </Box>
+            )}
+          </Container>
+        </Box>
+        <RestaurantFooter restaurantData={restaurantData} />
+      </Box>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { checkBusinessLogin } from "@/app/api/auth";
+import { getOrderBasedOnStatus } from "@/app/api/order";
 import { Button, Grid, Paper, Box, Typography, Switch } from "@mui/material";
 import Link from "next/link";
 import {
@@ -21,6 +22,8 @@ export default function DashboardPage() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
+  const [restaurantID, setRestaurantID] = useState(null);
+  const [numOrders, setNumOrders] = useState(0);
 
   useEffect(() => {
     const checkLoggedIn = checkBusinessLogin();
@@ -48,6 +51,7 @@ export default function DashboardPage() {
     const fetchData = async () => {
       const data = await getRestaurantByRoute(restaurantRoute);
       setRestaurantData(data);
+      setRestaurantID(data.id);
       console.log(data);
       console.log("status: " + data.attributes.status);
 
@@ -62,6 +66,17 @@ export default function DashboardPage() {
       fetchData();
     }
   }, [restaurantRoute]);
+
+  useEffect(() => {
+    const fetchOrderData = async () => {
+      const orderData = await getOrderBasedOnStatus(restaurantID);
+      setNumOrders(orderData.length);
+    };
+
+    if (restaurantID) {
+      fetchOrderData();
+    }
+  }, [restaurantID]);
 
   const handleToggleChange = () => {
     const message = isOpen
@@ -104,7 +119,7 @@ export default function DashboardPage() {
               Pick Up Order System
             </Typography>
             <br />
-            <Typography variant="h6">Placed Orders: 313</Typography>
+            <Typography variant="h6">Total Orders: {numOrders}</Typography>
             <br />
             <br />
             {/* Toggle Switch for Opening or Closing restaurant */}

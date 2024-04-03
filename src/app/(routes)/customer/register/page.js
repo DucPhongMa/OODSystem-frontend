@@ -58,7 +58,13 @@ export default function CustomerRegisterPage() {
 
   const validateForm = (data) => {
     // Sign Up page must have email and password
-    if (!data.email || !data.password) {
+    if (
+      !data.email ||
+      !data.password ||
+      !data.firstName ||
+      !data.lastName ||
+      !data.phoneNum
+    ) {
       setAlertMsg("Please fill in all required fields.");
       return false;
     }
