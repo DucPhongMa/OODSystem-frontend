@@ -106,9 +106,14 @@ export default function EditThemePage() {
     }
   }, [selectedTheme]);
 
-  return isLoading ? (
+  return !isLoggedIn ? (
+    <div>
+      <MainNavbar isLoggedin={isLoggedIn} />
+      <p>Please log in</p>
+    </div>
+  ) : isLoading ? (
     "Page is loading"
-  ) : isLoggedIn ? (
+  ) : (
     <div>
       <MainNavbar isLoggedin={isLoggedIn} />
       <Box
@@ -149,11 +154,6 @@ export default function EditThemePage() {
           </Grid>
         </Grid>
       </Box>
-    </div>
-  ) : (
-    <div>
-      <MainNavbar isLoggedin={isLoggedIn} />
-      <p>Please log in</p>
     </div>
   );
 }
