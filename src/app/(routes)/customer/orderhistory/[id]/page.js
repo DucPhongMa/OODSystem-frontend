@@ -87,6 +87,7 @@ export default function OrderHistoryDetails() {
         const formattedOrder = {
           id: id,
           email: order.users_permissions_user.data.attributes.email,
+          username: order.users_permissions_user.data.attributes.username,
           createdAt: order.createdAt,
           dateTime: order.time_placed,
           note: order.note,
@@ -154,7 +155,7 @@ export default function OrderHistoryDetails() {
   const storedUsername = localStorage.getItem("customer-username");
 
   function checkEmail() {
-    if (storedUsername != order.email) {
+    if (storedUsername != order.username) {
       return false;
     }
     return true;
