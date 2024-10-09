@@ -14,9 +14,14 @@
 }
 
 .textContainer {
-  height: 75px;
+  min-height: 75px;
   overflow: hidden;
   position: relative;
+
+  @media (max-width: 600px) {
+    min-height: 40px;
+    font-size: smaller;
+  }
 }
 
 @keyframes slide-up-in {
@@ -52,5 +57,18 @@
 
   &.stay {
     animation: none;
+  }
+}
+
+.textContainer {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.textBaseStyle {
+  font-size: 2rem;
+  @media (min-width: 600px) {
+    font-size: 3.75rem;
   }
 }
