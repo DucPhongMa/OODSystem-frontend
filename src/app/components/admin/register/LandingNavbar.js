@@ -5,14 +5,10 @@ import {
   Toolbar,
   Typography,
   IconButton,
-  Menu,
-  MenuItem,
   useMediaQuery,
   Drawer,
   List,
   ListItem,
-  ListItemText,
-  ListItemIcon,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
@@ -34,11 +30,16 @@ export default function MainNavbar({ isLoggedin }) {
     removeToken();
   };
 
+  const linkStyle = { color: "#fefcfc", textDecoration: "none" };
+
   return (
     <>
       {isMobileOrTablet ? (
         <>
-          <AppBar position="static">
+          <AppBar
+            position="static"
+            style={{ background: "transparent", boxShadow: "none" }}
+          >
             <Toolbar>
               <IconButton
                 size="large"
@@ -62,35 +63,53 @@ export default function MainNavbar({ isLoggedin }) {
             <List>
               <ListItem button>
                 {isLoggedin ? (
-                  <Link href="/admin/dashboard">
+                  <Link href="/admin/dashboard" style={linkStyle}>
                     Restaurante Wiz
                   </Link>
                 ) : (
-                  <Link href="/admin">Restaurante Wiz</Link>
+                  <Link href="/admin" style={linkStyle}>
+                    Restaurante Wiz
+                  </Link>
                 )}
               </ListItem>
               <ListItem button>
-                <Link href="/about">About</Link>
+                <Link href="/about" style={linkStyle}>
+                  About
+                </Link>
               </ListItem>
               <ListItem button>
-                <Link href="/contact">Contact</Link>
+                <Link href="/contact" style={linkStyle}>
+                  Contact
+                </Link>
               </ListItem>
               {isLoggedin ? (
                 <>
                   <ListItem button>
-                    <Link href="/admin/promotion/edit">Edit Promotions</Link>
+                    <Link href="/admin/promotion/edit" style={linkStyle}>
+                      Edit Promotions
+                    </Link>
                   </ListItem>
                   <ListItem button>
-                    <Link href="/admin/menu/edit">Edit Menu</Link>
+                    <Link href="/admin/menu/edit" style={linkStyle}>
+                      Edit Menu
+                    </Link>
                   </ListItem>
                   <ListItem button>
-                    <Link href="/admin/theme/edit">Edit Theme</Link>
+                    <Link href="/admin/theme/edit" style={linkStyle}>
+                      Edit Theme
+                    </Link>
                   </ListItem>
                   <ListItem button>
-                    <Link href="/">Edit Info</Link>
+                    <Link href="/" style={linkStyle}>
+                      Edit Info
+                    </Link>
                   </ListItem>
                   <ListItem button>
-                    <Link href="/admin/login" onClick={logout}>
+                    <Link
+                      href="/admin/login"
+                      onClick={logout}
+                      style={linkStyle}
+                    >
                       Logout
                     </Link>
                   </ListItem>
@@ -98,10 +117,14 @@ export default function MainNavbar({ isLoggedin }) {
               ) : (
                 <>
                   <ListItem button>
-                    <Link href="/admin/login">Log In</Link>
+                    <Link href="/admin/login" style={linkStyle}>
+                      Log In
+                    </Link>
                   </ListItem>
                   <ListItem button>
-                    <Link href="/admin/register">Register</Link>
+                    <Link href="/admin/register" style={linkStyle}>
+                      Register
+                    </Link>
                   </ListItem>
                 </>
               )}
@@ -109,20 +132,31 @@ export default function MainNavbar({ isLoggedin }) {
           </Drawer>
         </>
       ) : (
-        <AppBar position="static">
+        <AppBar
+          position="static"
+          style={{ background: "transparent", boxShadow: "none" }}
+        >
           <Toolbar>
             <Typography style={{ marginRight: "40px" }}>
               {isLoggedin ? (
-                <Link href="/admin/dashboard">Restaurante Wiz</Link>
+                <Link href="/admin/dashboard" style={linkStyle}>
+                  Restaurante Wiz
+                </Link>
               ) : (
-                <Link href="/admin">Restaurante Wiz</Link>
+                <Link href="/admin" style={linkStyle}>
+                  Restaurante Wiz
+                </Link>
               )}
             </Typography>
             <Typography style={{ marginRight: "20px" }}>
-              <Link href="/about">About</Link>
+              <Link href="/about" style={linkStyle}>
+                About
+              </Link>
             </Typography>
             <Typography style={{ marginRight: "20px" }}>
-              <Link href="/contact">Contact</Link>
+              <Link href="/contact" style={linkStyle}>
+                Contact
+              </Link>
             </Typography>
 
             <div style={{ flexGrow: 1 }}></div>
@@ -130,19 +164,27 @@ export default function MainNavbar({ isLoggedin }) {
             {isLoggedin ? (
               <>
                 <Typography style={{ marginRight: "40px" }}>
-                  <Link href="/admin/promotion/edit">Edit Promotions</Link>
+                  <Link href="/admin/promotion/edit" style={linkStyle}>
+                    Edit Promotions
+                  </Link>
                 </Typography>
                 <Typography style={{ marginRight: "40px" }}>
-                  <Link href="/admin/menu/edit">Edit Menu</Link>
+                  <Link href="/admin/menu/edit" style={linkStyle}>
+                    Edit Menu
+                  </Link>
                 </Typography>
                 <Typography style={{ marginRight: "30px" }}>
-                  <Link href="/admin/theme/edit">Edit Theme</Link>
+                  <Link href="/admin/theme/edit" style={linkStyle}>
+                    Edit Theme
+                  </Link>
                 </Typography>
                 <Typography style={{ marginRight: "30px" }}>
-                  <Link href="/">Edit Info</Link>
+                  <Link href="/" style={linkStyle}>
+                    Edit Info
+                  </Link>
                 </Typography>
                 <Typography>
-                  <Link href="/admin/login" onClick={logout}>
+                  <Link href="/admin/login" onClick={logout} style={linkStyle}>
                     Logout
                   </Link>
                 </Typography>
@@ -150,10 +192,14 @@ export default function MainNavbar({ isLoggedin }) {
             ) : (
               <>
                 <Typography style={{ marginRight: "40px" }}>
-                  <Link href="/admin/login">Log In</Link>
+                  <Link href="/admin/login" style={linkStyle}>
+                    Log In
+                  </Link>
                 </Typography>
                 <Typography>
-                  <Link href="/admin/register">Register</Link>
+                  <Link href="/admin/register" style={linkStyle}>
+                    Register
+                  </Link>
                 </Typography>
               </>
             )}

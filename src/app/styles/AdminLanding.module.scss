@@ -1,0 +1,56 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&family=Castoro:ital@0;1&display=swap");
+
+.container {
+  background: linear-gradient(
+    55deg,
+    #050405 10%,
+    #0d0c0f 25%,
+    #0d0c0f 55%,
+    #605458 100%
+  );
+  color: #fefcfc;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.textContainer {
+  height: 75px;
+  overflow: hidden;
+  position: relative;
+}
+
+@keyframes slide-up-in {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up-out {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+.animatedText {
+  &.slide-up-in {
+    animation: slide-up-in 0.1s forwards;
+  }
+
+  &.slide-up-out {
+    animation: slide-up-out 0.1s forwards;
+  }
+
+  &.stay {
+    animation: none;
+  }
+}
