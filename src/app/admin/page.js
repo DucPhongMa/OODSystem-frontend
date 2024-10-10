@@ -14,41 +14,79 @@ export default function Landing() {
   // Word animation
   useEffect(() => {
     const cycleWords = () => {
-      // First word
-      setTimeout(() => setWord({ text: "Build", animation: "slide-up-in" }), 0);
-      setTimeout(() => setWord({ text: "Build", animation: "stay" }), 100);
       setTimeout(
-        () => setWord({ text: "Build", animation: "slide-up-out" }),
+        () =>
+          setWord({ text: "Build", animation: "slide-up-in", visible: true }),
+        0
+      );
+      setTimeout(
+        () => setWord({ text: "Build", animation: "stay", visible: true }),
+        100
+      );
+      setTimeout(
+        () =>
+          setWord({ text: "Build", animation: "slide-up-out", visible: false }),
         1300
       );
-      setTimeout(() => setWord({ text: "", animation: "stay" }), 1400);
-
-      // Second word
       setTimeout(
-        () => setWord({ text: "Customize", animation: "slide-up-in" }),
+        () => setWord({ text: " ", animation: "stay", visible: false }),
+        1400
+      );
+
+      setTimeout(
+        () =>
+          setWord({
+            text: "Customize",
+            animation: "slide-up-in",
+            visible: true,
+          }),
         1900
       );
-      setTimeout(() => setWord({ text: "Customize", animation: "stay" }), 2000);
       setTimeout(
-        () => setWord({ text: "Customize", animation: "slide-up-out" }),
+        () => setWord({ text: "Customize", animation: "stay", visible: true }),
+        2000
+      );
+      setTimeout(
+        () =>
+          setWord({
+            text: "Customize",
+            animation: "slide-up-out",
+            visible: false,
+          }),
         3200
       );
-      setTimeout(() => setWord({ text: "", animation: "stay" }), 3300);
-
-      // Third word
       setTimeout(
-        () => setWord({ text: "Track orders", animation: "slide-up-in" }),
+        () => setWord({ text: " ", animation: "stay", visible: false }),
+        3300
+      );
+
+      setTimeout(
+        () =>
+          setWord({
+            text: "Track orders",
+            animation: "slide-up-in",
+            visible: true,
+          }),
         3800
       );
       setTimeout(
-        () => setWord({ text: "Track orders", animation: "stay" }),
+        () =>
+          setWord({ text: "Track orders", animation: "stay", visible: true }),
         3900
       );
       setTimeout(
-        () => setWord({ text: "Track orders", animation: "slide-up-out" }),
+        () =>
+          setWord({
+            text: "Track orders",
+            animation: "slide-up-out",
+            visible: false,
+          }),
         5100
       );
-      setTimeout(() => setWord({ text: "", animation: "stay" }), 5200);
+      setTimeout(
+        () => setWord({ text: " ", animation: "stay", visible: false }),
+        5200
+      );
     };
 
     cycleWords();

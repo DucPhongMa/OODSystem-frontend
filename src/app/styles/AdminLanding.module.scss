@@ -14,14 +14,8 @@
 }
 
 .textContainer {
-  min-height: 75px;
   overflow: hidden;
   position: relative;
-
-  @media (max-width: 600px) {
-    min-height: 40px;
-    font-size: smaller;
-  }
 }
 
 @keyframes slide-up-in {
@@ -47,6 +41,9 @@
 }
 
 .animatedText {
+  width: 100%;
+  height: 100%;
+
   &.slide-up-in {
     animation: slide-up-in 0.1s forwards;
   }
@@ -64,6 +61,7 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  align-items: center;
 }
 
 .textBaseStyle {
