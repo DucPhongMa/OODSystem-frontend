@@ -56,13 +56,13 @@ export default function MainNavbar({ isLoggedin }) {
             </Toolbar>
           </AppBar>
           <Drawer
-  anchor="left"
-  open={Boolean(mobileMenuAnchor)}
-  onClose={handleMobileMenuClose}
-  PaperProps={{
-    style: { backgroundColor: 'gray', color: 'black' } // Change these values as needed
-  }}
->
+            anchor="left"
+            open={Boolean(mobileMenuAnchor)}
+            onClose={handleMobileMenuClose}
+            PaperProps={{
+              style: { backgroundColor: "gray", color: "black" }, // Change these values as needed
+            }}
+          >
             <List>
               <ListItem button>
                 {isLoggedin ? (
