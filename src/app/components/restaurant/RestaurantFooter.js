@@ -1,4 +1,4 @@
-import { Grid, Typography, Box } from "@mui/material";
+import { Grid, Typography, Box, useMediaQuery } from "@mui/material";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
 import PlaceIcon from "@mui/icons-material/Place";
@@ -6,6 +6,7 @@ import styles from "../../styles/RestaurantFooter.module.scss";
 import { useEffect, useState } from "react";
 
 export default function RestaurantFooter({ restaurantData }) {
+  const isMobileOrTablet = useMediaQuery("(max-width:960px)");
   const themeID = restaurantData.theme?.id || 1;
   const [theme, setTheme] = useState("");
   const fullAddress = `${restaurantData.restaurant_contact?.address || ""}, ${restaurantData.restaurant_contact?.city || ""}, ${restaurantData.restaurant_contact?.provinceOrState || ""}, ${restaurantData.restaurant_contact?.postalCode || ""}`;
@@ -33,7 +34,15 @@ export default function RestaurantFooter({ restaurantData }) {
       <Grid container spacing={0} sx={{ maxWidth: 1200, margin: "0 auto" }}>
         {" "}
         {/* CONTACT */}
-        <Grid item xs={12} sm={4}>
+        <Grid
+          item
+          xs={12}
+          sm={4}
+          sx={{
+            padding: isMobileOrTablet ? "0 20px" : "0 20px",
+            textAlign: "center",
+          }}
+        >
           <Typography
             gutterBottom
             className={`${theme} ${styles.sectionTitle}`}
@@ -41,7 +50,12 @@ export default function RestaurantFooter({ restaurantData }) {
             CONTACT
           </Typography>
           <Box
-            sx={{ display: "flex", alignItems: "center", marginBottom: "5px" }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              marginBottom: "5px",
+              justifyContent: "center",
+            }}
           >
             <PhoneIcon sx={{ marginRight: "5px" }} />
             <Typography variant="subtitle1">
@@ -55,9 +69,8 @@ export default function RestaurantFooter({ restaurantData }) {
           xs={12}
           sm={4}
           sx={{
-            padding: "0 80px",
-            display: "flex",
-            flexDirection: "column",
+            padding: isMobileOrTablet ? "0 20px" : "0 20px",
+            textAlign: "center",
           }}
         >
           <Typography
@@ -72,6 +85,7 @@ export default function RestaurantFooter({ restaurantData }) {
               alignItems: "center",
               marginBottom: "5px",
               cursor: "pointer",
+              justifyContent: "center",
             }}
             onClick={() => window.open(googleMapsUrl, "_blank")}
           >
@@ -80,9 +94,7 @@ export default function RestaurantFooter({ restaurantData }) {
               {restaurantData.restaurant_contact?.address || "N/A"}
             </Typography>
           </Box>
-          <Box sx={{ textAlign: "left" }}>
-            {" "}
-            {/* Removed paddingLeft adjustment */}
+          <Box sx={{ textAlign: "center" }}>
             <Typography variant="subtitle1">
               {restaurantData.restaurant_contact?.city || "N/A"},{" "}
               {restaurantData.restaurant_contact?.provinceOrState || "N/A"}
@@ -93,7 +105,15 @@ export default function RestaurantFooter({ restaurantData }) {
           </Box>
         </Grid>
         {/* SUPPORT */}
-        <Grid item xs={12} sm={4} sx={{ padding: "0 200px" }}>
+        <Grid
+          item
+          xs={12}
+          sm={4}
+          sx={{
+            padding: isMobileOrTablet ? "0 20px" : "0 20px",
+            textAlign: "center",
+          }}
+        >
           <Typography
             gutterBottom
             className={`${theme} ${styles.sectionTitle}`}
@@ -104,8 +124,9 @@ export default function RestaurantFooter({ restaurantData }) {
             sx={{
               display: "flex",
               alignItems: "center",
-              marginBottom: "5px",
+              marginBottom: "100px",
               whiteSpace: "nowrap",
+              justifyContent: "center",
             }}
           >
             <EmailIcon sx={{ marginRight: "5px" }} />

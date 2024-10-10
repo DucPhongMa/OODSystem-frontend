@@ -1,42 +1,40 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&family=Castoro:ital@0;1&display=swap");
+
 .theme1 {
   background-color: #1565c0;
-  font-family: "Noto Serif Ethiopic", serif;
   color: white;
-  padding: 20px 0;
+
   .sectionTitle {
-    font-size: 25px;
-    font-weight: 500;
-    font-family: "Noto Serif Ethiopic", serif;
+    padding-top: 40px;
+    padding-bottom: 5px;
+    font-size: 1.5rem;
+    font-weight: 600;
     color: #ffffff;
   }
 }
 
 .theme2 {
   background-color: #101010;
-  font-family: "Noto Serif Ethiopic", serif;
   color: #ffffff;
-  padding: 20px 0;
-  font-weight: bold;
-  margin-bottom: 10px;
+
   .sectionTitle {
-    font-size: 25px;
-    font-weight: 500;
-    font-family: "Noto Serif Ethiopic", serif;
+    padding-top: 40px;
+    padding-bottom: 5px;
+    font-size: 1.5rem;
+    font-weight: 600;
     color: #ffffff;
   }
 }
 
 .theme3 {
   background-color: #eb582c;
-  font-family: "Lato", sans-serif;
   color: #101010;
-  padding: 20px 0;
-  font-weight: bold;
-  margin-bottom: 10px;
+
   .sectionTitle {
-    font-size: 25px;
-    font-weight: 700;
-    font-family: "Lato", sans-serif;
+    padding-top: 40px;
+    padding-bottom: 5px;
+    font-size: 1.5rem;
+    font-weight: 600;
     color: #101010;
   }
 }
