@@ -118,10 +118,19 @@ export default function RestaurantHomepage() {
     (order) => order.orderStatus === "completed"
   );*/
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-
   console.log("All Reviews: ", reviewData);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!restaurantData || !restaurantData.menuCate) {
+    return <div>No restaurant data available.</div>;
+  }
 
   return (
     <div className={theme}>
