@@ -2,14 +2,12 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { getOrderByCustomer } from "../../../api/order";
-import { Button, Container, Typography } from "@mui/material";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
+  Container,
+  Typography,
+  Card,
+  CardContent,
+  Grid,
   Rating,
   Box,
   Paper,
@@ -116,73 +114,76 @@ export default function OrderHistory() {
   };
 
   return (
-    <div className={theme}>
-      <Box
-        sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
-        className={`${theme} ${styles.pageBackground}`}
-      >
-        <Box sx={{ flexGrow: 1 }}>
-          <RestaurantAppBar data={restaurantData} />
-          <Container maxWidth="xl" sx={{ marginBottom: 12 }}>
-            <Typography
-              variant="h2"
-              align="center"
-              style={{ margin: "40px 0" }}
+    <Box
+      className={`${theme} pageBackground`}
+      sx={{ minHeight: "100vh", backgroundColor: "#F5F5F5" }}
+    >
+      <RestaurantAppBar data={restaurantData} />
+
+      <Container maxWidth="lg" sx={{ py: 4, px: 2 }}>
+        <Typography
+          variant="h4"
+          align="center"
+          gutterBottom
+          sx={{
+            mt: 0,
+            mb: 4,
+            fontWeight: "bold",
+            color: "#333",
+            fontSize: "2rem",
+            "&::after": {
+              content: '""',
+              display: "block",
+              width: "120px",
+              height: "3px",
+              backgroundColor: "#BAA378",
+              borderRadius: "1px",
+              margin: "8px auto 0",
+            },
+          }}
+        >
+          REVIEWS
+        </Typography>
+        {reviewData.length > 0 ? (
+          reviewData.map((review) => (
+            <Paper
+              key={review.id}
+              sx={{ mb: 2, p: 2, backgroundColor: "#ffffff" }}
             >
-              Reviews
-            </Typography>
-            {reviewData.length > 0 ? (
-              <Paper
-                sx={{ marginBottom: 2, padding: 2 }}
-                className={`${theme} ${styles.section}`}
+              <Typography
+                variant="subtitle1"
+                component="div"
+                sx={{ fontWeight: "bold" }}
               >
-                <Table>
-                  <TableBody>
-                    {reviewData.map((review, index) => (
-                      <TableRow key={review.id}>
-                        <TableCell
-                          align="center"
-                          className={`${theme} ${styles.tableText}`}
-                        >
-                          {review.attributes.customerName != "" &&
-                            review.attributes.customerName}{" "}
-                          {review.attributes.customerName == "" && "Guest"}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          className={`${theme} ${styles.tableText}`}
-                        >
-                          <Rating
-                            value={review.attributes.rating}
-                            readOnly
-                          ></Rating>
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          className={`${theme} ${styles.tableText}`}
-                        >
-                          {review.attributes.reviewContent}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          className={`${theme} ${styles.tableText}`}
-                        >
-                          {formatDate(review.attributes.createdAt)}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </Paper>
-            ) : (
-              <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
-                <Typography>There are no reviews.</Typography>
-              </Box>
-            )}
-          </Container>
-        </Box>
-        <RestaurantFooter restaurantData={restaurantData} />
-      </Box>
-    </div>
+                {review.attributes.customerName || "Guest"}
+                <Typography
+                  variant="body2"
+                  component="span"
+                  sx={{
+                    display: "block",
+                    color: "text.secondary",
+                    fontSize: "0.875rem",
+                  }}
+                >
+                  Reviewed in {review.attributes.location} on{" "}
+                  {new Date(review.attributes.createdAt).toLocaleDateString()}
+                </Typography>
+              </Typography>
+              <Rating
+                value={review.attributes.rating}
+                readOnly
+                sx={{ mb: 1 }}
+              />
+              <Typography variant="body2">
+                {review.attributes.reviewContent}
+              </Typography>
+            </Paper>
+          ))
+        ) : (
+          <Typography align="center">No reviews yet.</Typography>
+        )}
+      </Container>
+      <RestaurantFooter restaurantData={restaurantData} />
+    </Box>
   );
 }
