@@ -1,20 +1,21 @@
 @import url(https://fonts.googleapis.com/css?family=Montserrat);
 
-.App {
-  background: rgb(255, 0, 228);
-  background: radial-gradient(
-    circle,
-    rgba(255, 0, 228, 1) 0%,
-    rgba(212, 51, 16, 1) 84%,
-    rgba(255, 0, 95, 1) 100%
-  );
-  width: 100vw;
-  height: 100vh;
+.RegisterPage {
+  width: 100%;
+  height: calc(100vh - 64px);
   display: grid;
   place-items: center;
+  overflow: hidden;
 }
 
 body {
+  background: linear-gradient(
+    55deg,
+    #050405 10%,
+    #0d0c0f 25%,
+    #0d0c0f 55%,
+    #605458 100%
+  );
   margin: 0%;
   padding: 0%;
   font-family: montserrat, arial, verdana;
@@ -59,7 +60,7 @@ body {
   border-radius: 7px;
   width: 100px;
   height: 40px;
-  background-color: rgb(255, 0, 140);
+  background-color: #373034;
   font-weight: bold;
   color: white;
   border: 0 none;

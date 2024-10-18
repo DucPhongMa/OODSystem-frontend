@@ -1,17 +1,16 @@
+// pages/register/index.js
 "use client";
-import "./App.css";
+import "../../styles/AdminRegister.css";
 import Form from "../../components/admin/register/Form";
-import MainNavbar from "../../components/admin/register/MainNavbar";
+import MainNavbar from "../../components/admin/register/LandingNavbar";
 
-function App() {
+export default function Register() {
   return (
     <>
       <MainNavbar isLoggedin={false} />
-      <div className="App">
+      <div className="RegisterPage">
         <Form />
       </div>
     </>
   );
 }
-
-export default App;
