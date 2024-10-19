@@ -1,4 +1,4 @@
-import "../../../styles/AdminRegister.scss";
+import "../../../styles/AdminRegister.css";
 import Form from "./components/Form";
 
 function AdminRegisterApp() {
