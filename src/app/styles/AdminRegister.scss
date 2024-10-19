@@ -139,8 +139,8 @@ body {
 input {
   border: 2px solid rgb(98, 0, 255);
   border-radius: 5px;
-}
-
-input:focus {
-  border: 3px solid rgb(98, 0, 255);
+  padding: 10px;
+  width: 200px; 
+  height: 40px;
+  box-sizing: border-box; 
 }

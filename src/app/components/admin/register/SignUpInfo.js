@@ -13,9 +13,8 @@ function SignUpInfo({ formData, setFormData }) {
             id="email"
             label="Email Address"
             value={formData.email}
-            onChange={
-              (event) =>
-                setFormData({ ...formData, email: event.target.value.trim() }) // Trim spaces here
+            onChange={(event) =>
+              setFormData({ ...formData, email: event.target.value.trim() })
             }
             inputProps={{
               maxLength: 320,
