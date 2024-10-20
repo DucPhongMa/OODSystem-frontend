@@ -1,5 +1,9 @@
 // Classic theme
 .theme1 {
+  .MuiTablePagination-root {
+    color: #000000;
+  }
+
   .pageBackground {
     background: linear-gradient(to bottom, #ffffff, #f7fafc);
     min-height: 100vh;
@@ -20,6 +24,10 @@
 
 // Dark theme
 .theme2 {
+  .MuiTablePagination-root {
+    color: #000000;
+  }
+
   .pageBackground {
     background: linear-gradient(to bottom, #2e2e2e, #383838);
     min-height: 100vh;
@@ -40,6 +48,10 @@
 
 // Modern theme
 .theme3 {
+  .MuiTablePagination-root {
+    color: #000000;
+  }
+
   .pageBackground {
     background-color: #f2eae3;
     min-height: 100vh;

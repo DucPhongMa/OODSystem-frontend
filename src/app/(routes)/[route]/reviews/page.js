@@ -11,6 +11,7 @@ import {
   Rating,
   Box,
   Paper,
+  TablePagination,
 } from "@mui/material";
 import { getRestaurantByRoute } from "../../../api/restaurant";
 import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
@@ -25,10 +26,11 @@ export default function OrderHistory() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const restaurantRoute = params.route;
-
   const [restaurantData, setRestaurantData] = useState(null);
   const [reviewData, setReviewData] = useState(null);
   const [theme, setTheme] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5); // Default number of rows per page
 
   useEffect(() => {
     async function fetchMyAPI() {
@@ -95,6 +97,15 @@ export default function OrderHistory() {
     localStorage.setItem("restaurant-route", restaurantRoute);
   }, [restaurantRoute]);
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
@@ -145,44 +156,57 @@ export default function OrderHistory() {
           REVIEWS
         </Typography>
         {reviewData.length > 0 ? (
-          reviewData.map((review) => (
-            <Paper
-              key={review.id}
-              sx={{ mb: 2, p: 2, backgroundColor: "#ffffff" }}
-            >
-              <Typography
-                variant="subtitle1"
-                component="div"
-                sx={{ fontWeight: "bold" }}
+          reviewData
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((review) => (
+              <Paper
+                key={review.id}
+                sx={{ mb: 2, p: 2, backgroundColor: "#ffffff" }}
               >
-                {review.attributes.customerName || "Guest"}
                 <Typography
-                  variant="body2"
-                  component="span"
-                  sx={{
-                    display: "block",
-                    color: "text.secondary",
-                    fontSize: "0.875rem",
-                  }}
+                  variant="subtitle1"
+                  component="div"
+                  sx={{ fontWeight: "bold" }}
                 >
-                  Reviewed in {review.attributes.location} on{" "}
-                  {new Date(review.attributes.createdAt).toLocaleDateString()}
+                  {review.attributes.customerName || "Guest"}
+                  <Typography
+                    variant="body2"
+                    component="span"
+                    sx={{
+                      display: "block",
+                      color: "text.secondary",
+                      fontSize: "0.875rem",
+                    }}
+                  >
+                    Reviewed in {review.attributes.location} on{" "}
+                    {new Date(review.attributes.createdAt).toLocaleDateString()}
+                  </Typography>
                 </Typography>
-              </Typography>
-              <Rating
-                value={review.attributes.rating}
-                readOnly
-                sx={{ mb: 1 }}
-              />
-              <Typography variant="body2">
-                {review.attributes.reviewContent}
-              </Typography>
-            </Paper>
-          ))
+                <Rating
+                  value={review.attributes.rating}
+                  readOnly
+                  sx={{ mb: 1 }}
+                />
+                <Typography variant="body2">
+                  {review.attributes.reviewContent}
+                </Typography>
+              </Paper>
+            ))
         ) : (
           <Typography align="center">No reviews yet.</Typography>
         )}
       </Container>
+      <TablePagination
+        component="div"
+        count={reviewData.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={(event, newPage) => setPage(newPage)}
+        onRowsPerPageChange={(event) =>
+          setRowsPerPage(parseInt(event.target.value, 10))
+        }
+        rowsPerPageOptions={[5, 10, 15]}
+      />
       <RestaurantFooter restaurantData={restaurantData} />
     </Box>
   );
