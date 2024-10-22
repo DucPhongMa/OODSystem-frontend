@@ -1,13 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { getOrderByCustomer } from "../../../api/order";
 import {
   Container,
   Typography,
-  Card,
-  CardContent,
-  Grid,
   Rating,
   Box,
   Paper,
@@ -16,12 +12,10 @@ import {
 import { getRestaurantByRoute } from "../../../api/restaurant";
 import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
 import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
-import Link from "next/link";
 import styles from "../../../styles/RestaurantReviews.module.scss";
 import { getAllReviews } from "../../../api/review";
 
 export default function OrderHistory() {
-  //const [orderHistory, setOrderHistory] = useState(null);
   const params = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -127,7 +121,7 @@ export default function OrderHistory() {
   return (
     <Box
       className={`${theme} pageBackground`}
-      sx={{ minHeight: "100vh", backgroundColor: "#F5F5F5" }}
+      sx={{ minHeight: "100vh", backgroundColor: "#f5f5f5" }}
     >
       <RestaurantAppBar data={restaurantData} />
 
@@ -147,7 +141,7 @@ export default function OrderHistory() {
               display: "block",
               width: "120px",
               height: "3px",
-              backgroundColor: "#BAA378",
+              backgroundColor: "#baa378",
               borderRadius: "1px",
               margin: "8px auto 0",
             },

@@ -165,6 +165,7 @@ const RestaurantAppBar = ({ data }) => {
     <Box className={theme} sx={{ flexGrow: 1 }}>
       <AppBar
         position="static"
+        elevation={0}
         sx={{
           backgroundColor:
             theme === styles.theme2

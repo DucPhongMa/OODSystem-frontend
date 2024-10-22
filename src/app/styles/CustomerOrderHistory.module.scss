@@ -1,16 +1,16 @@
 // Classic theme
 .theme1 {
   .pageBackground {
-    background: linear-gradient(to bottom, #ffffff, #f7fafc);
-
+    background: #f5f5f5;
     background-attachment: fixed;
     color: #000000;
   }
 
   .section {
-    background-color: #fefefe;
+    background-color: transparent;
     color: #000000;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+    border: none;
+    box-shadow: none;
   }
 
   .tableText {
@@ -32,15 +32,15 @@
 .theme2 {
   .pageBackground {
     background: linear-gradient(to bottom, #2e2e2e, #383838);
-
     background-attachment: fixed;
     color: #e0e0e0;
   }
 
   .section {
-    background-color: #282828;
+    background-color: transparent;
     color: #e0e0e0;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+    border: none;
+    box-shadow: none;
   }
 
   .tableText {
@@ -66,14 +66,15 @@
 .theme3 {
   .pageBackground {
     background-color: #f2eae3;
-
     background-attachment: fixed;
     color: #383838;
   }
 
   .section {
-    background-color: #fbfbf7;
+    background-color: transparent;
     color: #383838;
+    border: none;
+    box-shadow: none;
   }
 
   .tableText {

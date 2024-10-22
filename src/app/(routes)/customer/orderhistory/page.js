@@ -7,9 +7,9 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TableRow,
+  TablePagination,
   Paper,
   Box,
 } from "@mui/material";
@@ -26,6 +26,8 @@ export default function OrderHistory() {
   const [error, setError] = useState(null);
   const [restaurantData, setRestaurantData] = useState(null);
   const [theme, setTheme] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5); // Default number of rows per page
 
   if (typeof window !== "undefined") {
     var route = JSON.parse(localStorage.getItem("restaurant-data")).route;
@@ -134,7 +136,17 @@ export default function OrderHistory() {
       (order) =>
         order.orderStatus === "completed" || order.orderStatus === "cancelled"
     )
-    .sort((a, b) => b.orderId - a.orderId);
+    .sort((a, b) => b.orderId - a.orderId)
+    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -166,11 +178,27 @@ export default function OrderHistory() {
           <RestaurantAppBar data={restaurantData} />
           <Container maxWidth="xl">
             <Typography
-              variant="h2"
+              variant="h4"
               align="center"
-              style={{ margin: "40px 0" }}
+              gutterBottom
+              sx={{
+                mt: 4,
+                mb: 4,
+                fontWeight: "bold",
+                color: "#333",
+                fontSize: "2rem",
+                "&::after": {
+                  content: '""',
+                  display: "block",
+                  width: "120px",
+                  height: "3px",
+                  backgroundColor: "#BAA378",
+                  borderRadius: "1px",
+                  margin: "8px auto 0",
+                },
+              }}
             >
-              Order History
+              ORDER HISTORY
             </Typography>
             {completedOrders.length > 0 ? (
               <Paper
@@ -182,14 +210,14 @@ export default function OrderHistory() {
                     <TableRow>
                       <TableCell
                         align="center"
-                        width="200em"
+                        width="150em"
                         className={`${theme} ${styles.tableText}`}
                       >
                         Order #
                       </TableCell>
                       <TableCell
                         align="center"
-                        width="400em"
+                        width="200em"
                         className={`${theme} ${styles.tableText}`}
                       >
                         Date
@@ -272,6 +300,15 @@ export default function OrderHistory() {
                     ))}
                   </TableBody>
                 </Table>
+                <TablePagination
+                  component="div"
+                  count={orderHistory ? orderHistory.length : 0}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                  rowsPerPageOptions={[5, 10, 15]}
+                />
               </Paper>
             ) : (
               <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
