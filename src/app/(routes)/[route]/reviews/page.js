@@ -172,7 +172,7 @@ export default function OrderHistory() {
                       fontSize: "0.875rem",
                     }}
                   >
-                    Reviewed in {review.attributes.location} on{" "}
+                    Reviewed on{" "}
                     {new Date(review.attributes.createdAt).toLocaleDateString()}
                   </Typography>
                 </Typography>
