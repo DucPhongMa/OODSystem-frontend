@@ -121,7 +121,7 @@ export default function OrderHistory() {
   return (
     <Box
       className={`${theme} pageBackground`}
-      sx={{ minHeight: "100vh", backgroundColor: "#f5f5f5" }}
+      sx={{ minHeight: "100vh" }}
     >
       <RestaurantAppBar data={restaurantData} />
 
