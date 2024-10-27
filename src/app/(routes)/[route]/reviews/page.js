@@ -119,89 +119,93 @@ export default function OrderHistory() {
   };
 
   return (
-    <Box
-      className={`${theme} pageBackground`}
-      sx={{ minHeight: "100vh" }}
-    >
-      <RestaurantAppBar data={restaurantData} />
+    <div className={theme}>
+      <Box
+        className={`${theme} ${styles.pageBackground}`}
+        sx={{ minHeight: "100vh" }}
+      >
+        <RestaurantAppBar data={restaurantData} />
 
-      <Container maxWidth="lg" sx={{ py: 4, px: 2 }}>
-        <Typography
-          variant="h4"
-          align="center"
-          gutterBottom
-          sx={{
-            mt: 0,
-            mb: 4,
-            fontWeight: "bold",
-            color: "#333",
-            fontSize: "2rem",
-            "&::after": {
-              content: '""',
-              display: "block",
-              width: "120px",
-              height: "3px",
-              backgroundColor: "#baa378",
-              borderRadius: "1px",
-              margin: "8px auto 0",
-            },
-          }}
-        >
-          REVIEWS
-        </Typography>
-        {reviewData.length > 0 ? (
-          reviewData
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((review) => (
-              <Paper
-                key={review.id}
-                sx={{ mb: 2, p: 2, backgroundColor: "#ffffff" }}
-              >
-                <Typography
-                  variant="subtitle1"
-                  component="div"
-                  sx={{ fontWeight: "bold" }}
+        <Container maxWidth="lg" sx={{ py: 4, px: 2 }}>
+          <Typography
+            variant="h4"
+            align="center"
+            gutterBottom
+            sx={{
+              mt: 0,
+              mb: 4,
+              fontWeight: "bold",
+              color: "#333",
+              fontSize: "2rem",
+              "&::after": {
+                content: '""',
+                display: "block",
+                width: "120px",
+                height: "3px",
+                backgroundColor: "#baa378",
+                borderRadius: "1px",
+                margin: "8px auto 0",
+              },
+            }}
+          >
+            REVIEWS
+          </Typography>
+          {reviewData.length > 0 ? (
+            reviewData
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((review) => (
+                <Paper
+                  key={review.id}
+                  sx={{ mb: 2, p: 2, backgroundColor: "#ffffff" }}
                 >
-                  {review.attributes.customerName || "Guest"}
                   <Typography
-                    variant="body2"
-                    component="span"
-                    sx={{
-                      display: "block",
-                      color: "text.secondary",
-                      fontSize: "0.875rem",
-                    }}
+                    variant="subtitle1"
+                    component="div"
+                    sx={{ fontWeight: "bold" }}
                   >
-                    Reviewed on{" "}
-                    {new Date(review.attributes.createdAt).toLocaleDateString()}
+                    {review.attributes.customerName || "Guest"}
+                    <Typography
+                      variant="body2"
+                      component="span"
+                      sx={{
+                        display: "block",
+                        color: "text.secondary",
+                        fontSize: "0.875rem",
+                      }}
+                    >
+                      Reviewed on{" "}
+                      {new Date(
+                        review.attributes.createdAt
+                      ).toLocaleDateString()}
+                    </Typography>
                   </Typography>
-                </Typography>
-                <Rating
-                  value={review.attributes.rating}
-                  readOnly
-                  sx={{ mb: 1 }}
-                />
-                <Typography variant="body2">
-                  {review.attributes.reviewContent}
-                </Typography>
-              </Paper>
-            ))
-        ) : (
-          <Typography align="center">No reviews yet.</Typography>
-        )}
-      </Container>
-      <TablePagination
-        component="div"
-        count={reviewData.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={(event, newPage) => setPage(newPage)}
-        onRowsPerPageChange={(event) =>
-          setRowsPerPage(parseInt(event.target.value, 10))
-        }
-        rowsPerPageOptions={[5, 10, 15]}
-      />
-      <RestaurantFooter restaurantData={restaurantData} />
-    </Box>
+                  <Rating
+                    value={review.attributes.rating}
+                    readOnly
+                    sx={{ mb: 1 }}
+                  />
+                  <Typography variant="body2">
+                    {review.attributes.reviewContent}
+                  </Typography>
+                </Paper>
+              ))
+          ) : (
+            <Typography align="center">No reviews yet.</Typography>
+          )}
+        </Container>
+        <TablePagination
+          component="div"
+          count={reviewData.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={(event, newPage) => setPage(newPage)}
+          onRowsPerPageChange={(event) =>
+            setRowsPerPage(parseInt(event.target.value, 10))
+          }
+          rowsPerPageOptions={[5, 10, 15]}
+        />
+        <RestaurantFooter restaurantData={restaurantData} />
+      </Box>
+    </div>
   );
 }
