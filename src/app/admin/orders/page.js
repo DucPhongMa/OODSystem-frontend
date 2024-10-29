@@ -83,6 +83,14 @@ export default function AdminOrders() {
   });
   const [tabValue, setTabValue] = useState("all");
 
+  // Filter orders based on search term
+  const filterOrders = useCallback((orders, searchTerm) => {
+    if (!searchTerm) return orders;
+    return orders.filter((order) =>
+      order.customer.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, []);
+
   // Check if user is authenticated and store in state variable
   // Get restaurant id and store in state variable
   useEffect(() => {
@@ -299,13 +307,13 @@ export default function AdminOrders() {
         .sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime));
 
       setOrders(formattedOrders);
-      setFilteredOrders(formattedOrders);
+      setFilteredOrders(filterOrders(formattedOrders, searchTerm));
 
       console.log(
         `Fetched orders for restaurant id# ${restaurantID} at:  ${new Date()}`
       );
     },
-    [isLoggedIn, restaurantID]
+    [isLoggedIn, restaurantID, filterOrders, searchTerm]
   );
 
   // When page tab changes, refetch orders
@@ -425,11 +433,8 @@ export default function AdminOrders() {
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
     setSearchTerm(value);
-    const filtered = orders.filter((order) =>
-      order.customer.toLowerCase().includes(value)
-    );
-    setFilteredOrders(filtered);
-    setPage(0); // Reset page to 0 when search changes
+    setFilteredOrders(filterOrders(orders, value));
+    setPage(0);
   };
 
   const handleChangePage = (event, newPage) => {
