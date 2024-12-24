@@ -7,6 +7,7 @@ import {
   Box,
   CardMedia,
   Button,
+  useMediaQuery,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
@@ -24,6 +25,7 @@ export default function ItemDialog({
   theme,
   isOpen,
 }) {
+  const isMobileOrTablet = useMediaQuery("(max-width:960px)");
   const [cart, setCart] = useAtom(cartAtom);
   const handleAddToCart = () => {
     setCart((prevCart) => {
