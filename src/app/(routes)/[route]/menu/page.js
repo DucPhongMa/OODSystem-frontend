@@ -17,6 +17,7 @@ import ItemCard from "@/app/components/restaurant/ItemCard";
 import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
 import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
 import styles from "../../../styles/RestaurantMenu.module.scss";
+import ScrollableCategoryMenu from '@/app/components/restaurant/ScrollableCategoryMenu';
 
 export default function RestaurantMenu() {
   const [restaurantData, setRestaurantData] = useState(null);
