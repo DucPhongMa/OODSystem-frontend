@@ -17,7 +17,7 @@ import ItemCard from "@/app/components/restaurant/ItemCard";
 import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
 import RestaurantFooter from "@/app/components/restaurant/RestaurantFooter";
 import styles from "../../../styles/RestaurantMenu.module.scss";
-import ScrollableCategoryMenu from '@/app/components/restaurant/ScrollableCategoryMenu';
+import ScrollableCategoryMenu from "@/app/components/restaurant/ScrollableCategoryMenu";
 
 export default function RestaurantMenu() {
   const [restaurantData, setRestaurantData] = useState(null);
@@ -177,26 +177,13 @@ export default function RestaurantMenu() {
           </Alert>
         )}
 
-        <AppBar
-          position="sticky"
-          color="default"
-          elevation={0}
-          className={`${theme} ${styles.appBar}`}
-        >
-          <Toolbar sx={{ justifyContent: "center" }}>
-            {restaurantData.menuCate.map((category) => (
-              <Button
-                disableRipple
-                key={category.id}
-                variant="contained"
-                onClick={() => handleCategoryClick(category.name)}
-                className={`${theme} ${styles.toolbarButton}`}
-              >
-                {category.name.toUpperCase()}
-              </Button>
-            ))}
-          </Toolbar>
-        </AppBar>
+        <ScrollableCategoryMenu
+          categories={restaurantData.menuCate}
+          handleCategoryClick={handleCategoryClick}
+          theme={theme}
+          styles={styles}
+        />
+
         <Container maxWidth="md">
           <Box sx={{ mt: 3 }}>
             {restaurantData.menuCate.map((category) => (

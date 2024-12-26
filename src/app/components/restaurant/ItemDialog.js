@@ -111,7 +111,7 @@ export default function ItemDialog({
 
             <Typography
               variant="h5"
-              sx={{ mt: 2 }}
+              sx={{ mt: 2, textAlign: "center" }}
               className={`${theme} ${styles.dialogItemName}`}
             >
               {item?.name}
@@ -119,7 +119,7 @@ export default function ItemDialog({
 
             <Typography
               variant="body1"
-              sx={{ mt: 1 }}
+              sx={{ mt: 1, textAlign: "center" }}
               className={`${theme} ${styles.dialogItemDescription}`}
             >
               {item?.description}

@@ -27,7 +27,7 @@ const ScrollableCategoryMenu = ({
           gap: "8px",
         }}
       >
-        <div className="flex gap-2 py-2">
+        <div className="flex gap-2 py-2 w-full md:justify-center">
           {categories.map((category) => (
             <Button
               key={category.id}
