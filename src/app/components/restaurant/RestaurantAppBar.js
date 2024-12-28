@@ -137,13 +137,15 @@ const RestaurantAppBar = ({ data }) => {
                 ? `/customer${link.route}`
                 : link.name === "Logout"
                   ? `/${data.route}`
-                  : `/${data.route}${link.route}`
+                  : link.name === "Order History"
+                    ? `/customer/orderhistory`
+                    : `/${data.route}${link.route}`
             }
             passHref
             key={link.name}
           >
             <ListItem
-              button
+              sx={{ cursor: "pointer" }}
               component="a"
               onClick={() => {
                 setMobileOpen(false);
