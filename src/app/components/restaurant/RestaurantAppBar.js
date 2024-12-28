@@ -62,7 +62,6 @@ const RestaurantAppBar = ({ data }) => {
   };
 
   useEffect(() => {
-    // Get open/closed status
     const status = data.status;
     if (status === "open") {
       setIsOpen(true);
@@ -132,12 +131,13 @@ const RestaurantAppBar = ({ data }) => {
     <Box onClick={handleDrawerToggle} sx={{ width: 250 }} role="presentation">
       <List>
         {getNavigationLinks().map((link) => (
-          // Check if the link needs a global path or a restaurant-specific path
           <Link
             href={
-              link.name === "Login" || link.name === "Logout"
+              link.name === "Login"
                 ? `/customer${link.route}`
-                : `/${data.route}${link.route}`
+                : link.name === "Logout"
+                  ? `/${data.route}`
+                  : `/${data.route}${link.route}`
             }
             passHref
             key={link.name}
@@ -146,7 +146,7 @@ const RestaurantAppBar = ({ data }) => {
               button
               component="a"
               onClick={() => {
-                setMobileOpen(false); // Close the drawer upon clicking any link
+                setMobileOpen(false);
                 if (link.name === "Logout") {
                   logoutCustomer();
                   setCustomerLoggedIn(false);
