@@ -237,9 +237,13 @@ export default function Landing() {
                 <Image
                   src="/landingAd.jpg"
                   alt="Mobile website"
-                  layout="responsive"
                   width={580}
                   height={354}
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                  }}
+                  priority
                 />
               </Box>
             </Grid>

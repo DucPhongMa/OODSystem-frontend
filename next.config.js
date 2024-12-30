@@ -4,7 +4,20 @@ const path = require("path");
 const nextConfig = {
   reactStrictMode: false,
   images: {
-    domains: ["images.pexels.com", "res.cloudinary.com", "picsum.photos"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.pexels.com",
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+      {
+        protocol: "https",
+        hostname: "picsum.photos",
+      },
+    ],
   },
   async redirects() {
     return [
