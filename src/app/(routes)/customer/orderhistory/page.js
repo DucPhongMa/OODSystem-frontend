@@ -12,6 +12,7 @@ import {
   TablePagination,
   Paper,
   Box,
+  useMediaQuery,
 } from "@mui/material";
 import { getRestaurantByRoute } from "../../../api/restaurant";
 import RestaurantAppBar from "@/app/components/restaurant/RestaurantAppBar";
@@ -28,6 +29,7 @@ export default function OrderHistory() {
   const [theme, setTheme] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5); // Default number of rows per page
+  const isMobileOrTablet = useMediaQuery("(max-width:960px)");
 
   if (typeof window !== "undefined") {
     var route = JSON.parse(localStorage.getItem("restaurant-data")).route;
@@ -166,6 +168,12 @@ export default function OrderHistory() {
       .replace(",", "");
   };
 
+  const handleRowClick = (orderId) => {
+    if (isMobileOrTablet) {
+      window.location.href = `orderhistory/${orderId}`;
+    }
+  };
+
   return (
     <div className={theme}>
       <Box
@@ -202,63 +210,95 @@ export default function OrderHistory() {
             </Typography>
             {completedOrders.length > 0 ? (
               <Paper
-                sx={{ mb: 2, padding: 2 }}
+                sx={{
+                  mb: 2,
+                  padding: 2,
+                  [isMobileOrTablet && "&"]: {
+                    padding: 1,
+                    ".MuiTablePagination-root": {
+                      marginRight: "-8px",
+                      ".MuiTablePagination-actions": {
+                        marginLeft: 0,
+                      },
+                    },
+                  },
+                }}
                 className={`${theme} ${styles.section}`}
               >
                 <Table>
                   <TableHead>
                     <TableRow>
+                      {!isMobileOrTablet && (
+                        <TableCell
+                          align="center"
+                          width="150em"
+                          className={`${theme} ${styles.tableText}`}
+                        >
+                          Order #
+                        </TableCell>
+                      )}
                       <TableCell
                         align="center"
-                        width="150em"
-                        className={`${theme} ${styles.tableText}`}
-                      >
-                        Order #
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        width="200em"
+                        width={isMobileOrTablet ? "33%" : "200em"}
                         className={`${theme} ${styles.tableText}`}
                       >
                         Date
                       </TableCell>
                       <TableCell
                         align="center"
-                        width="200em"
-                        className={`${theme} ${styles.tableText}`}
-                      >
-                        Status
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        width="150em"
+                        width={isMobileOrTablet ? "33%" : "150em"}
                         className={`${theme} ${styles.tableText}`}
                       >
                         Restaurant
                       </TableCell>
+                      {!isMobileOrTablet && (
+                        <TableCell
+                          align="center"
+                          width="200em"
+                          className={`${theme} ${styles.tableText}`}
+                        >
+                          Status
+                        </TableCell>
+                      )}
                       <TableCell
                         align="center"
-                        width="150em"
+                        width={isMobileOrTablet ? "33%" : "150em"}
                         className={`${theme} ${styles.tableText}`}
                       >
                         Total
                       </TableCell>
-                      <TableCell
-                        align="center"
-                        width="250em"
-                        className={`${theme} ${styles.tableText}`}
-                      ></TableCell>
+                      {!isMobileOrTablet && (
+                        <TableCell
+                          align="center"
+                          width="250em"
+                          className={`${theme} ${styles.tableText}`}
+                        ></TableCell>
+                      )}
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {completedOrders.map((order, index) => (
-                      <TableRow key={order.orderId}>
-                        <TableCell
-                          align="center"
-                          className={`${theme} ${styles.tableText}`}
-                        >
-                          {order.orderId}
-                        </TableCell>
+                      <TableRow
+                        key={order.orderId}
+                        {...(isMobileOrTablet && {
+                          onClick: () => handleRowClick(order.orderId),
+                          sx: {
+                            cursor: "pointer",
+                            "&:hover": {
+                              backgroundColor: "rgba(0, 0, 0, 0.04)",
+                              transition: "background-color 0.2s ease",
+                            },
+                          },
+                        })}
+                      >
+                        {!isMobileOrTablet && (
+                          <TableCell
+                            align="center"
+                            className={`${theme} ${styles.tableText}`}
+                          >
+                            {order.orderId}
+                          </TableCell>
+                        )}
                         <TableCell
                           align="center"
                           className={`${theme} ${styles.tableText}`}
@@ -269,33 +309,40 @@ export default function OrderHistory() {
                           align="center"
                           className={`${theme} ${styles.tableText}`}
                         >
-                          {order.orderStatus}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          className={`${theme} ${styles.tableText}`}
-                        >
                           {order.restaurantName}
                         </TableCell>
+                        {!isMobileOrTablet && (
+                          <TableCell
+                            align="center"
+                            className={`${theme} ${styles.tableText}`}
+                          >
+                            {order.orderStatus}
+                          </TableCell>
+                        )}
                         <TableCell
                           align="center"
                           className={`${theme} ${styles.tableText}`}
                         >
                           ${order.orderTotalPrice}
                         </TableCell>
-                        <TableCell
-                          align="center"
-                          className={`${theme} ${styles.tableText}`}
-                        >
-                          <Link href={`orderhistory/${order.orderId}`} passHref>
-                            <Button
-                              variant="contained"
-                              className={`${theme} ${styles.button}`}
+                        {!isMobileOrTablet && (
+                          <TableCell
+                            align="center"
+                            className={`${theme} ${styles.tableText}`}
+                          >
+                            <Link
+                              href={`orderhistory/${order.orderId}`}
+                              passHref
                             >
-                              DETAILS
-                            </Button>
-                          </Link>
-                        </TableCell>
+                              <Button
+                                variant="contained"
+                                className={`${theme} ${styles.button}`}
+                              >
+                                DETAILS
+                              </Button>
+                            </Link>
+                          </TableCell>
+                        )}
                       </TableRow>
                     ))}
                   </TableBody>
