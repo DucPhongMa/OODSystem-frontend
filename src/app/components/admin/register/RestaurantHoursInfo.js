@@ -6,9 +6,11 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  useMediaQuery,
 } from "@mui/material";
 
 function RestaurantHoursInfo({ formData, setFormData }) {
+  const isMobileOrTablet = useMediaQuery("(max-width:960px)");
   const days = [
     "monday",
     "tuesday",

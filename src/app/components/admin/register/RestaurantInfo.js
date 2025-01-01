@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { TextField, Grid, Box, Input } from "@mui/material";
+import { TextField, Grid, Box, Input, useMediaQuery } from "@mui/material";
 import { useAtom } from "jotai";
 import { selectedFileAtom } from "../../../../../store";
 import { selectedLogoAtom } from "../../../../../store";
 
 function RestaurantInfo({ formData, setFormData }) {
+  const isMobileOrTablet = useMediaQuery("(max-width:960px)");
   //const [file, setFile] = useState(null);
   const [, setSelectedFile] = useAtom(selectedFileAtom);
   const [, setSelectedLogo] = useAtom(selectedLogoAtom);

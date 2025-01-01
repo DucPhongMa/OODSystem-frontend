@@ -6,9 +6,11 @@ import {
   Select,
   MenuItem,
   InputLabel,
+  useMediaQuery,
 } from "@mui/material";
 
 function RestaurantThemeInfo({ formData, setFormData }) {
+  const isMobileOrTablet = useMediaQuery("(max-width:960px)");
   const handleChangeTheme = (event) => {
     const themeId = event.target.value;
     let themeName = "";

@@ -13,11 +13,13 @@ import {
   DialogActions,
   IconButton,
   Input,
+  useMediaQuery,
 } from "@mui/material";
 import RemoveIcon from "@mui/icons-material/Remove";
 import Image from "next/image";
 
 function RestaurantMenuInfo({ formData, setFormData }) {
+  const isMobileOrTablet = useMediaQuery("(max-width:960px)");
   const [activeCategory, setActiveCategory] = useState(null);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [file, setFile] = useState(null);
