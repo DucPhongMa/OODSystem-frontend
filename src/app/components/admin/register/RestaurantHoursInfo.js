@@ -42,7 +42,7 @@ function RestaurantHoursInfo({ formData, setFormData }) {
   };
 
   return (
-    <Box sx={{ mt: 3 }}>
+    <Box sx={{ mt: 3, width: "100%", px: 2 }}>
       {days.map((day, index) => (
         <Grid container spacing={2} sx={{ mb: 1 }} key={index}>
           <Grid item xs={12} sm={6}>

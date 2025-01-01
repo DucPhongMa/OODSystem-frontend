@@ -1,9 +1,10 @@
 import React from "react";
-import { TextField, Grid, Box } from "@mui/material";
+import { TextField, Grid, Box, useMediaQuery } from "@mui/material";
 
 function SignUpInfo({ formData, setFormData }) {
+  const isMobileOrTablet = useMediaQuery("(max-width:960px)");
   return (
-    <Box sx={{ mt: 3 }}>
+    <Box sx={{ mt: 3, width: "100%", px: 2 }}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <TextField

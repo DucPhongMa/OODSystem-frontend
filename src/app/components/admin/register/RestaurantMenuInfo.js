@@ -183,7 +183,7 @@ function RestaurantMenuInfo({ formData, setFormData }) {
   };
 
   return (
-    <Box sx={{ mt: 3, maxHeight: "100vh", overflow: "auto" }}>
+    <Box sx={{ mt: 3, width: "100%", px: 2 }}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <TextField

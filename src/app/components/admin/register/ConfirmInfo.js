@@ -1,13 +1,12 @@
 import React from "react";
-import { Grid, Box } from "@mui/material";
+import { Grid, Box, useMediaQuery } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { selectedFileAtom } from "../../../../../store";
-import { selectedLogoAtom } from "../../../../../store";
+import { selectedFileAtom, selectedLogoAtom } from "../../../../../store";
 import { useAtom } from "jotai";
 
 function createData(field, value) {
@@ -15,6 +14,7 @@ function createData(field, value) {
 }
 
 function ConfirmInfo({ formData, setFormData }) {
+  const isMobileOrTablet = useMediaQuery("(max-width:960px)");
   const [selectedFile, setSelectedFile] = useAtom(selectedFileAtom);
   const [selectedLogo, setSelectedLogo] = useAtom(selectedLogoAtom);
 
@@ -63,12 +63,12 @@ function ConfirmInfo({ formData, setFormData }) {
   ];
 
   return (
-    <Box sx={{ mt: 3 }}>
+    <Box sx={{ mt: 3, width: "100%", px: 2 }}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <TableContainer
             component={Paper}
-            sx={{ maxHeight: 300, overflow: "auto" }}
+            sx={{ maxHeight: 300, overflow: "auto", boxShadow: "none" }}
           >
             <Table sx={{ minWidth: 250 }} aria-label="simple table">
               <TableBody>

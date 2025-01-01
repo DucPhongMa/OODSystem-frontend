@@ -24,7 +24,7 @@ function RestaurantInfo({ formData, setFormData }) {
     }
   };
   return (
-    <Box sx={{ mt: 3 }}>
+    <Box sx={{ mt: 3, width: "100%", px: 2 }}>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <TextField
