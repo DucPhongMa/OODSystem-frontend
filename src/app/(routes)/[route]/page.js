@@ -113,7 +113,7 @@ export default function RestaurantHomepage() {
         reviewContent: review.attributes.reviewContent,
       }))
     : [];
-   
+
   /*const completedOrders = orderHistoryList.filter(
     (order) => order.orderStatus === "completed"
   );*/
