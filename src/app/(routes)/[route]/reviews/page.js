@@ -103,8 +103,6 @@ export default function OrderHistory() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
-  console.log("All Reviews: ", reviewData);
-
   const formatDate = (dateString) => {
     const options = {
       year: "numeric",
@@ -117,6 +115,8 @@ export default function OrderHistory() {
       .toLocaleString("default", options)
       .replace(",", "");
   };
+
+  console.log("All Reviews: ", reviewData);
 
   return (
     <div className={theme}>

@@ -113,12 +113,10 @@ export default function RestaurantHomepage() {
         reviewContent: review.attributes.reviewContent,
       }))
     : [];
-
+   
   /*const completedOrders = orderHistoryList.filter(
     (order) => order.orderStatus === "completed"
   );*/
-
-  console.log("All Reviews: ", reviewData);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -131,6 +129,8 @@ export default function RestaurantHomepage() {
   if (!restaurantData || !restaurantData.menuCate) {
     return <div>No restaurant data available.</div>;
   }
+
+  console.log("All Reviews: ", reviewData);
 
   return (
     <div className={theme}>
