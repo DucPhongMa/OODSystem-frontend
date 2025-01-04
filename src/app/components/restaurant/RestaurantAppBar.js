@@ -292,9 +292,33 @@ const RestaurantAppBar = ({ data }) => {
                   ORDER PICKUP
                 </Typography>
 
-                {/* Simplified Login Modal */}
-                <Modal open={loginModalOpen} onClose={handleLoginModalClose}>
-                  <Paper sx={modalStyle}>
+                <Modal
+                  open={loginModalOpen}
+                  onClose={handleLoginModalClose}
+                  disableScrollLock={false}
+                  keepMounted
+                  sx={{
+                    "& .MuiBackdrop-root": {
+                      backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    },
+                  }}
+                >
+                  <Paper
+                    className={`${theme} ${styles.guestPromptModal}`}
+                    sx={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      width: 620,
+                      pt: 5,
+                      px: 8,
+                      pb: 6,
+                      borderRadius: 2,
+                      maxHeight: "90vh",
+                      overflowY: "auto",
+                    }}
+                  >
                     <Typography variant="h6" gutterBottom>
                       Register for an account to collect rewards!
                     </Typography>
@@ -308,50 +332,23 @@ const RestaurantAppBar = ({ data }) => {
                     >
                       <Link href="/customer/register" passHref>
                         <Button
-                          variant="contained"
-                          sx={{
-                            height: 120,
-                            width: 120,
-                            backgroundColor: "blue",
-                            color: "white",
-                            "&:hover": {
-                              backgroundColor: "darkblue",
-                            },
-                          }}
+                          className={`${theme} ${styles.guestPromptButton}`}
                         >
                           Register
                         </Button>
                       </Link>
                       <Link href="/customer/login" passHref>
                         <Button
-                          variant="contained"
-                          sx={{
-                            height: 120,
-                            width: 120,
-                            backgroundColor: "blue",
-                            color: "white",
-                            "&:hover": {
-                              backgroundColor: "darkblue",
-                            },
-                          }}
+                          className={`${theme} ${styles.guestPromptButton}`}
                         >
                           Sign In
                         </Button>
                       </Link>
                       <Button
-                        variant="contained"
+                        className={`${theme} ${styles.guestPromptButton}`}
                         onClick={() => {
                           handleLoginModalClose();
                           router.push(`/${data.route}/menu`);
-                        }}
-                        sx={{
-                          height: 120,
-                          width: 120,
-                          backgroundColor: "blue",
-                          color: "white",
-                          "&:hover": {
-                            backgroundColor: "darkblue",
-                          },
                         }}
                       >
                         Continue as Guest

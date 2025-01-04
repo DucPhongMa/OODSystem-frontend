@@ -26,6 +26,20 @@
     color: inherit;
     border: 1px solid;
   }
+  .guestPromptModal {
+    background-color: #ffffff;
+    color: #000000;
+    box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.15);
+  }
+  .guestPromptButton {
+    height: 120px;
+    width: 120px;
+    background-color: #1565c0;
+    color: white;
+    &:hover {
+      background-color: #0d47a1;
+    }
+  }
 }
 
 .theme2 {
@@ -56,14 +70,26 @@
     color: inherit;
     border: 1px solid;
   }
-
   .viewCartTitle {
     color: #ffffff;
   }
-
   .cartIcon {
     &:disabled {
       color: #808080;
+    }
+  }
+  .guestPromptModal {
+    background-color: #3c3c3c;
+    color: #ffffff;
+    box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.25);
+  }
+  .guestPromptButton {
+    height: 120px;
+    width: 120px;
+    background-color: #1565c0;
+    color: white;
+    &:hover {
+      background-color: #0d47a1;
     }
   }
 }
@@ -95,5 +121,19 @@
   .loginButton {
     color: inherit;
     border: 1px solid;
+  }
+  .guestPromptModal {
+    background-color: #fbfbf7;
+    color: #4d4d4d;
+    box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.15);
+  }
+  .guestPromptButton {
+    height: 120px;
+    width: 120px;
+    background-color: #eb582c;
+    color: white;
+    &:hover {
+      background-color: #d44d26;
+    }
   }
 }
