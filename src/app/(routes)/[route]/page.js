@@ -43,7 +43,6 @@ export default function RestaurantHomepage() {
 
       const themeID = restaurantData.attributes.theme.id;
 
-      // Set the page theme based on the themeID
       switch (themeID) {
         case 1:
           setTheme(styles.theme1);
@@ -58,7 +57,6 @@ export default function RestaurantHomepage() {
           setTheme(styles.theme1);
       }
 
-      // Set top-pick items
       if (restaurantData["top-pick"]) {
         setTopPickItems(restaurantData["top-pick"]);
       }
