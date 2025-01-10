@@ -210,7 +210,7 @@ function Form() {
         <div className="body">{PageDisplay()}</div>
         <div className="footer">
           <button
-            disabled={page == 0}
+            className={`${page === 0 ? "hidden" : ""}`}
             onClick={() => {
               setPage((currPage) => currPage - 1);
             }}

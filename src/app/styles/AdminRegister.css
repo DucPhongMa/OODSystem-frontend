@@ -147,3 +147,7 @@ input {
   height: 40px;
   box-sizing: border-box;
 }
+
+.hidden {
+  display: none;
+}
