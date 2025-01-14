@@ -71,6 +71,11 @@ body {
   padding: 10px 5px;
   margin: 10px 5px;
   margin: 5px;
+  transition: background-color 0.2s ease;
+}
+
+.form-container .footer button:hover {
+  background-color: #4a4347;
 }
 
 .sign-up-container {
