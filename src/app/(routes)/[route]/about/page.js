@@ -20,7 +20,6 @@ export default function AboutPage() {
 
     const themeID = data.attributes.theme.id;
 
-    // Set the page theme based on the themeID
     switch (themeID) {
       case 1:
         setTheme(styles.theme1);
@@ -78,7 +77,6 @@ export default function AboutPage() {
             <RestaurantAppBar data={restaurantData} />
 
             <Container maxWidth="lg" sx={{ mt: 8, mb: 8 }}>
-              {/* Image and Intro Section */}
               <Grid container spacing={4} alignItems="center">
                 <Grid item xs={12} md={6}>
                   <Image
