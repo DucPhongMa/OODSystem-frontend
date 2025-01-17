@@ -63,7 +63,6 @@ export default function RestaurantMenu() {
     const data = await getRestaurantByRoute(restaurantRoute);
     console.log(data);
 
-    // Get open/closed status
     const status = data.attributes.status;
     if (status === "open") {
       setIsOpen(true);
@@ -73,7 +72,6 @@ export default function RestaurantMenu() {
 
     const themeID = data.attributes.theme.id;
 
-    // Set the page theme based on the themeID
     switch (themeID) {
       case 1:
         setTheme(styles.theme1);
