@@ -93,26 +93,21 @@ export default function Order() {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    // Get the year, month, and day
+
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Months are 0-based
     const day = date.getDate().toString().padStart(2, "0");
 
-    // Get hours and minutes
     let hours = date.getHours();
     const minutes = date.getMinutes().toString().padStart(2, "0");
 
-    // Determine AM or PM suffix
     const ampm = hours >= 12 ? "pm" : "am";
 
-    // Convert 24h time to 12h time
     hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
+    hours = hours ? hours : 12;
 
-    // Format the time
     const time = hours + ":" + minutes + ampm;
 
-    // Combine the date and time
     return `${year}-${month}-${day} ${time}`;
   };
 
