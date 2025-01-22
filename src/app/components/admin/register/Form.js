@@ -27,32 +27,26 @@ function validateEmail(email) {
 }
 
 function validatePassword(password) {
-  // Check for minimum length
   if (password.length < 8) {
     return false;
   }
 
-  // Check for uppercase letter
   if (!/[A-Z]/.test(password)) {
     return false;
   }
 
-  // Check for lowercase letter
   if (!/[a-z]/.test(password)) {
     return false;
   }
 
-  // Check for digit
   if (!/[0-9]/.test(password)) {
     return false;
   }
 
-  // Check for special character
   if (!/[!@#$%^&*]/.test(password)) {
     return false;
   }
 
-  // If all conditions are met
   return true;
 }
 
